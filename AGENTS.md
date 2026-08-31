@@ -15,6 +15,7 @@ Design references:
 - [Phase roadmap and verification requirements](docs/ROADMAP.md)
 - [Observed local environment](docs/ENVIRONMENT.md)
 - [Phase 1 implementation and verification](docs/phases/phase-01.md)
+- [Implemented foundation conventions](docs/FOUNDATION.md)
 
 These files are the working design baseline for the authorized foundation phase. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
 
@@ -26,6 +27,7 @@ These files are the working design baseline for the authorized foundation phase.
 - Reuse these actions, policies and validation rules when versioned REST controllers/API Resources and Sanctum are introduced. Do not create speculative APIs or mobile code early.
 - Use normal Laravel directories grouped by feature. Create classes/tables when their approved phase needs them, not the whole folder/schema tree in advance.
 - Install packages only when needed and compatible; keep Composer/npm lockfiles committed. Never bypass platform constraints. Livewire supplies Alpine; avoid duplicate initialization.
+- Phase 1's supported queue is the database connection with `after_commit=true`; batching/failures default to MySQL. Private local storage throws on write failure. The local environment uses daily info logs with 14-day retention. Follow FOUNDATION.md for worker, payload and logging rules; no business jobs or schedules exist yet.
 
 ## Data and authorization rules
 
@@ -72,6 +74,7 @@ Planning-only work has no app to migrate/run/browser-test; report these checks a
 
 - Workspace uses PowerShell on Windows. PHP/Composer are on PATH; inspected Laragon Node and MySQL binaries are not. Consult ENVIRONMENT.md, and reinspect before use; its inventory does not prove a server is running.
 - Phase 1 uses an isolated MySQL instance at `127.0.0.1:3307` under ignored `.runtime/mysql`, with separate `maktoobe` and `maktoobe_test` databases/users. See README.md and `scripts/mysql.ps1` (PowerShell 7). Never reinitialize an existing runtime. Tests reject cached configuration and any database/user other than `maktoobe_test` before RefreshDatabase can run.
+- Queue integration tests use DatabaseMigrations on that disposable database to verify real commits, rollbacks and worker execution. Browser tests own a server on port 8001; manual preview remains on 8000. Current browser tests only change session preferences. Add a dedicated browser-test database before future business-data mutation tests.
 - Keep explicit runtime paths or process-scoped PATH changes local to the project session. Never initialize over an existing MySQL data directory or assume credentials.
 - Preserve `my task.txt`, existing Git history and unrelated user changes. Use a `codex/` branch for new work unless instructed otherwise. Do not amend unrelated commits, rewrite history or push checkpoints automatically.
 - Do not spawn subagents unless the user explicitly asks for delegation. Keep work within the current phase and current task.

@@ -7,16 +7,17 @@ export default defineConfig({
     retries: 0,
     reporter: [['list'], ['html', { open: 'never' }]],
     use: {
-        baseURL: 'http://127.0.0.1:8000',
+        baseURL: 'http://127.0.0.1:8001',
         browserName: 'chromium',
         trace: 'retain-on-failure',
         screenshot: 'only-on-failure',
         launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined },
     },
     webServer: {
-        command: 'php artisan serve --host=127.0.0.1 --port=8000 --no-reload',
-        url: 'http://127.0.0.1:8000/up',
-        reuseExistingServer: !process.env.CI,
+        // Keep automated traffic separate from the single-process Windows preview server.
+        command: 'php artisan serve --host=127.0.0.1 --port=8001 --no-reload',
+        url: 'http://127.0.0.1:8001/up',
+        reuseExistingServer: false,
         timeout: 30000,
     },
 });

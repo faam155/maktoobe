@@ -34,7 +34,9 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/private'),
             'serve' => false,
-            'throw' => false,
+            'visibility' => 'private',
+            // A failed write must not be mistaken for a successfully saved document.
+            'throw' => true,
             'report' => false,
         ],
 

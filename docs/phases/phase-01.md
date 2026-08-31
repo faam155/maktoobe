@@ -2,6 +2,8 @@
 
 Completed and verified locally on 2026-08-31. Starting checkpoint: `89cc181` (`docs: propose architecture schema and phased development plan`). Branch: `codex/phase-01-foundation`.
 
+The explicit follow-up request for **Laravel Foundation & Database Architecture** was completed against checkpoint `d473adc`. See [follow-up verification](#foundation-and-database-architecture-follow-up) below for the current 28-test PHP suite and infrastructure changes; the initial implementation evidence is preserved for history.
+
 ## Scope and review
 
 Read AGENTS.md, the architecture, database proposal, roadmap and environment inventory before implementation. The repository contained planning documents and an empty `my task.txt`; no prior application, migrations or features existed. The user's instruction to start the next phase authorized the roadmap's Phase 1 foundation only. PHP and Composer were available; Node and MySQL required explicit Laragon binary paths. There was no application database to reuse.
@@ -47,7 +49,7 @@ The framework session `user_id` remains nullable and indexed without a foreign k
 
 Both databases use MySQL/InnoDB and `utf8mb4_unicode_ci`. Development uses `maktoobe` with `maktoobe_app`; tests use `maktoobe_test` with a distinct `maktoobe_test` user. The server binds to `127.0.0.1:3307`, uses a new project-owned data directory, disables local infile and server-side file import/export, and uses randomly generated credentials. Tests check database/user/environment and uncached configuration before any RefreshDatabase operation. A real database-permission test proves test credentials cannot read development users.
 
-## Verification evidence
+## Initial checkpoint verification evidence
 
 | Check | Result |
 | --- | --- |
@@ -90,3 +92,45 @@ The application runs at **http://127.0.0.1:8000** using built assets. MySQL runs
 This is a verified local foundation, not a production deployment. Registration, login, role permissions, AI, events, file workflows and provider integrations have not been implemented or tested. Production HTTPS, complete CSP enforcement, operational supervision, backups, retention and deployment hardening remain later work. The MySQL binary distribution reports a missing optional ICU regex data directory; current queries do not use regular expressions, but the distribution must be repaired or replaced before regex-dependent functionality is introduced. The local helper requires PowerShell 7 and the documented MySQL binaries; broader OS setup is not claimed.
 
 Phase 2 has not started. Stop at this checkpoint until the next phase is requested.
+
+## Foundation and database architecture follow-up
+
+Completed on 2026-08-31 in response to the explicit Phase 1 scope. Before changes, inspected AGENTS.md, the full file inventory, architecture and schema documents, existing migrations/model/factory/seeder, configuration, previous phase report, dependency versions, Git history and local services. The working tree was clean at `d473adc`. Explained the existing foundation and the remaining configuration gaps before implementation.
+
+### Changes
+
+- Made MySQL the configuration fallback, replaced the default root account with the application account, and specified InnoDB and UTC connection time. The existing local database already uses these settings; no data conversion was required.
+- Configured the supported database queue to dispatch after enclosing transactions commit, and made batch/failure configuration default to MySQL. Documented safe payloads, worker attempts/timeouts, rollback behavior, retry limits and scheduler registration. Removed the unused example `inspire` command. No business jobs or scheduled tasks were added.
+- Made the local disk explicitly private and enabled exceptions on failed writes. Added tests for actual private-file round trips, HTTP denials, path traversal and injected write failures.
+- Configured daily info logs with 14-day retention in defaults and the local environment. Added an isolated log-write test, plus safe logging guidance; no claim of automatic arbitrary-content redaction is made.
+- Added real database-queue tests for nested commits, rollback, successful worker execution and persisted failures. Test payloads remain under `tests/Fixtures`; no production probe jobs were introduced.
+- Added User factory/model checks for hashing, hidden credentials, verification states and MySQL-enforced case-insensitive email uniqueness. The existing model/factory/seeder remain sufficient; no account or administration feature was introduced.
+- Added `docs/FOUNDATION.md` covering the current normalized schema, framework-managed relationships, folder responsibilities, future REST/API Resource/Sanctum boundaries, private storage, queues, logging and test discipline. Updated AGENTS.md, README.md and architecture/database references.
+- Gave browser tests a dedicated server on port 8001, separate from the manual preview on port 8000. This phase's browser tests only change browser-session preferences, not business data. A separate browser-test database must precede future business mutation tests.
+
+### Schema and dependency impact
+
+**No new tables, migrations, relationships or packages were necessary.** The existing three framework migrations and eight normalized framework tables plus the ledger remain the initial schema. InnoDB, `utf8mb4_unicode_ci`, UTC, application database identity and zero development users were verified directly. Laravel owns session/reset/queue/cache relationships; no redundant Eloquent models or speculative module foreign keys were added. Future domain constraints remain specified in DATABASE.md and will be migrated with their modules. Composer/npm manifests and lockfiles are unchanged.
+
+### Final checks
+
+| Check | Follow-up result |
+| --- | --- |
+| `php artisan migrate` | Nothing pending on verified `maktoobe` database |
+| `php artisan migrate --env=testing` | Nothing pending; isolated test schema restored/verified after tests |
+| `php artisan test --compact` | 28 passed, 129 assertions; final PHP rerun 7.35 seconds |
+| `composer lint` | Passed; formatting was applied before checks |
+| `composer validate --strict` / `composer check-platform-reqs` | Passed |
+| `npm run build` | Passed; production assets generated |
+| `npm run test:browser` | Final clean run: 12 passed in 55.5 seconds, exit code 0 |
+| Real database worker | Successful, rolled-back and exhausted-job behavior passed using test-only payloads |
+| `php artisan schedule:list` / `php artisan queue:failed` | No schedules or development failed jobs |
+| Browser/manual review | English desktop; Arabic tablet 768px and mobile 390px; language save, drawer navigation, no overflow and no console warnings/errors |
+| Automated viewport matrix | English/Arabic at 1440×900, 1280×800, 768×1024, 390×844 and 360px |
+| Application/log inspection | Preview restarted with updated environment; health endpoint passed; no unexpected Laravel log or preview stderr errors |
+
+Two verification issues were resolved: a Windows separator mismatch in a test path assertion now compares resolved paths; a browser navigation timeout on the shared Windows preview led to separate test-server ownership. All checks then passed, but the restricted sandbox could not cleanly stop the test server. After verifying and stopping only task-owned hung/duplicate processes, a full browser rerun with process permissions completed normally without intervention. The README records this sandbox limitation. No application assertions were weakened and no automatic retries or larger test timeouts were added.
+
+The manually reviewed UI is unchanged from the initial screenshots; fresh automated screenshots are in ignored `test-results`. The preview remains at **http://127.0.0.1:8000**; the automatic server on port 8001 stops after the suite. Private probes and temporary logs were cleaned. Existing MySQL data was preserved.
+
+Limitations remain explicit: no authentication/RBAC or excluded business modules, no external providers, no Flutter or REST endpoints, no physical-device/Safari/Firefox coverage, no hard worker-timeout enforcement on Windows without PCNTL, and no production deployment. The previously noted optional MySQL ICU regex-data warning remains outside current queries. Stop after Phase 1.

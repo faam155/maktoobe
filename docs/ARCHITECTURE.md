@@ -17,7 +17,7 @@ Read with [environment findings](ENVIRONMENT.md), the [database design](DATABASE
 | AI transport | Application-owned `AiGateway` contract; OpenAI Responses API via Laravel HTTP client | A small adapter controls request options, privacy, usage, error mapping, and HTTP fakes without coupling business logic to an SDK. |
 | Background work | Laravel queues, scheduler, notifications | Database queue initially; dedicated production workers, shared cache, and Redis can be introduced when operational load warrants it. |
 
-These are target constraints, not installed dependency versions. Exact patch versions and compatibility must be confirmed from Composer/npm resolution and committed lockfiles during Phase 1; no dependencies are installed in this planning step.
+This table combines the installed foundation with target packages for later phases. Exact installed versions are recorded in the Phase 1 report and Composer/npm lockfiles; Fortify, Spatie Permission and provider packages remain deferred. See [foundation conventions](FOUNDATION.md) for the implemented database, queue, storage, logging and API boundaries.
 
 ## 2. Application shape
 

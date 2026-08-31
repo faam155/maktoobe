@@ -4,6 +4,8 @@ Status: **design for review, not migrations**. Create only the tables needed by 
 
 Phase 1 implemented only Laravel's user/password-reset/session/cache/queue baseline. No business-module tables have been created. See the [migration inventory and framework exceptions](phases/phase-01.md#database-changes) in the Phase 1 report; the remaining schema below is a future target.
 
+The explicitly requested Phase 1 database-architecture review retains this boundary: the existing eight framework tables form the current normalized foundation. [FOUNDATION.md](FOUNDATION.md#current-schema-and-eloquent-boundary) maps them to their Eloquent/framework owners, indexes and lifecycle rules. Domain foreign keys and relationships are added together with their approved modules, not as empty tables in advance.
+
 ## 1. Conventions and integrity
 
 - MySQL 8.4, InnoDB, `utf8mb4`; use a documented Unicode collation consistently. Canonicalize email/username/phone inputs before uniqueness checks. Use exact/binary comparison for provider subjects, storage keys, hashes and other case-sensitive identifiers.

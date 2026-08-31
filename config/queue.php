@@ -41,7 +41,8 @@ return [
             'table' => env('DB_QUEUE_TABLE', 'jobs'),
             'queue' => env('DB_QUEUE', 'default'),
             'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 90),
-            'after_commit' => false,
+            // Workers must never observe a job for a transaction that was rolled back.
+            'after_commit' => true,
         ],
 
         'beanstalkd' => [
@@ -103,7 +104,7 @@ return [
     */
 
     'batching' => [
-        'database' => env('DB_CONNECTION', 'sqlite'),
+        'database' => env('DB_CONNECTION', 'mysql'),
         'table' => 'job_batches',
     ],
 
@@ -122,7 +123,7 @@ return [
 
     'failed' => [
         'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
-        'database' => env('DB_CONNECTION', 'sqlite'),
+        'database' => env('DB_CONNECTION', 'mysql'),
         'table' => 'failed_jobs',
     ],
 
