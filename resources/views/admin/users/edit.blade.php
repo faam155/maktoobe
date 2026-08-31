@@ -1,0 +1,1 @@
+<x-layouts.admin :title="__('admin.edit_user')"><form method="POST" action="{{ route('admin.users.update',$managedUser) }}" class="admin-form">@csrf @method('PUT') @include('admin.users._form')<button class="admin-button" type="submit">{{ __('admin.save') }}</button></form></x-layouts.admin>

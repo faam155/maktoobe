@@ -1,0 +1,1 @@
+<x-layouts.admin :title="__('admin.create_user')"><form method="POST" action="{{ route('admin.users.store') }}" class="admin-form">@csrf @include('admin.users._form')<button class="admin-button" type="submit">{{ __('admin.create') }}</button></form></x-layouts.admin>

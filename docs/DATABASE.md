@@ -1,10 +1,10 @@
 # Proposed normalized MySQL schema
 
-Status: **design for review, not migrations**. Create only the tables needed by the approved implementation phase. This is a target logical schema; framework/package migration details are resolved against the locked versions when installed.
+Status: **target design with Phases 1–3 migrated**. Create only the tables needed by the approved implementation phase. Remaining sections describe the future logical schema; framework/package details are resolved against locked versions when installed.
 
-Phase 1 implemented only Laravel's user/password-reset/session/cache/queue baseline. No business-module tables have been created. See the [migration inventory and framework exceptions](phases/phase-01.md#database-changes) in the Phase 1 report; the remaining schema below is a future target.
+Phase 1 implemented Laravel's user/password-reset/session/cache/queue baseline. Phase 2 extended users and added social identity, OTP challenge and account-audit records. Phase 3 added Spatie's normalized role/permission tables. No prompt, AI, event, file, brand, notification or analytics tables have been created. See the phase reports for the applied migration inventory; the remaining schema below is a future target.
 
-The explicitly requested Phase 1 database-architecture review retains this boundary: the existing eight framework tables form the current normalized foundation. [FOUNDATION.md](FOUNDATION.md#current-schema-and-eloquent-boundary) maps them to their Eloquent/framework owners, indexes and lifecycle rules. Domain foreign keys and relationships are added together with their approved modules, not as empty tables in advance.
+The eight Phase 1 framework tables remain the normalized foundation. [FOUNDATION.md](FOUNDATION.md#current-schema-and-eloquent-boundary) maps them to their Eloquent/framework owners, indexes and lifecycle rules. Identity and authorization added only their approved records; future domain foreign keys and relationships arrive with their modules, not as empty tables in advance.
 
 ## 1. Conventions and integrity
 
@@ -37,6 +37,8 @@ The explicitly requested Phase 1 database-architecture review retains this bound
 | `personal_access_tokens` | Sanctum's supported tokenable relation, name, hash, abilities, last_used_at, expires_at | **Future API phase only**; hashed tokens, scoped abilities, revocation and expiration. |
 
 Spatie's user-assignment tables and Laravel's session/notification/token structures have polymorphic or deliberately unconstrained user references. Do not pretend these have database-enforced user FKs. Initially only `User` may be an authorization subject; use a fixed morph map, validate assignments server-side, prohibit arbitrary model_type inputs, and explicitly clean up memberships/sessions/tokens on user purge. Preserve package compatibility instead of modifying its generic relation shape without an ADR. Ordinary business tables below use typed FKs.
+
+Phase 3 uses the package schema unchanged for compatibility: `roles`, `permissions`, `role_has_permissions`, `model_has_roles`, and `model_has_permissions`. Role/permission foreign keys cascade within package pivots, composite primary keys prevent duplicate assignments, and `(model_id, model_type)` indexes support subject lookups. The application enforces the fixed `user` morph alias and exposes no direct-permission assignment UI. Development migration batch 3 contains `2026_08_31_230738_create_permission_tables`.
 
 Username is a canonical unique login string without `@`; email is always required for this proposed first version. A phone is optional and must be E.164 with independently tracked verification. Nullable password allows a linked-provider account without a local password. Registration approval and contact verification remain independent states.
 
@@ -177,12 +179,13 @@ This diagram omits most access pivots and nullable audit references; the tables 
 ## 10. Migration order and retention decisions
 
 1. Foundation: framework user/session/password-reset, cache and queue migrations only as required by the selected scaffold.
-2. Identity: user profile/status/identifier additions, Spatie roles/permissions; audit_logs with the first sensitive actions. Social identities/OTP come with their own later phase.
-3. Prompts: categories/translations, prompts, audiences, tags, favorites and uses. Add the nullable AI request relation only after its target exists.
-4. Documents: stored files, extractions/chunks, logical guidelines, versions, then activation relation.
-5. AI: models/settings/role grants and limits, conversations, requests, messages, attempts, continuation items, context joins and quota buckets.
-6. Events: categories/events, typed access and assignment pivots, then workspace files/reports/communications/activity as their phases arrive. Add nullable activity subject FKs with their target modules, and the AI request communication FK after the communications table exists.
-7. Notifications and remaining settings when needed; Sanctum only with approved API work.
+2. Identity (implemented): user profile/status/identifier additions, social identities, OTP challenges and scoped account audits.
+3. Authorization (implemented): Spatie roles, permissions and package assignment pivots.
+4. Prompts: categories/translations, prompts, audiences, tags, favorites and uses. Add the nullable AI request relation only after its target exists.
+5. Documents: stored files, extractions/chunks, logical guidelines, versions, then activation relation.
+6. AI: models/settings/role grants and limits, conversations, requests, messages, attempts, continuation items, context joins and quota buckets.
+7. Events: categories/events, typed access and assignment pivots, then workspace files/reports/communications/activity as their phases arrive. Add nullable activity subject FKs with their target modules, and the AI request communication FK after the communications table exists.
+8. Notifications and remaining settings when needed; Sanctum only with approved API work.
 
 Down migrations reverse dependency order; run rollback tests only on a disposable test database. Use additive changes and explicit data backfills on deployed databases; never run `migrate:fresh` on user data.
 

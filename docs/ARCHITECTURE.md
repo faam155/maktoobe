@@ -1,6 +1,6 @@
 # AI Prompt Hub & Event Management Platform: proposed architecture
 
-Status: **working architecture baseline; Phase 2 authentication completed on 2026-09-01**. Later phases remain subject to their scope review. See the [Phase 2 report](phases/phase-02.md) for implementation and verification.
+Status: **working architecture baseline; Phase 3 user administration and RBAC completed on 2026-09-01**. Later phases remain subject to their scope review. See the [Phase 3 report](phases/phase-03.md) for implementation and verification.
 
 Read with [environment findings](ENVIRONMENT.md), the [database design](DATABASE.md), and the [implementation roadmap](ROADMAP.md). The complete application is the eventual destination; each phase is a separately verified increment.
 
@@ -13,11 +13,11 @@ Read with [environment findings](ENVIRONMENT.md), the [database design](DATABASE
 | Data | MySQL 8.4 LTS, InnoDB, utf8mb4 | Native relational constraints; test against MySQL as well as running it locally. [MySQL release tracks](https://dev.mysql.com/doc/refman/8.4/en/mysql-releases.html) |
 | Build | Node 22 on a maintained patch, npm, Vite + Laravel Vite plugin | Local 22.12.0 meets Vite's documented Node 22 minimum; resolve the actual plugin/engine combination at setup. [Vite](https://vite.dev/guide/) |
 | Authentication | Laravel Fortify, custom localized Blade/Livewire screens | Reuse framework authentication flows while keeping UI and access rules under application control. [Fortify](https://laravel.com/docs/13.x/fortify) |
-| Authorization | Spatie Laravel Permission + Laravel policies | Dynamic role management with resource-level ownership and visibility checks. Proposed package major `^8.0`; its compatibility table lists Laravel 12/13 and PHP 8.3+. [Package requirements](https://spatie.be/docs/laravel-permission/v8/prerequisites) |
+| Authorization | Spatie Laravel Permission 8.3 + Laravel policies | Dynamic role management with resource-level ownership and visibility checks. The installed package supports Laravel 12/13 and PHP 8.3+. [Package requirements](https://spatie.be/docs/laravel-permission/v8/prerequisites) |
 | AI transport | Application-owned `AiGateway` contract; OpenAI Responses API via Laravel HTTP client | A small adapter controls request options, privacy, usage, error mapping, and HTTP fakes without coupling business logic to an SDK. |
 | Background work | Laravel queues, scheduler, notifications | Database queue initially; dedicated production workers, shared cache, and Redis can be introduced when operational load warrants it. |
 
-This table combines installed components with later targets. Phase 2 installed Fortify 1.39 and Socialite 5.30; Fortify's passkey/TOTP transitive dependencies are present but those features and routes remain disabled. Spatie Permission and other feature packages remain deferred. See [identity conventions](IDENTITY.md), [foundation conventions](FOUNDATION.md), and the lockfiles.
+This table combines installed components with later targets. Phase 2 installed Fortify 1.39 and Socialite 5.30; Fortify's passkey/TOTP transitive dependencies are present but those features and routes remain disabled. Phase 3 installed Spatie Laravel Permission 8.3. Other feature packages remain deferred. See [identity conventions](IDENTITY.md), [authorization conventions](AUTHORIZATION.md), [foundation conventions](FOUNDATION.md), and the lockfiles.
 
 ## 2. Application shape
 
@@ -95,15 +95,15 @@ An action such as `PublishPrompt`, `DisableUser`, or `UploadEventReport` is the 
 
 Roles aggregate granular capabilities; role names are never authorization logic. Seed the requested five roles. Add new roles through data, without code changes. Use one Spatie guard namespace so future Sanctum authentication does not require duplicate permission catalogs.
 
-| Seed role | Proposed initial responsibility |
+| Seed role | Implemented default responsibility |
 | --- | --- |
-| Super Administrator | All administrative capabilities; protected assignment/revocation and last-active-super-admin safeguards |
-| Administrator | Users, published content, all managed events, guidelines, reports; privileged role assignment and AI settings granted separately |
-| Content Manager | Categories, library drafts/publication, guidelines when explicitly assigned |
-| Event Manager | Create events and manage events they organize or are explicitly assigned to manage |
-| Standard User | Use AI, read visible library/events, favorites, personal prompts, own conversations |
+| Super Administrator | All 18 current capabilities; protected assignment/revocation and last-active-super safeguards |
+| Administrator | Every current capability except permission-catalog delegation |
+| Content Manager | Prompt/category/publication/guideline preparation and AI use |
+| Event Manager | Event management, event-file upload and AI use |
+| Standard User | AI use when that later module becomes available |
 
-Permission catalog includes the user's requested keys plus `access-admin`, `assign-roles`, `approve-users`, `manage-all-events`, `manage-event-communications`, `manage-personal-prompts`, and `view-audit-logs` as needed. Split destructive or sensitive abilities further when that phase's policy matrix requires it. `view-reports` means administration analytics; event report access follows event visibility and file policy.
+The implemented catalog includes the 17 requested keys plus `access-admin`; role assignment uses `manage-roles`, and account approval uses the separate create/edit/disable capabilities. Later modules may split destructive or resource-specific abilities when their policy matrices require it. The exact current mapping is in AUTHORIZATION.md.
 
 There is no blanket super-admin `Gate::before` that bypasses private-content policies. Administrative powers do not imply permission to read another user's conversations or private prompts. If a future support/legal access feature is needed, design an explicit audited capability and workflow separately. Never allow users to grant capabilities above their own delegation authority; reserved super-admin changes require a super administrator and recent authentication.
 
@@ -164,9 +164,9 @@ Keep user-visible `event_activities` separate from restricted `audit_logs`. Writ
 | 1 | `laravel/framework`, `livewire/livewire`, `tailwindcss`, `@tailwindcss/vite`, `vite`, `laravel-vite-plugin` | Required foundation; compatible stable lockfile versions |
 | 1 | `laravel/pint`, `phpunit/phpunit`, Laravel's standard test utilities | Formatting and automated tests; choose PHPUnit as the single PHP runner |
 | 1 onward | `@playwright/test` | Browser flows and viewport regression tests against the local Laravel server |
-| 2 | `laravel/fortify`, `spatie/laravel-permission` | Authentication pipeline and dynamic RBAC |
-| 4 | `laravel/socialite` | Required for Google; verify supported release against Laravel 13. [Socialite](https://laravel.com/docs/13.x/socialite) |
-| 4 | SMS provider SDK, only if its API requires it | Provider undecided; keep gateway interface and test fake, no fabricated production delivery |
+| 2 | `laravel/fortify`, `laravel/socialite` | Installed authentication pipeline and Google OAuth adapter |
+| 3 | `spatie/laravel-permission` | Installed dynamic RBAC with application policies and guarded actions |
+| As needed | SMS provider SDK, only if its API requires it | Provider remains behind the Phase 2 gateway interface; no fabricated production delivery |
 | 6 | PDF/DOCX extractor and image processor | Select maintained, licensed, sandboxable tools after real Arabic/English sample evaluation; PHP GD/Imagick prerequisite for chosen image path |
 | 7 | Laravel HTTP client already included | No additional OpenAI PHP package required. First-party Laravel AI SDK may be reconsidered only if it demonstrably simplifies required privacy/state behavior |
 | 8 | `@fullcalendar/core`, day-grid, time-grid, list, interaction packages | Standard calendar views, no premium resource scheduling required; lock matching versions after review. [FullCalendar docs](https://fullcalendar.io/docs) |
@@ -204,4 +204,4 @@ The architecture assumes one internal organization, not multi-tenant SaaS; pendi
 
 Before the relevant integration phase, choose the Google client/domain policy, SMS provider/sender region, mail transport, allowed AI models and budgets, document size limits, retention/deletion periods, malware scanner, and hosting/backup arrangement. Do not block architecture review on collecting credentials; keep secrets out of this document.
 
-Phase 1 implemented the framework foundation. Phase 2 implemented the explicitly requested password, Google and SMS OTP authentication scope, but not role administration or MFA. Do not start another phase automatically.
+Phase 1 implemented the framework foundation. Phase 2 implemented password, Google and SMS OTP authentication. Phase 3 implemented permission-protected user and role administration; MFA and business modules remain deferred. Do not start another phase automatically.

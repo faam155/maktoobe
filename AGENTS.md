@@ -4,7 +4,7 @@
 
 This repository is for an internal AI Prompt Hub and Event Management Platform built with Laravel. The user explicitly requires incremental development and review of architecture/database design before Phase 1.
 
-**Current status: Phase 2 Authentication completed and verified on 2026-09-01.** Phase 1 is complete at `3205d33`. The latest user scope brought password, Google and SMS OTP authentication forward, overriding their earlier roadmap placement. Role administration, business modules and MFA implementation remain out of scope. Do not start another phase without explicit user scope.
+**Current status: Phase 3 Users, Roles & Permissions completed and verified on 2026-09-01.** Phase 2 is complete at `bfc5c29`; see the Phase 3 report for the new checkpoint. Prompt, event, AI, brand, analytics, API and MFA modules remain out of scope until explicitly requested. Stop after Phase 3.
 
 Read the current conversation first: explicit user approvals and changes take precedence over this recorded status. Once the user approves the design/phase, update this status and proceed with that scope without asking for the same approval again. Never treat the full specification as authorization to implement all phases at once.
 
@@ -18,8 +18,10 @@ Design references:
 - [Implemented foundation conventions](docs/FOUNDATION.md)
 - [Implemented identity conventions](docs/IDENTITY.md)
 - [Phase 2 implementation and verification](docs/phases/phase-02.md)
+- [Implemented authorization conventions](docs/AUTHORIZATION.md)
+- [Phase 3 implementation and verification](docs/phases/phase-03.md)
 
-These files are the working design baseline for the authorized foundation phase. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
+These files are the working baseline for completed Phases 1–3. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
 
 ## Architecture rules
 
@@ -31,6 +33,7 @@ These files are the working design baseline for the authorized foundation phase.
 - Install packages only when needed and compatible; keep Composer/npm lockfiles committed. Never bypass platform constraints. Livewire supplies Alpine; avoid duplicate initialization.
 - Phase 1's supported queue is the database connection with `after_commit=true`; batching/failures default to MySQL. Private local storage throws on write failure. The local environment uses daily info logs with 14-day retention. Follow FOUNDATION.md for worker, payload and logging rules; no business jobs or schedules exist yet.
 - Phase 2 uses Fortify's selected password controllers behind application-owned routes/UI and one `CompleteSignIn` pipeline for password, Google and OTP. Socialite state must remain enabled. Production mail/SMS providers replace the fail-closed local adapters; local authentication inbox files are encrypted, private, environment-scoped and terminal-readable only.
+- Phase 3 uses Spatie Laravel Permission 8 with the `web` guard and a fixed `user` morph alias. The permission catalog is code-owned; roles are data and users may hold several. Policies and guarded Actions protect every mutation. There is no blanket super-administrator bypass. Role delegation is limited to permissions the actor holds, protected-role changes require a Super Administrator, and governance mutations lock the protected role before checking the last active Super Administrator. See AUTHORIZATION.md.
 
 ## Data and authorization rules
 

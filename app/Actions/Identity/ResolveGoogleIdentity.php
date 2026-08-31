@@ -4,6 +4,7 @@ namespace App\Actions\Identity;
 
 use App\Models\SocialAccount;
 use App\Models\User;
+use App\Support\Authorization\Access;
 use App\Support\Identity\Identifiers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Laravel\Socialite\Contracts\User as ProviderUser;
+use Spatie\Permission\Models\Role;
 
 class ResolveGoogleIdentity
 {
@@ -53,6 +55,9 @@ class ResolveGoogleIdentity
                 'password' => null, 'email_verified_at' => now(), 'status' => 'pending',
                 'locale' => app()->getLocale(), 'timezone' => 'UTC',
             ])->save();
+            if ($role = Role::where('name', Access::STANDARD_USER)->where('guard_name', 'web')->first()) {
+                $user->assignRole($role);
+            }
             $user->socialAccounts()->create(['provider' => 'google', 'provider_subject' => $subject]);
             app(RecordAccountAudit::class)->handle($user, 'account.google_registered');
 

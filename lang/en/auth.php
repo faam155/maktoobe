@@ -99,4 +99,5 @@ return [
     'continue' => 'Continue',
     'phone_enrollment_title' => 'Verify your mobile number',
     'security_access' => 'Manage account security',
+    'admin_access' => 'Open administration',
 ];

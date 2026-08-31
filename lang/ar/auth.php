@@ -99,4 +99,5 @@ return [
     'continue' => 'متابعة',
     'phone_enrollment_title' => 'تأكيد رقم جوالك',
     'security_access' => 'إدارة أمان الحساب',
+    'admin_access' => 'فتح لوحة الإدارة',
 ];

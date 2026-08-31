@@ -1,0 +1,6 @@
+<x-layouts.admin :title="__('admin.roles')">
+<div class="admin-heading-row"><p class="admin-lead">{{ __('admin.roles_intro') }}</p>@can('create',\Spatie\Permission\Models\Role::class)<a class="admin-button" href="{{ route('admin.roles.create') }}">{{ __('admin.create_role') }}</a>@endcan</div>
+<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>{{ __('admin.role_name') }}</th><th>{{ __('admin.permission_count') }}</th><th>{{ __('admin.user_count') }}</th><th>{{ __('admin.actions') }}</th></tr></thead><tbody>
+@forelse($roles as $role)<tr><td data-label="{{ __('admin.role_name') }}"><strong>{{ __('admin.role_names.'.$role->name) !== 'admin.role_names.'.$role->name ? __('admin.role_names.'.$role->name) : $role->name }}</strong></td><td data-label="{{ __('admin.permission_count') }}">{{ $role->permissions_count }}</td><td data-label="{{ __('admin.user_count') }}">{{ $role->users_count }}</td><td data-label="{{ __('admin.actions') }}"><a href="{{ route('admin.roles.show',$role) }}">{{ __('admin.view') }}</a></td></tr>@empty<tr><td colspan="4" class="admin-empty">{{ __('admin.no_roles') }}</td></tr>@endforelse
+</tbody></table></div><div class="admin-pagination">{{ $roles->links() }}</div>
+</x-layouts.admin>

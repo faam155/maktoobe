@@ -14,6 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Accounts and role bootstrap are deliberately deferred to Phase 2.
+        $this->call(AccessControlSeeder::class);
     }
 }

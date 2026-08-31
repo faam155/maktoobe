@@ -5,6 +5,7 @@ use App\Actions\Identity\SetAccountStatus;
 use App\Enums\AccountStatus;
 use App\Models\User;
 use App\Services\Identity\LocalInbox;
+use App\Support\Authorization\Access;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -30,8 +31,12 @@ $action = $argv[1] ?? '';
 $email = $argv[2] ?? 'member@example.test';
 if ($action === 'reset') {
     Artisan::call('migrate:fresh', ['--force' => true]);
+    Artisan::call('db:seed', ['--force' => true]);
     Storage::disk('local')->deleteDirectory('auth-inbox/browser');
-    User::factory()->create(['name' => 'Browser Member', 'username' => 'member', 'email' => 'member@example.test', 'phone_e164' => '+96891111111', 'phone_verified_at' => now(), 'password' => 'BrowserPassword123']);
+    $user = User::factory()->create(['name' => 'Browser Member', 'username' => 'member', 'email' => 'member@example.test', 'phone_e164' => '+96891111111', 'phone_verified_at' => now(), 'password' => 'BrowserPassword123']);
+    $user->assignRole(Access::STANDARD_USER);
+    $administrator = User::factory()->create(['name' => 'Browser Administrator', 'username' => 'admin', 'email' => 'admin@example.test', 'password' => 'AdminBrowserPassword123']);
+    $administrator->assignRole(Access::SUPER_ADMINISTRATOR);
     echo json_encode(['ready' => true]);
 } elseif ($action === 'inbox') {
     $messages = array_values(array_filter(app(LocalInbox::class)->messages(), fn ($message) => ($message['recipient'] ?? null) === $email));

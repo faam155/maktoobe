@@ -1,0 +1,1 @@
+<x-layouts.admin :title="__('admin.edit_role')"><form method="POST" action="{{ route('admin.roles.update',$role) }}" class="admin-form">@csrf @method('PUT') @include('admin.roles._form')<button class="admin-button" type="submit">{{ __('admin.save') }}</button></form></x-layouts.admin>

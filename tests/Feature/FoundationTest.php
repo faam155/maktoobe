@@ -23,7 +23,7 @@ class FoundationTest extends TestCase
             ->assertHeader('X-Frame-Options', 'DENY')->assertHeader('X-Content-Type-Options', 'nosniff')
             ->assertHeader('Content-Language', 'en');
 
-        foreach (['/admin', '/api/v1/users', '/storage/private.txt'] as $path) {
+        foreach (['/api/v1/users', '/storage/private.txt'] as $path) {
             $this->get($path)->assertNotFound()->assertDontSee('password');
         }
     }
@@ -84,7 +84,7 @@ class FoundationTest extends TestCase
 
     public function test_arabic_not_found_page_has_a_safe_return_link(): void
     {
-        $this->withSession(['locale' => 'ar'])->get('/admin')->assertNotFound()
+        $this->withSession(['locale' => 'ar'])->get('/missing-page')->assertNotFound()
             ->assertSee('dir="rtl"', false)->assertSee('العودة إلى البداية');
     }
 
@@ -94,7 +94,7 @@ class FoundationTest extends TestCase
         $this->assertSame('maktoobe_test', DB::connection()->getDatabaseName());
         $this->assertSame('utf8mb4_unicode_ci', DB::selectOne('SELECT @@collation_database AS value')->value);
 
-        foreach (['users', 'password_reset_tokens', 'sessions', 'cache', 'cache_locks', 'jobs', 'job_batches', 'failed_jobs'] as $table) {
+        foreach (['users', 'password_reset_tokens', 'sessions', 'cache', 'cache_locks', 'jobs', 'job_batches', 'failed_jobs', 'roles', 'permissions', 'model_has_roles', 'model_has_permissions', 'role_has_permissions'] as $table) {
             $this->assertTrue(Schema::hasTable($table));
         }
 
@@ -106,7 +106,7 @@ class FoundationTest extends TestCase
 
     public function test_both_locales_have_matching_interface_keys(): void
     {
-        foreach (['foundation', 'validation', 'errors', 'auth', 'passwords'] as $file) {
+        foreach (['foundation', 'validation', 'errors', 'auth', 'passwords', 'admin'] as $file) {
             $this->assertSame(array_keys(require lang_path("en/$file.php")), array_keys(require lang_path("ar/$file.php")));
         }
     }

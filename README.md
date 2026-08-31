@@ -1,6 +1,6 @@
 # Maktoobe
 
-An internal AI productivity and event workspace developed incrementally with Laravel. Phase 1 establishes the framework, MySQL, Livewire, Tailwind, tests and English/Arabic UI. Authentication and business modules are intentionally unavailable until later approved phases.
+An internal AI productivity and event workspace developed incrementally with Laravel. The verified application currently includes its Laravel/MySQL foundation, bilingual authentication, and a permission-protected user and role administration area. Prompt, AI, event, brand, analytics and public API modules remain unavailable until their phases are requested.
 
 ## Requirements
 
@@ -34,7 +34,18 @@ Keep `.runtime` and `.env*` private and untracked. Do not rerun initialization t
 composer dev
 ```
 
-Open `http://127.0.0.1:8000`. The PHP server is local-only. Registration, password/username login, recovery, verification and local OTP authentication are available; `/app` is an authenticated placeholder and business/admin modules remain unavailable. Use `php artisan serve --host=127.0.0.1 --port=8000 --no-reload` directly if preferred. Stop PHP with Ctrl+C and the project database with `scripts/mysql.ps1 -Action Stop`.
+Open `http://127.0.0.1:8000`. The PHP server is local-only. Registration, password/username login, recovery, verification, local OTP authentication and the authorized `/admin` area are available; `/app` remains a placeholder for later business modules. Use `php artisan serve --host=127.0.0.1 --port=8000 --no-reload` directly if preferred. Stop PHP with Ctrl+C and the project database with `scripts/mysql.ps1 -Action Stop`.
+
+## First Super Administrator
+
+Seed the permission catalog, register the intended operator through the normal application flow, then promote that existing account once:
+
+```powershell
+php artisan db:seed --class=AccessControlSeeder
+php artisan auth:create-super-admin operator@example.com
+```
+
+The command accepts no password, stores no production credential, activates and verifies the selected existing account, revokes its prior sessions, and refuses to run when an active Super Administrator already exists. Review [authorization conventions](docs/AUTHORIZATION.md) before changing seeded permissions or role governance.
 
 ## Verification
 
@@ -59,6 +70,6 @@ In a restricted Windows sandbox, Vite may need permission to resolve ancestor pa
 
 Read `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/ROADMAP.md` and the current phase report before changes. Interface strings belong in matching `lang/en` and `lang/ar` files. Livewire supplies Alpine; do not load it twice. Add packages and migrations only when the approved phase needs them.
 
-See [foundation conventions](docs/FOUNDATION.md) for the current schema/model boundary, future API reuse, queue worker commands, private storage, logging and test isolation. Database jobs wait for transaction commits. Local files are private and write failures throw. New local setups use daily info logs with 14-day retention; an existing `.env` should use `LOG_STACK=daily`, `LOG_LEVEL=info` and `LOG_DAILY_DAYS=14` to adopt those defaults.
+See [foundation conventions](docs/FOUNDATION.md), [identity conventions](docs/IDENTITY.md), and [authorization conventions](docs/AUTHORIZATION.md) for the current boundaries. Database jobs wait for transaction commits. Local files are private and write failures throw. New local setups use daily info logs with 14-day retention; an existing `.env` should use `LOG_STACK=daily`, `LOG_LEVEL=info` and `LOG_DAILY_DAYS=14` to adopt those defaults.
 
 This is a verified local application increment, not a deployment. Google and real SMS/email delivery require server-side production credentials/providers. HTTPS, production workers, secret management, backups, stricter CSP and operational hardening remain deployment responsibilities.

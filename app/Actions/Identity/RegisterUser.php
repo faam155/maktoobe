@@ -3,12 +3,14 @@
 namespace App\Actions\Identity;
 
 use App\Models\User;
+use App\Support\Authorization\Access;
 use App\Support\Identity\Identifiers;
 use App\Support\Identity\IdentityRules;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Models\Role;
 
 class RegisterUser
 {
@@ -32,6 +34,9 @@ class RegisterUser
                     'phone_e164' => $data['phone'], 'password' => $data['password'], 'status' => 'pending',
                     'locale' => app()->getLocale(), 'timezone' => 'UTC',
                 ])->save();
+                if ($role = Role::where('name', Access::STANDARD_USER)->where('guard_name', 'web')->first()) {
+                    $user->assignRole($role);
+                }
                 app(RecordAccountAudit::class)->handle($user, 'account.registered');
 
                 return $user;
