@@ -1,6 +1,6 @@
 # AI Prompt Hub & Event Management Platform: proposed architecture
 
-Status: **proposed, awaiting user review**. Planning baseline: 2026-08-31. Phase 1 is not authorized by this document.
+Status: **working architecture baseline; Phase 1 authorized and completed on 2026-08-31**. Later phases remain subject to their scope review. See the [Phase 1 report](phases/phase-01.md) for installed versions and verification.
 
 Read with [environment findings](ENVIRONMENT.md), the [database design](DATABASE.md), and the [implementation roadmap](ROADMAP.md). The complete application is the eventual destination; each phase is a separately verified increment.
 
@@ -204,4 +204,4 @@ The architecture assumes one internal organization, not multi-tenant SaaS; pendi
 
 Before the relevant integration phase, choose the Google client/domain policy, SMS provider/sender region, mail transport, allowed AI models and budgets, document size limits, retention/deletion periods, malware scanner, and hosting/backup arrangement. Do not block architecture review on collecting credentials; keep secrets out of this document.
 
-The immediate approval request is the architecture, normalized schema, and Phase 1 boundary. No application implementation should begin until that review is complete.
+Phase 1 implemented only the framework, local database, bilingual responsive foundation and test tooling. The next planned scope is Phase 2 identity and RBAC; do not start it automatically.

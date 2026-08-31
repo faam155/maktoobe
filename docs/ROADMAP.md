@@ -1,6 +1,6 @@
 # Incremental implementation roadmap
 
-Status: **proposed, awaiting design review**. No application phase has started. Phase 0 is documentation and environment inspection only.
+Status: **Phase 1 completed and verified on 2026-08-31**. Phase 0 planning is complete. Phase 2 has not started; later phases below remain the implementation roadmap. See the [Phase 1 report](phases/phase-01.md).
 
 ## 1. Phase gates
 
@@ -21,13 +21,13 @@ For every implementation phase:
 
 Suggested viewport coverage: desktop 1440×900, laptop 1280×800, tablet 768×1024, mobile 390×844, with a narrow 360px spot-check. Check keyboard/focus behavior, labels/errors, modal and drawer use, touch targets, overflow, long translations, loading/empty/error states and readable RTL content. Repeat critical flows in both directions, not merely screenshots of the home page. Viewport emulation is not a claim of physical-device testing.
 
-Once the tools exist, the baseline command set is `composer validate --strict`, `composer check-platform-reqs`, `vendor/bin/pint --test`, `php artisan test`, `npm run build`, and the project's browser-test command. Run migration checks against MySQL, including forward migration and disposable-database rollback/reapply where meaningful. Check `composer audit` and `npm audit` during dependency changes and release hardening. Record actual outcomes; these commands have not run for an application yet.
+The baseline command set is `composer validate --strict`, `composer check-platform-reqs`, `composer lint`, `php artisan test`, `npm run build`, and `npm run test:browser`. Run migration checks against MySQL, including forward migration and disposable-database rollback/reapply where meaningful. Check `composer audit` and `npm audit` during dependency changes and release hardening. Record actual outcomes in the phase report.
 
 ## 2. Phases and acceptance criteria
 
 | Phase | Requested-scope proposal | Database work | Acceptance boundary |
 | --- | --- | --- | --- |
-| **0 — Architecture review (current)** | Inspect environment, propose architecture/schema/packages/security/roadmap, write AGENTS.md | None | Reviewable documentation; no application code, packages, migrations, local web server or UI testing |
+| **0 — Architecture review (completed)** | Inspect environment, propose architecture/schema/packages/security/roadmap, write AGENTS.md | None | Reviewable documentation; no application code, packages, migrations, local web server or UI testing |
 | **1 — Laravel foundation** | Laravel 13 skeleton, Livewire/Tailwind build, configuration, environment examples, English/Arabic locale and direction support, reusable responsive layout primitives, local setup README and baseline test tooling | Only required framework user/session/reset/cache/queue tables; no speculative module tables | MySQL connection and fresh test DB verified; localized foundation page runs at recorded URL; assets build; responsive English/Arabic shell passes browser checks; sensitive routes not exposed |
 | **2 — Core identity and RBAC** | Email/username-password registration/login/logout, reset/forgot password, email verification, pending/active/disabled state, session list/revoke, five seed roles and granular permissions, shared authentication pipeline; protected portal/admin shells; secure local bootstrap/approval commands until the administration UI exists | Extend users; permission package tables; audit log for sensitive identity changes | Registration cannot enter portal before verification/approval; identifier normalization, session regeneration/revocation, rate limits, direct-request/Livewire denials and role boundaries tested; super-admin bootstrap has no default password |
 | **3 — User and role administration** | User search/create/edit/approval/disable/delete; access recovery; role creation/edit/assignment and permissions UI; administration audit view; basic real dashboard account information | Only additions necessary for administration; reuse identity and audit tables | Disable takes effect in existing sessions; no privilege escalation or self-grant; last-active-super-admin protected under concurrency; private user content not exposed; admin responsive forms/tables verified |

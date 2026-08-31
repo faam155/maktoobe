@@ -1,6 +1,8 @@
 # Environment inspection
 
-Inspected on 2026-08-31. This is a read-only readiness report, not an installation or application verification report.
+Initial inspection on 2026-08-31, before Phase 1. The inventory below is historical readiness evidence, not the current installation state.
+
+**Phase 1 update, 2026-08-31:** Laravel and frontend dependencies are now installed and locked. A project-local MySQL instance and application have been started and verified. See [Phase 1 versions and verification](phases/phase-01.md) and the [setup README](../README.md) for current details. Existing Laragon data was not used or changed.
 
 ## Repository
 

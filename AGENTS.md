@@ -4,7 +4,7 @@
 
 This repository is for an internal AI Prompt Hub and Event Management Platform built with Laravel. The user explicitly requires incremental development and review of architecture/database design before Phase 1.
 
-**Current status: architecture proposed, awaiting user review. No Phase 1 implementation has begun.** Do not scaffold Laravel, install project dependencies, create/run migrations, start application services, or build feature modules until the user has reviewed the architecture and database design and authorized the next scope. This boundary comes from the user's project instruction, not an independent approval policy.
+**Current status: Phase 1 (Laravel foundation) completed and verified on 2026-08-31. Phase 2 has not started.** The user's instruction to start the next phase authorized the Phase 1 boundary in ROADMAP.md. Authentication, RBAC and business modules remain later phases. Do not begin Phase 2 automatically.
 
 Read the current conversation first: explicit user approvals and changes take precedence over this recorded status. Once the user approves the design/phase, update this status and proceed with that scope without asking for the same approval again. Never treat the full specification as authorization to implement all phases at once.
 
@@ -14,12 +14,13 @@ Design references:
 - [Normalized schema, constraints and lifecycle](docs/DATABASE.md)
 - [Phase roadmap and verification requirements](docs/ROADMAP.md)
 - [Observed local environment](docs/ENVIRONMENT.md)
+- [Phase 1 implementation and verification](docs/phases/phase-01.md)
 
-These files are proposals until reviewed. Document approved changes rather than silently departing from them.
+These files are the working design baseline for the authorized foundation phase. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
 
 ## Architecture rules
 
-- Use a conventional Laravel modular monolith: PHP, MySQL, Eloquent, Blade, Livewire, Tailwind and Alpine as needed. Proposed versions are Laravel 13, PHP 8.4, Livewire 4 and Tailwind 4; confirm actual compatible locked versions at setup.
+- Use a conventional Laravel modular monolith: PHP, MySQL, Eloquent, Blade, Livewire, Tailwind and Alpine as needed. Phase 1 locks Laravel 13, PHP 8.4, Livewire 4 and Tailwind 4; consult the phase report and lockfiles for patch versions and recheck compatibility before upgrades.
 - One application/database/user population; separate `/app` and `/admin` route groups and layouts. Do not add a SPA, microservices, generic repository framework or Flutter application.
 - Keep Livewire components/controllers thin. Shared Actions own nontrivial mutations/transactions; Queries own authorized lists/aggregates; Policies own reusable resource abilities; adapters isolate AI/SMS/extraction/storage integrations.
 - Reuse these actions, policies and validation rules when versioned REST controllers/API Resources and Sanctum are introduced. Do not create speculative APIs or mobile code early.
@@ -70,6 +71,7 @@ Planning-only work has no app to migrate/run/browser-test; report these checks a
 ## Local environment and Git care
 
 - Workspace uses PowerShell on Windows. PHP/Composer are on PATH; inspected Laragon Node and MySQL binaries are not. Consult ENVIRONMENT.md, and reinspect before use; its inventory does not prove a server is running.
+- Phase 1 uses an isolated MySQL instance at `127.0.0.1:3307` under ignored `.runtime/mysql`, with separate `maktoobe` and `maktoobe_test` databases/users. See README.md and `scripts/mysql.ps1` (PowerShell 7). Never reinitialize an existing runtime. Tests reject cached configuration and any database/user other than `maktoobe_test` before RefreshDatabase can run.
 - Keep explicit runtime paths or process-scoped PATH changes local to the project session. Never initialize over an existing MySQL data directory or assume credentials.
 - Preserve `my task.txt`, existing Git history and unrelated user changes. Use a `codex/` branch for new work unless instructed otherwise. Do not amend unrelated commits, rewrite history or push checkpoints automatically.
 - Do not spawn subagents unless the user explicitly asks for delegation. Keep work within the current phase and current task.

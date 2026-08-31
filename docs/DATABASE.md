@@ -2,6 +2,8 @@
 
 Status: **design for review, not migrations**. Create only the tables needed by the approved implementation phase. This is a target logical schema; framework/package migration details are resolved against the locked versions when installed.
 
+Phase 1 implemented only Laravel's user/password-reset/session/cache/queue baseline. No business-module tables have been created. See the [migration inventory and framework exceptions](phases/phase-01.md#database-changes) in the Phase 1 report; the remaining schema below is a future target.
+
 ## 1. Conventions and integrity
 
 - MySQL 8.4, InnoDB, `utf8mb4`; use a documented Unicode collation consistently. Canonicalize email/username/phone inputs before uniqueness checks. Use exact/binary comparison for provider subjects, storage keys, hashes and other case-sensitive identifiers.
