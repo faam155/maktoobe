@@ -1,6 +1,6 @@
 # AI Prompt Hub & Event Management Platform: proposed architecture
 
-Status: **working architecture baseline; Phase 1 authorized and completed on 2026-08-31**. Later phases remain subject to their scope review. See the [Phase 1 report](phases/phase-01.md) for installed versions and verification.
+Status: **working architecture baseline; Phase 2 authentication completed on 2026-09-01**. Later phases remain subject to their scope review. See the [Phase 2 report](phases/phase-02.md) for implementation and verification.
 
 Read with [environment findings](ENVIRONMENT.md), the [database design](DATABASE.md), and the [implementation roadmap](ROADMAP.md). The complete application is the eventual destination; each phase is a separately verified increment.
 
@@ -17,7 +17,7 @@ Read with [environment findings](ENVIRONMENT.md), the [database design](DATABASE
 | AI transport | Application-owned `AiGateway` contract; OpenAI Responses API via Laravel HTTP client | A small adapter controls request options, privacy, usage, error mapping, and HTTP fakes without coupling business logic to an SDK. |
 | Background work | Laravel queues, scheduler, notifications | Database queue initially; dedicated production workers, shared cache, and Redis can be introduced when operational load warrants it. |
 
-This table combines the installed foundation with target packages for later phases. Exact installed versions are recorded in the Phase 1 report and Composer/npm lockfiles; Fortify, Spatie Permission and provider packages remain deferred. See [foundation conventions](FOUNDATION.md) for the implemented database, queue, storage, logging and API boundaries.
+This table combines installed components with later targets. Phase 2 installed Fortify 1.39 and Socialite 5.30; Fortify's passkey/TOTP transitive dependencies are present but those features and routes remain disabled. Spatie Permission and other feature packages remain deferred. See [identity conventions](IDENTITY.md), [foundation conventions](FOUNDATION.md), and the lockfiles.
 
 ## 2. Application shape
 
@@ -204,4 +204,4 @@ The architecture assumes one internal organization, not multi-tenant SaaS; pendi
 
 Before the relevant integration phase, choose the Google client/domain policy, SMS provider/sender region, mail transport, allowed AI models and budgets, document size limits, retention/deletion periods, malware scanner, and hosting/backup arrangement. Do not block architecture review on collecting credentials; keep secrets out of this document.
 
-Phase 1 implemented only the framework, local database, bilingual responsive foundation and test tooling. The next planned scope is Phase 2 identity and RBAC; do not start it automatically.
+Phase 1 implemented the framework foundation. Phase 2 implemented the explicitly requested password, Google and SMS OTP authentication scope, but not role administration or MFA. Do not start another phase automatically.

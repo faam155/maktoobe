@@ -10,6 +10,55 @@
 }
 
 :root { --canvas: #fbfbf9; --surface: #fff; --ink: #272b27; --muted: #61665f; --line: #eaeaea; --accent: #46664d; }
+
+/* Functional account screens share the foundation palette without redesigning the portal. */
+.auth-body { min-height:100dvh; display:flex; flex-direction:column; }
+.auth-header { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:24px clamp(20px,5vw,72px); border-bottom:1px solid var(--line); }
+.auth-locale { display:flex; gap:8px; align-items:center; }
+.auth-locale select,.auth-locale button { min-height:42px; padding:8px 12px; border:1px solid #b9bfb6; background:white; border-radius:5px; }
+.auth-panel { width:min(100% - 40px,480px); margin:48px auto; background:white; padding:32px; border:1px solid var(--line); border-radius:8px; }
+.auth-panel-wide { width:min(100% - 40px,720px); }
+.auth-panel h1 { font-size:28px; font-weight:650; line-height:1.3; }
+.auth-intro { color:var(--muted); margin:12px 0 26px; }
+.auth-form { display:grid; gap:20px; }
+.auth-field { display:flex; flex-direction:column; gap:7px; min-width:0; }
+.auth-field label { font-weight:600; }
+.auth-field input { width:100%; min-height:46px; border:1px solid #a8b0a4; border-radius:5px; padding:10px 12px; background:white; color:var(--ink); }
+.auth-field input:focus-visible { outline:3px solid #46664d; outline-offset:2px; }
+.auth-field input[aria-invalid=true] { border-color:#a13232; }
+.auth-hint { color:var(--muted); font-size:13px; line-height:1.6; }
+.auth-field-error { color:#932b2b; font-size:13px; }
+.auth-primary,.auth-secondary { display:flex; align-items:center; justify-content:center; min-height:46px; border-radius:5px; padding:11px 16px; text-align:center; font-weight:600; }
+.auth-primary { background:var(--ink); color:white; border:1px solid var(--ink); width:100%; }
+.auth-secondary { background:white; border:1px solid #a8b0a4; margin-top:12px; width:100%; }
+.auth-form-row { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; font-size:14px; }
+.auth-checkbox { display:flex; gap:8px; align-items:center; min-height:36px; }
+.auth-checkbox input { width:18px; height:18px; }
+.auth-panel a:not(.auth-primary):not(.auth-secondary),.auth-text-link { text-decoration:underline; text-underline-offset:4px; }
+.auth-alternatives { margin-top:24px; padding-top:20px; border-top:1px solid var(--line); }
+.auth-bottom { margin-top:24px; }
+.auth-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; align-items:start; }
+.auth-status,.auth-errors { padding:14px 16px; margin:20px 0; border-radius:4px; }
+.auth-status { background:#ecf3ec; color:#294d31; }
+.auth-errors { background:#fff0ee; color:#842727; }
+.auth-errors ul { padding-inline-start:20px; margin:8px 0 0; }
+.auth-footer { margin-top:auto; padding:24px; display:flex; justify-content:center; flex-wrap:wrap; gap:24px; color:var(--muted); font-size:13px; }
+.auth-text-link { background:none; border:0; padding:0; color:inherit; }
+.auth-section { padding:24px 0; border-top:1px solid var(--line); }
+.auth-section h2 { font-size:19px; margin-bottom:10px; }
+.auth-session-list { padding:0; margin:16px 0; list-style:none; }
+.auth-session-list li { display:grid; gap:4px; padding:16px 0; border-bottom:1px solid var(--line); overflow-wrap:anywhere; }
+.auth-account-details { display:grid; gap:8px; margin:24px 0; overflow-wrap:anywhere; }
+.auth-account-details dd { margin:0 0 8px; }
+.auth-identifier { margin-bottom:20px; overflow-wrap:anywhere; }
+@media(max-width:600px) {
+    .auth-header { padding:18px 20px; align-items:flex-start; flex-direction:column; }
+    .auth-locale { width:100%; }
+    .auth-locale select { flex:1; }
+    .auth-panel,.auth-panel-wide { width:100%; margin:12px auto 24px; border:0; background:transparent; padding:24px 20px; }
+    .auth-panel h1 { font-size:25px; }
+    .auth-grid { grid-template-columns:1fr; }
+}
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 32px; }
 body { margin: 0; background: var(--canvas); color: var(--ink); font: 15px/1.6 var(--font-sans); -webkit-font-smoothing: antialiased; }

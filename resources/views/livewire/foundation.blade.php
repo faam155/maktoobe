@@ -26,7 +26,7 @@
             <article class="foundation-card"><span class="feature-icon"><x-icon name="screens" /></span><h3>{{ __('foundation.responsive_title') }}</h3><p>{{ __('foundation.responsive_body') }}</p><span class="card-index" aria-hidden="true">02</span></article>
             <article class="foundation-card"><span class="feature-icon"><x-icon name="layers" /></span><h3>{{ __('foundation.private_title') }}</h3><p>{{ __('foundation.private_body') }}</p><span class="card-index" aria-hidden="true">03</span></article>
         </div>
-        <aside class="next-phase"><div class="next-icon"><x-icon name="lock" /></div><div><p class="eyebrow">{{ __('foundation.next_label') }}</p><h3>{{ __('foundation.next_title') }}</h3><p>{{ __('foundation.next_body') }}</p></div><span class="planned-label">{{ __('foundation.planned') }}</span></aside>
+        <aside class="next-phase"><div class="next-icon"><x-icon name="lock" /></div><div><p class="eyebrow">{{ __('foundation.next_label') }}</p><h3>{{ __('foundation.next_title') }}</h3><p>{{ __('foundation.next_body') }}</p></div><a class="planned-label" href="{{ route('login') }}">{{ __('auth.login_title') }}</a></aside>
     </section>
 
     <section id="preferences" class="preferences-section" aria-labelledby="preferences-heading">

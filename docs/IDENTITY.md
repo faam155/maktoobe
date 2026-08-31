@@ -1,0 +1,17 @@
+# Identity implementation
+
+Phase 2 uses application-owned routes, localized Blade views, actions and middleware around selected Laravel Fortify controllers. `CompleteSignIn` is the single finalization path for password, Google, OTP and future methods. It reloads and locks the user, runs `EnsureSignInAllowed` plus the configured future-MFA checks, logs in, regenerates the session and records the account security version.
+
+New registrations and Google-created accounts are `pending`. Pending users may sign in only to verification and approval guidance; `/app` requires both `active` and verified email. Operators may change status with `php artisan auth:account-status user@example.test active --reason="Approved by operator"`. This command revokes sessions, remember tokens and pending OTPs and records a redacted audit. A future administration UI must call the same action with authorization.
+
+Password login accepts one normalized email-or-username identifier and uses equivalent password work and errors for unavailable accounts. Recovery responses do not disclose whether an account exists. Security middleware reloads current status/version on every protected request, including remembered sessions. Users can view redacted metadata for their own sessions and revoke the others after recent password authentication.
+
+Google uses Socialite with OAuth state, a ten-minute initiation window and verified provider email. Login identity is the provider's immutable subject. Matching email never silently links an existing account; linking requires an authenticated, active, verified account and a recent authentication. Configure only server-side `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` and `GOOGLE_REDIRECT_URI`. No provider tokens are stored. Live OAuth was not tested without credentials.
+
+SMS is behind `App\Contracts\SmsGateway`. Login applies only to an active, approved account with a verified stored number. Challenges contain HMAC digests for target, session and code; expire after five minutes; allow five attempts; are one-use; and have per-target cooldown/hour and per-IP route limits. Phone enrollment requires the owner, active/verified access and recent authentication. `SMS_DRIVER=local` writes encrypted, environment-scoped messages to private storage for local/browser/test only. A production gateway implementation must deliver the code without logging it and remain fail closed on errors.
+
+Local verification/reset messages use the same encrypted inbox when `AUTH_MAIL_DRIVER=local`. Trusted developers can read the latest message with `php artisan auth:inbox --recipient=user@example.test --latest`; the command refuses non-local/test/browser environments. Production must set a real Laravel mail transport and `AUTH_MAIL_DRIVER=mail`. Neither OTPs nor action URLs are exposed through HTTP routes or public storage.
+
+Fortify's TOTP/passkey-related transitive packages are installed by Fortify 1.39, but every Fortify feature flag and package route is disabled. Future MFA should add a class to `identity.additional_sign_in_checks`, preserving the same finalization path for all primary methods. MFA itself is outside Phase 2.
+
+Automated browser mutation uses `maktoobe_browser` through `.env.browser`. `scripts/browser-fixtures.php` verifies the exact database and MySQL account before any reset; it is CLI-only and is never registered as an HTTP route. PHP tests similarly require `maktoobe_test`.

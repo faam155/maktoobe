@@ -23,7 +23,7 @@ class FoundationTest extends TestCase
             ->assertHeader('X-Frame-Options', 'DENY')->assertHeader('X-Content-Type-Options', 'nosniff')
             ->assertHeader('Content-Language', 'en');
 
-        foreach (['/app', '/admin', '/login', '/register', '/api/v1/users', '/storage/private.txt'] as $path) {
+        foreach (['/admin', '/api/v1/users', '/storage/private.txt'] as $path) {
             $this->get($path)->assertNotFound()->assertDontSee('password');
         }
     }
@@ -106,7 +106,7 @@ class FoundationTest extends TestCase
 
     public function test_both_locales_have_matching_interface_keys(): void
     {
-        foreach (['foundation', 'validation', 'errors'] as $file) {
+        foreach (['foundation', 'validation', 'errors', 'auth', 'passwords'] as $file) {
             $this->assertSame(array_keys(require lang_path("en/$file.php")), array_keys(require lang_path("ar/$file.php")));
         }
     }

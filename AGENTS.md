@@ -4,7 +4,7 @@
 
 This repository is for an internal AI Prompt Hub and Event Management Platform built with Laravel. The user explicitly requires incremental development and review of architecture/database design before Phase 1.
 
-**Current status: Phase 1 (Laravel foundation) completed and verified on 2026-08-31. Phase 2 has not started.** The user's instruction to start the next phase authorized the Phase 1 boundary in ROADMAP.md. Authentication, RBAC and business modules remain later phases. Do not begin Phase 2 automatically.
+**Current status: Phase 2 Authentication completed and verified on 2026-09-01.** Phase 1 is complete at `3205d33`. The latest user scope brought password, Google and SMS OTP authentication forward, overriding their earlier roadmap placement. Role administration, business modules and MFA implementation remain out of scope. Do not start another phase without explicit user scope.
 
 Read the current conversation first: explicit user approvals and changes take precedence over this recorded status. Once the user approves the design/phase, update this status and proceed with that scope without asking for the same approval again. Never treat the full specification as authorization to implement all phases at once.
 
@@ -16,6 +16,8 @@ Design references:
 - [Observed local environment](docs/ENVIRONMENT.md)
 - [Phase 1 implementation and verification](docs/phases/phase-01.md)
 - [Implemented foundation conventions](docs/FOUNDATION.md)
+- [Implemented identity conventions](docs/IDENTITY.md)
+- [Phase 2 implementation and verification](docs/phases/phase-02.md)
 
 These files are the working design baseline for the authorized foundation phase. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
 
@@ -28,6 +30,7 @@ These files are the working design baseline for the authorized foundation phase.
 - Use normal Laravel directories grouped by feature. Create classes/tables when their approved phase needs them, not the whole folder/schema tree in advance.
 - Install packages only when needed and compatible; keep Composer/npm lockfiles committed. Never bypass platform constraints. Livewire supplies Alpine; avoid duplicate initialization.
 - Phase 1's supported queue is the database connection with `after_commit=true`; batching/failures default to MySQL. Private local storage throws on write failure. The local environment uses daily info logs with 14-day retention. Follow FOUNDATION.md for worker, payload and logging rules; no business jobs or schedules exist yet.
+- Phase 2 uses Fortify's selected password controllers behind application-owned routes/UI and one `CompleteSignIn` pipeline for password, Google and OTP. Socialite state must remain enabled. Production mail/SMS providers replace the fail-closed local adapters; local authentication inbox files are encrypted, private, environment-scoped and terminal-readable only.
 
 ## Data and authorization rules
 
@@ -73,8 +76,8 @@ Planning-only work has no app to migrate/run/browser-test; report these checks a
 ## Local environment and Git care
 
 - Workspace uses PowerShell on Windows. PHP/Composer are on PATH; inspected Laragon Node and MySQL binaries are not. Consult ENVIRONMENT.md, and reinspect before use; its inventory does not prove a server is running.
-- Phase 1 uses an isolated MySQL instance at `127.0.0.1:3307` under ignored `.runtime/mysql`, with separate `maktoobe` and `maktoobe_test` databases/users. See README.md and `scripts/mysql.ps1` (PowerShell 7). Never reinitialize an existing runtime. Tests reject cached configuration and any database/user other than `maktoobe_test` before RefreshDatabase can run.
-- Queue integration tests use DatabaseMigrations on that disposable database to verify real commits, rollbacks and worker execution. Browser tests own a server on port 8001; manual preview remains on 8000. Current browser tests only change session preferences. Add a dedicated browser-test database before future business-data mutation tests.
+- Phase 1 uses an isolated MySQL instance at `127.0.0.1:3307` under ignored `.runtime/mysql`, with separate `maktoobe` and `maktoobe_test` databases/users. Phase 2 adds a separately credentialed `maktoobe_browser` database for browser mutations. See README.md and the guarded setup scripts. Never reinitialize an existing runtime. PHP tests reject cached configuration and any database/user other than `maktoobe_test` before RefreshDatabase can run; browser fixtures enforce the browser database/user before reset.
+- Queue integration tests use DatabaseMigrations on the disposable PHP-test database to verify real commits, rollbacks and worker execution. Browser tests own a server on port 8001 and may reset only `maktoobe_browser`; manual preview remains on 8000.
 - Keep explicit runtime paths or process-scoped PATH changes local to the project session. Never initialize over an existing MySQL data directory or assume credentials.
 - Preserve `my task.txt`, existing Git history and unrelated user changes. Use a `codex/` branch for new work unless instructed otherwise. Do not amend unrelated commits, rewrite history or push checkpoints automatically.
 - Do not spawn subagents unless the user explicitly asks for delegation. Keep work within the current phase and current task.

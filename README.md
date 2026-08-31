@@ -22,7 +22,7 @@ php artisan migrate --env=testing
 npm run build
 ```
 
-Initialization creates an isolated data directory under ignored `.runtime/mysql`, binds only to `127.0.0.1:3307`, creates separate `maktoobe` and `maktoobe_test` databases/users, and writes random credentials to ignored `.env` and `.env.testing`. It refuses existing runtime/environment targets and never changes Laragon's data. Pass `-MySqlBase` for another installation or `-Port` for an unused local port. The generated environment files inherit that port.
+Initialization creates an isolated data directory under ignored `.runtime/mysql`, binds only to `127.0.0.1:3307`, creates separate `maktoobe` and `maktoobe_test` databases/users, and writes random credentials to ignored `.env` and `.env.testing`. It refuses existing runtime/environment targets and never changes Laragon's data. Pass `-MySqlBase` for another installation or `-Port` for an unused local port. Before browser tests that mutate authentication data, run `scripts/browser-database.ps1` once to create a third isolated database/user and ignored `.env.browser`.
 
 Keep `.runtime` and `.env*` private and untracked. Do not rerun initialization to reset a database. Never use `migrate:fresh` on development data. Tests refuse cached configuration or any database/user other than `maktoobe_test`.
 
@@ -34,7 +34,7 @@ Keep `.runtime` and `.env*` private and untracked. Do not rerun initialization t
 composer dev
 ```
 
-Open `http://127.0.0.1:8000`. The PHP server is local-only. The foundation and Laravel health endpoint are available; `/app`, `/admin`, authentication and feature routes remain unavailable. Use `php artisan serve --host=127.0.0.1 --port=8000` directly if preferred. Stop PHP with Ctrl+C and the project database with `scripts/mysql.ps1 -Action Stop`.
+Open `http://127.0.0.1:8000`. The PHP server is local-only. Registration, password/username login, recovery, verification and local OTP authentication are available; `/app` is an authenticated placeholder and business/admin modules remain unavailable. Use `php artisan serve --host=127.0.0.1 --port=8000 --no-reload` directly if preferred. Stop PHP with Ctrl+C and the project database with `scripts/mysql.ps1 -Action Stop`.
 
 ## Verification
 
@@ -61,4 +61,4 @@ Read `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/ROADMAP.md` 
 
 See [foundation conventions](docs/FOUNDATION.md) for the current schema/model boundary, future API reuse, queue worker commands, private storage, logging and test isolation. Database jobs wait for transaction commits. Local files are private and write failures throw. New local setups use daily info logs with 14-day retention; an existing `.env` should use `LOG_STACK=daily`, `LOG_LEVEL=info` and `LOG_DAILY_DAYS=14` to adopt those defaults.
 
-This is a verified development foundation, not a deployed production application. Production authentication, workers, HTTPS, secret management, backups, stricter CSP and operational hardening are later phases.
+This is a verified local application increment, not a deployment. Google and real SMS/email delivery require server-side production credentials/providers. HTTPS, production workers, secret management, backups, stricter CSP and operational hardening remain deployment responsibilities.

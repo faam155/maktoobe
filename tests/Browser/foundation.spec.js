@@ -80,7 +80,7 @@ test('server rejects invalid locale input and missing CSRF without exposing a fe
     const csrfResponse = await request.post(updateUri, { data: {}, headers: { 'Sec-Fetch-Site': 'cross-site' } });
     expect(csrfResponse.status()).toBe(419);
 
-    for (const path of ['/admin', '/app', '/register', '/.env', '/composer.json']) {
+    for (const path of ['/admin', '/.env', '/composer.json']) {
         const response = await request.get(path);
         expect(response.status()).toBe(404);
     }

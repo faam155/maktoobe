@@ -15,7 +15,7 @@ export default defineConfig({
     },
     webServer: {
         // Keep automated traffic separate from the single-process Windows preview server.
-        command: 'php artisan serve --host=127.0.0.1 --port=8001 --no-reload',
+        command: 'php scripts/browser-fixtures.php reset && php artisan serve --env=browser --host=127.0.0.1 --port=8001 --no-reload',
         url: 'http://127.0.0.1:8001/up',
         reuseExistingServer: false,
         timeout: 30000,
