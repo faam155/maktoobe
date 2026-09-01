@@ -22,7 +22,7 @@ class PortalDashboardQuery
         })->whereHas('uses', fn ($uses) => $uses->where('user_id', $user->id))->count();
 
         $sections = collect([
-            ['key' => 'recent_ai_conversations', 'authorized' => $user->can('use-ai')],
+            ['key' => 'recent_ai_conversations', 'authorized' => $user->can('use-ai'), 'count' => $user->aiConversations()->count(), 'route' => 'ai.index'],
             ['key' => 'favorite_prompts', 'authorized' => true, 'count' => (clone $visibleLibrary)->whereHas('favorites', fn ($favorites) => $favorites->where('user_id', $user->id))->count(), 'route' => 'my-prompts.index', 'params' => ['section' => 'favorites']],
             ['key' => 'recent_prompts', 'authorized' => true, 'count' => $recentPromptCount, 'route' => 'my-prompts.index', 'params' => ['section' => 'recent']],
             ['key' => 'personal_prompts', 'authorized' => true, 'count' => $user->prompts()->where('source', PromptSource::Personal)->count(), 'route' => 'my-prompts.index', 'params' => ['section' => 'personal']],
@@ -32,7 +32,7 @@ class PortalDashboardQuery
         ])->where('authorized', true)->map(fn (array $section) => collect($section)->except('authorized')->all())->values();
 
         $quickActions = collect([
-            ['key' => 'ai_assistant', 'authorized' => $user->can('use-ai')],
+            ['key' => 'ai_assistant', 'authorized' => $user->can('use-ai'), 'route' => 'ai.create'],
             ['key' => 'prompt_library', 'authorized' => true, 'route' => 'prompts.index'],
             ['key' => 'event_calendar', 'authorized' => true],
         ])->where('authorized', true)->map(fn (array $action) => ['key' => $action['key'], 'route' => $action['route'] ?? null])->values();

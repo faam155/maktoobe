@@ -1,0 +1,9 @@
+# AI Assistant conventions
+
+Phase 8 uses a provider-neutral `AiProvider` contract. The OpenAI adapter calls the Responses API only from Laravel with server-side credentials, explicit timeouts, `store=false`, bounded output, and a pseudonymous safety identifier. The browser never receives provider credentials or calls the provider. A deterministic local adapter is permitted only in local, browser, and testing environments for UI verification.
+
+Conversation ownership has no administrator bypass. Every web action requires `use-ai` and exact ownership. The queued job rechecks the user's active status, permission, and conversation ownership before a provider call. Model IDs come from server configuration and are intersected with configured role mappings on every request and retry.
+
+Each submitted message creates an idempotent `ai_request` and dispatches `ProcessAiRequest` after commit. The job makes one provider attempt, avoiding blind retries after ambiguous paid requests. It records a safe request status, provider request ID, token counts, timestamps, settings snapshot, prompt reference/revision, and encrypted prompt snapshot. Provider bodies, credentials, raw exception messages, and full content are never written to logs as request metadata.
+
+Local history supplies up to 30 ordered messages and 100,000 characters. OpenAI state is not used for continuation. Cancellation prevents a queued call or discards a late result; it cannot guarantee that an already transmitted HTTP request stops provider processing. Retry is an explicit user action and creates a new idempotency key.

@@ -81,4 +81,9 @@ class Prompt extends Model
     {
         return $this->belongsToMany(User::class, 'prompt_favorites')->withPivot('created_at');
     }
+
+    public function aiRequests(): HasMany
+    {
+        return $this->hasMany(AiRequest::class);
+    }
 }

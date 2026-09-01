@@ -1,5 +1,5 @@
 <a href="{{ route('account.home') }}" @class(['portal-nav-link','is-current'=>request()->routeIs('account.home')])>{{ __('dashboard.dashboard') }}</a>
-@can('use-ai')<span class="portal-nav-link is-disabled" aria-disabled="true"><span>{{ __('dashboard.ai_assistant') }}</span><small>{{ __('dashboard.coming_later') }}</small></span>@endcan
+@can('use-ai')<a href="{{ route('ai.index') }}" @class(['portal-nav-link','is-current'=>request()->routeIs('ai.*')])>{{ __('dashboard.ai_assistant') }}</a>@endcan
 <a href="{{ route('prompts.index') }}" @class(['portal-nav-link','is-current'=>request()->routeIs('prompts.*')])>{{ __('dashboard.prompt_library') }}</a>
 <a href="{{ route('my-prompts.index') }}" @class(['portal-nav-link','is-current'=>request()->routeIs('my-prompts.*')])>{{ __('dashboard.my_prompts') }}</a>
 <span class="portal-nav-link is-disabled" aria-disabled="true"><span>{{ __('dashboard.events') }}</span><small>{{ __('dashboard.coming_later') }}</small></span>

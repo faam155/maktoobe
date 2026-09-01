@@ -2,13 +2,18 @@
 
 namespace App\Providers;
 
+use App\Contracts\AiProvider;
+use App\Models\AiConversation;
 use App\Models\Prompt;
 use App\Models\PromptCategory;
 use App\Models\User;
+use App\Policies\AiConversationPolicy;
 use App\Policies\PermissionPolicy;
 use App\Policies\PromptCategoryPolicy;
 use App\Policies\PromptPolicy;
 use App\Policies\RolePolicy;
+use App\Services\Ai\LocalAiProvider;
+use App\Services\Ai\OpenAiResponsesProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -22,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(AiProvider::class, fn ($app) => config('ai.provider') === 'local' ? $app->make(LocalAiProvider::class) : $app->make(OpenAiResponsesProvider::class));
     }
 
     /**
@@ -35,5 +40,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Permission::class, PermissionPolicy::class);
         Gate::policy(PromptCategory::class, PromptCategoryPolicy::class);
         Gate::policy(Prompt::class, PromptPolicy::class);
+        Gate::policy(AiConversation::class, AiConversationPolicy::class);
     }
 }

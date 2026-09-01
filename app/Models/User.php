@@ -59,6 +59,11 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return $this->hasMany(Prompt::class, 'owner_id');
     }
 
+    public function aiConversations(): HasMany
+    {
+        return $this->hasMany(AiConversation::class);
+    }
+
     public function favoritePrompts(): BelongsToMany
     {
         return $this->belongsToMany(Prompt::class, 'prompt_favorites')->withPivot('created_at');

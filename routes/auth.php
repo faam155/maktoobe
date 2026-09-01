@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\Auth\PasswordRecoveryController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Portal\AiAssistantController;
 use App\Http\Controllers\Portal\DashboardController;
 use App\Http\Controllers\Portal\MyPromptController;
 use App\Http\Controllers\Portal\PromptFavoriteController;
@@ -41,6 +42,18 @@ Route::middleware('auth')->group(function () {
     Route::view('/account/pending', 'auth.pending')->name('account.pending');
     Route::middleware(['active', 'verified'])->group(function () {
         Route::get('/app', DashboardController::class)->name('account.home');
+        Route::middleware('permission:use-ai')->group(function () {
+            Route::get('/app/assistant', [AiAssistantController::class, 'index'])->name('ai.index');
+            Route::get('/app/assistant/new', [AiAssistantController::class, 'create'])->name('ai.create');
+            Route::post('/app/assistant', [AiAssistantController::class, 'store'])->middleware('throttle:10,1')->name('ai.store');
+            Route::get('/app/assistant/{conversation}', [AiAssistantController::class, 'show'])->name('ai.show');
+            Route::post('/app/assistant/{conversation}/messages', [AiAssistantController::class, 'send'])->middleware('throttle:10,1')->name('ai.send');
+            Route::get('/app/assistant/{conversation}/requests/{aiRequest}', [AiAssistantController::class, 'status'])->middleware('throttle:60,1')->name('ai.status');
+            Route::patch('/app/assistant/{conversation}', [AiAssistantController::class, 'rename'])->name('ai.rename');
+            Route::delete('/app/assistant/{conversation}', [AiAssistantController::class, 'destroy'])->name('ai.destroy');
+            Route::post('/app/assistant/{conversation}/requests/{aiRequest}/cancel', [AiAssistantController::class, 'cancel'])->name('ai.cancel');
+            Route::post('/app/assistant/{conversation}/requests/{aiRequest}/retry', [AiAssistantController::class, 'retry'])->middleware('throttle:10,1')->name('ai.retry');
+        });
         Route::get('/app/prompts', [PromptLibraryController::class, 'index'])->name('prompts.index');
         Route::get('/app/prompts/{prompt}', [PromptLibraryController::class, 'show'])->name('prompts.show');
         Route::post('/app/prompts/{prompt}/copy', [PromptLibraryController::class, 'copy'])->middleware('throttle:60,1')->name('prompts.copy');

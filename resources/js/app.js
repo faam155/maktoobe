@@ -49,3 +49,22 @@ document.addEventListener('click', async (event) => {
         status.textContent = button.dataset.copyFailed;
     }
 });
+
+const pendingAi = document.querySelectorAll('[data-ai-poll]');
+if (pendingAi.length) {
+    const poll = async () => {
+        for (const item of pendingAi) {
+            try {
+                const response = await fetch(item.dataset.aiPoll, {headers: {'Accept':'application/json'}});
+                if (!response.ok) continue;
+                const data = await response.json();
+                if (['completed','failed','cancelled'].includes(data.status)) {
+                    window.location.reload();
+                    return;
+                }
+            } catch { /* Retry transient browser/network failures on the next interval. */ }
+        }
+        window.setTimeout(poll, 2000);
+    };
+    window.setTimeout(poll, 1000);
+}
