@@ -8,6 +8,7 @@ use App\Enums\AiRequestStatus;
 use App\Exceptions\AiProviderException;
 use App\Models\AiRequest;
 use App\Models\PromptUse;
+use App\Services\Brand\BrandGuidelineContext;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,7 @@ class ProcessAiRequest implements ShouldQueue
     public function handle(AiProvider $provider): void
     {
         $request = DB::transaction(function () {
-            $request = AiRequest::with(['user.roles', 'conversation'])->lockForUpdate()->find($this->requestId);
+            $request = AiRequest::with(['user.roles', 'conversation', 'brandGuidelineVersion.guideline'])->lockForUpdate()->find($this->requestId);
             if (! $request || $request->status !== AiRequestStatus::Queued) {
                 return null;
             }
@@ -53,6 +54,10 @@ class ProcessAiRequest implements ShouldQueue
 
             return $characters <= 100000;
         })->reverse()->map(fn ($message) => ['role' => $message->role, 'content' => $message->content])->values()->all();
+        $brandContext = app(BrandGuidelineContext::class)->forVersion($request->brandGuidelineVersion);
+        if ($brandContext) {
+            array_unshift($messages, ['role' => 'developer', 'content' => $brandContext]);
+        }
         try {
             $result = $provider->generate($messages, $request->model, $request->settings_snapshot, hash('sha256', 'maktoobe:'.$request->user_id));
             DB::transaction(function () use ($request, $result) {

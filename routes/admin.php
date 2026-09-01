@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BrandGuidelineController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\PromptCategoryController;
@@ -34,5 +35,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified'
         Route::patch('/prompts/{prompt}/status', [PromptController::class, 'status'])->name('prompts.status');
         Route::post('/prompts/{prompt}/duplicate', [PromptController::class, 'duplicate'])->name('prompts.duplicate');
         Route::delete('/prompts/{prompt}', [PromptController::class, 'destroy'])->name('prompts.destroy');
+    });
+});
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified', 'permission:manage-brand-guidelines'])->group(function () {
+    Route::resource('brand-guidelines', BrandGuidelineController::class)->only(['index', 'create', 'show']);
+    Route::get('/brand-guideline-versions/{version}/download', [BrandGuidelineController::class, 'download'])->name('brand-guidelines.download');
+    Route::middleware('recent-auth')->group(function () {
+        Route::post('/brand-guidelines', [BrandGuidelineController::class, 'store'])->name('brand-guidelines.store');
+        Route::post('/brand-guidelines/{brandGuideline}/versions', [BrandGuidelineController::class, 'version'])->name('brand-guidelines.versions.store');
+        Route::patch('/brand-guideline-versions/{version}/status', [BrandGuidelineController::class, 'status'])->name('brand-guidelines.status');
     });
 });

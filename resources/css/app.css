@@ -370,3 +370,4 @@ a.portal-nav-link:hover, .portal-nav-link.is-current { color:#233228; background
 }
 
 @media(max-width:639px){.ai-history-hero{align-items:stretch;flex-direction:column}.ai-history-filters{grid-template-columns:1fr}.ai-history-card{grid-template-columns:1fr}.ai-history-card>div{justify-content:space-between}.ai-history-sidebar nav a{flex-basis:12rem}.ai-message{max-width:94%}.ai-chat-heading{align-items:flex-start;flex-direction:column}.ai-chat-controls{width:100%}.ai-chat-controls form:first-child{display:grid;width:100%;grid-template-columns:1fr auto}.ai-compose{padding:1rem}}
+.ai-brand-option{padding:.8rem;border:1px solid var(--line);border-radius:.6rem;background:var(--surface-muted)}.ai-brand-option span{display:flex;align-items:center;gap:.5rem}.ai-brand-option input{width:1.1rem;height:1.1rem}.ai-brand-option small{color:var(--muted);font-weight:400}.brand-versions{overflow:hidden}.brand-versions .admin-table-wrap{margin-top:1rem}

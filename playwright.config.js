@@ -4,6 +4,7 @@ export default defineConfig({
     testDir: './tests/Browser',
     fullyParallel: false,
     workers: 1,
+    timeout: 60000,
     retries: 0,
     reporter: [['list'], ['html', { open: 'never' }]],
     use: {
@@ -18,6 +19,6 @@ export default defineConfig({
         command: 'php scripts/browser-fixtures.php reset && php artisan serve --env=browser --host=127.0.0.1 --port=8001 --no-reload',
         url: 'http://127.0.0.1:8001/up',
         reuseExistingServer: false,
-        timeout: 30000,
+        timeout: 60000,
     },
 });

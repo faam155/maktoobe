@@ -128,7 +128,7 @@ class AiAssistantController
         abort_unless($aiRequest->conversation_id === $conversation->id && $aiRequest->status === AiRequestStatus::Failed, 404);
         $model = app(AiModelAccess::class)->authorize($request->user(), $aiRequest->model);
         $copy = AiRequest::create(['user_id' => $request->user()->id, 'conversation_id' => $conversation->id,
-            'prompt_id' => $aiRequest->prompt_id, 'prompt_revision' => $aiRequest->prompt_revision, 'prompt_snapshot' => $aiRequest->prompt_snapshot,
+            'prompt_id' => $aiRequest->prompt_id, 'brand_guideline_version_id' => $aiRequest->brand_guideline_version_id, 'prompt_revision' => $aiRequest->prompt_revision, 'prompt_snapshot' => $aiRequest->prompt_snapshot,
             'user_message_id' => $aiRequest->user_message_id, 'client_operation_id' => (string) Str::uuid(), 'model' => $model,
             'status' => AiRequestStatus::Queued, 'settings_snapshot' => $aiRequest->settings_snapshot, 'requested_at' => now()]);
         ProcessAiRequest::dispatch($copy->id)->afterCommit();

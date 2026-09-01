@@ -4,7 +4,7 @@
 
 This repository is for an internal AI Prompt Hub and Event Management Platform built with Laravel. The user explicitly requires incremental development and review of architecture/database design before Phase 1.
 
-**Current status: Phase 9 AI Conversation History completed and verified on 2026-09-02.** See the Phase 9 report for its checkpoint and evidence. Events, brand, analytics, API and MFA modules remain out of scope until explicitly requested. Stop after Phase 9.
+**Current status: Phase 10 Brand Guidelines Management and AI Context completed and verified on 2026-09-02.** See the Phase 10 report for its checkpoint and evidence. Events, analytics, API and MFA modules remain out of scope until explicitly requested. Stop after Phase 10.
 
 Read the current conversation first: explicit user approvals and changes take precedence over this recorded status. Once the user approves the design/phase, update this status and proceed with that scope without asking for the same approval again. Never treat the full specification as authorization to implement all phases at once.
 
@@ -31,8 +31,10 @@ Design references:
 - [Implemented AI Assistant conventions](docs/AI_ASSISTANT.md)
 - [Phase 8 implementation and verification](docs/phases/phase-08.md)
 - [Phase 9 implementation and verification](docs/phases/phase-09.md)
+- [Implemented Brand Guideline conventions](docs/BRAND_GUIDELINES.md)
+- [Phase 10 implementation and verification](docs/phases/phase-10.md)
 
-These files are the working baseline for completed Phases 1–9. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
+These files are the working baseline for completed Phases 1–10. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
 
 ## Architecture rules
 
@@ -51,6 +53,7 @@ These files are the working baseline for completed Phases 1–9. Document approv
 - Phase 7 activates `source=personal` as authenticated-owner-only private drafts. Administrator permissions never bypass ownership. Favorites are unique user/library-prompt facts and are always intersected with current `PromptAccess`; recent prompts derive from current authorized `prompt_uses`. See PERSONAL_PROMPTS.md.
 - Phase 8 uses a provider-neutral backend AI contract and queued single-attempt requests. Conversations are owner-only; prompt inputs are reauthorized and snapshotted; configured model access is rechecked by role in the request and job. See AI_ASSISTANT.md.
 - Phase 9 adds owner-scoped, searchable and sortable conversation history, archive lifecycle, activity metadata and bounded message pagination. See AI_ASSISTANT.md.
+- Phase 10 keeps guideline files private and versioned, gates every operation with `manage-brand-guidelines`, and snapshots only explicitly selected bounded text context into AI requests. Production scanning fails closed until its adapter is configured. See BRAND_GUIDELINES.md.
 
 ## Data and authorization rules
 

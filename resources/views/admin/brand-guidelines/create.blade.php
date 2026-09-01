@@ -1,0 +1,1 @@
+<x-layouts.admin :title="__('brand.create')"><form method="POST" action="{{ route('admin.brand-guidelines.store') }}" enctype="multipart/form-data" class="admin-form">@csrf @include('admin.brand-guidelines._form')</form></x-layouts.admin>

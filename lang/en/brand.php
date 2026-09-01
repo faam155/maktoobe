@@ -1,0 +1,8 @@
+<?php
+
+return [
+    'scanner_unavailable' => 'File scanning is not configured for this environment.',
+    'file_unsafe' => 'The file did not pass the security scan.',
+    'file_not_scanned' => 'Only a successfully scanned file can be activated.',
+    'title' => 'Brand Guidelines', 'intro' => 'Manage private, versioned brand source documents used by authorized AI requests.', 'create' => 'Upload guideline', 'details' => 'Guideline details', 'name' => 'Title', 'description' => 'Description', 'version' => 'Version', 'file' => 'Document file', 'file_help' => 'PDF, DOCX, PNG, JPG, WEBP or UTF-8 TXT. Maximum 10 MB.', 'save' => 'Upload document', 'new_version' => 'Upload a new version', 'versions' => 'Version history', 'active' => 'Active', 'inactive' => 'Inactive', 'activate' => 'Activate', 'deactivate' => 'Deactivate', 'download' => 'Download', 'uploaded' => 'The guideline version was uploaded.', 'activated' => 'The guideline version is now active.', 'deactivated' => 'The guideline version was deactivated.', 'empty' => 'No brand guidelines have been uploaded.', 'uploaded_by' => 'Uploaded by', 'uploaded_at' => 'Uploaded', 'size' => 'Size', 'type' => 'File type', 'extraction' => 'AI context', 'ready' => 'Plain text ready', 'not_supported' => 'Stored only; extraction is not available yet.', 'invalid_file' => 'The file content or MIME type does not match an allowed guideline format.', 'use' => 'Use Brand Guidelines', 'use_help' => 'Include the bounded text context from the currently active guideline when available.', 'no_active_context' => 'No active text guideline is available.', 'context_used' => 'Brand guideline context used: :title, version :version.',
+];

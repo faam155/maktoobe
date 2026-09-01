@@ -1,6 +1,6 @@
 # AI Prompt Hub & Event Management Platform: proposed architecture
 
-Status: **working architecture baseline; Phase 9 AI Conversation History completed on 2026-09-02**. Later phases remain subject to their scope review. See the [Phase 9 report](phases/phase-09.md) for implementation and verification.
+Status: **working architecture baseline; Phase 10 Brand Guidelines completed on 2026-09-02**. Later phases remain subject to their scope review. See the [Phase 10 report](phases/phase-10.md) for implementation and verification.
 
 Read with [environment findings](ENVIRONMENT.md), the [database design](DATABASE.md), and the [implementation roadmap](ROADMAP.md). The complete application is the eventual destination; each phase is a separately verified increment.
 

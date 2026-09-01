@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AiRequest extends Model
 {
-    protected $fillable = ['user_id', 'conversation_id', 'prompt_id', 'prompt_revision', 'prompt_snapshot', 'user_message_id', 'assistant_message_id', 'client_operation_id', 'model', 'status', 'settings_snapshot', 'provider_request_id', 'input_tokens', 'output_tokens', 'total_tokens', 'failure_code', 'requested_at', 'started_at', 'finished_at', 'cancelled_at'];
+    protected $fillable = ['user_id', 'conversation_id', 'prompt_id', 'brand_guideline_version_id', 'prompt_revision', 'prompt_snapshot', 'user_message_id', 'assistant_message_id', 'client_operation_id', 'model', 'status', 'settings_snapshot', 'provider_request_id', 'input_tokens', 'output_tokens', 'total_tokens', 'failure_code', 'requested_at', 'started_at', 'finished_at', 'cancelled_at'];
 
     protected function casts(): array
     {
@@ -28,6 +28,11 @@ class AiRequest extends Model
     public function prompt(): BelongsTo
     {
         return $this->belongsTo(Prompt::class);
+    }
+
+    public function brandGuidelineVersion(): BelongsTo
+    {
+        return $this->belongsTo(BrandGuidelineVersion::class);
     }
 
     public function userMessage(): BelongsTo

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Contracts\AiProvider;
+use App\Contracts\GuidelineFileScanner;
 use App\Models\AiConversation;
 use App\Models\Prompt;
 use App\Models\PromptCategory;
@@ -14,6 +15,7 @@ use App\Policies\PromptPolicy;
 use App\Policies\RolePolicy;
 use App\Services\Ai\LocalAiProvider;
 use App\Services\Ai\OpenAiResponsesProvider;
+use App\Services\Brand\LocalGuidelineFileScanner;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(AiProvider::class, fn ($app) => config('ai.provider') === 'local' ? $app->make(LocalAiProvider::class) : $app->make(OpenAiResponsesProvider::class));
+        $this->app->bind(GuidelineFileScanner::class, LocalGuidelineFileScanner::class);
     }
 
     /**
