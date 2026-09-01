@@ -1,8 +1,8 @@
 # Proposed normalized MySQL schema
 
-Status: **target design with Phases 1–3, Phase 5 categories and Phase 6 Prompt Library migrated; Phase 4 required no migration**. Create only the tables needed by the approved implementation phase. Remaining sections describe the future logical schema; framework/package details are resolved against locked versions when installed.
+Status: **target design with Phases 1–3 and Phases 5–7 migrated; Phase 4 required no migration**. Create only the tables needed by the approved implementation phase. Remaining sections describe the future logical schema; framework/package details are resolved against locked versions when installed.
 
-Phase 1 implemented Laravel's user/password-reset/session/cache/queue baseline. Phase 2 extended users and added social identity, OTP challenge and account-audit records. Phase 3 added Spatie's normalized role/permission tables. Phase 5 added categories. Phase 6 added `prompts`, tags, audience pivots and `prompt_uses`. AI, event, file, brand, notification and analytics tables remain uncreated. See the phase reports for the applied migration inventory; the remaining schema below is a future target.
+Phase 1 implemented Laravel's user/password-reset/session/cache/queue baseline. Phase 2 extended users and added social identity, OTP challenge and account-audit records. Phase 3 added Spatie's normalized role/permission tables. Phase 5 added categories. Phase 6 added `prompts`, tags, audience pivots and `prompt_uses`. Phase 7 activates personal prompt records and adds `prompt_favorites`. AI, event, file, brand, notification and analytics tables remain uncreated. See the phase reports for the applied migration inventory; the remaining schema below is a future target.
 
 The eight Phase 1 framework tables remain the normalized foundation. [FOUNDATION.md](FOUNDATION.md#current-schema-and-eloquent-boundary) maps them to their Eloquent/framework owners, indexes and lifecycle rules. Identity and authorization added only their approved records; future domain foreign keys and relationships arrive with their modules, not as empty tables in advance.
 
@@ -53,7 +53,7 @@ Username is a canonical unique login string without `@`; email is always require
 | `prompt_role_access` | prompt_id → prompts; role_id → roles; granted_by? → users; created_at | **Implemented Phase 6:** PK(prompt_id, role_id); I(role_id, prompt_id); same rules. |
 | `tags` | id; canonical_name; display_name; timestamps | **Implemented Phase 6:** U(canonical_name). User filter suggestions are visibility-scoped. |
 | `prompt_tag` | prompt_id → prompts; tag_id → tags | **Implemented Phase 6:** composite PK; CASCADE both parents; reverse index on tag_id. |
-| `prompt_favorites` | user_id → users; prompt_id → prompts; created_at | PK(user_id, prompt_id); I(prompt_id); CASCADE hard deletion; inaccessible favorites are excluded from responses. |
+| `prompt_favorites` | user_id → users; prompt_id → prompts; created_at | **Implemented Phase 7:** PK(user_id, prompt_id); I(prompt_id, created_at); CASCADE hard deletion; inaccessible favorites are excluded from responses. |
 | `prompt_uses` | id; user_id? → users; prompt_id? → prompts; ai_request_id? → ai_requests (added in AI phase); kind (`copy`, `ai`); client_operation_id; created_at | **Partially implemented Phase 6:** copy facts, U(user_id, client_operation_id), user/time and prompt/kind/time indexes; user/prompt SET NULL. The nullable AI request relation is deferred with AI execution. |
 
 Library prompts are visible/useable to their selected audience only when published. Authorized editors can preview drafts. Owners can use their own private drafts. Standard users' personal prompts stay private; publishing them to the library requires an explicit authorized action rather than a source/visibility field update from the browser.

@@ -11,6 +11,7 @@ use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -51,6 +52,16 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     public function otpChallenges(): HasMany
     {
         return $this->hasMany(OtpChallenge::class);
+    }
+
+    public function prompts(): HasMany
+    {
+        return $this->hasMany(Prompt::class, 'owner_id');
+    }
+
+    public function favoritePrompts(): BelongsToMany
+    {
+        return $this->belongsToMany(Prompt::class, 'prompt_favorites')->withPivot('created_at');
     }
 
     public function preferredLocale(): string

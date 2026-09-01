@@ -71,4 +71,14 @@ class Prompt extends Model
     {
         return $this->hasMany(PromptUse::class);
     }
+
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(PromptFavorite::class);
+    }
+
+    public function favoritedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'prompt_favorites')->withPivot('created_at');
+    }
 }

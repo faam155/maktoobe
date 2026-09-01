@@ -14,7 +14,8 @@ class PromptLibraryQuery
     {
         Gate::forUser($actor)->authorize('viewAny', Prompt::class);
         $query = app(PromptAccess::class)->visibleTo(Prompt::query(), $actor)
-            ->with(['category.translations', 'tags'])->withCount('uses');
+            ->with(['category.translations', 'tags'])->withCount('uses')
+            ->withExists(['favorites as is_favorite' => fn ($favorites) => $favorites->where('user_id', $actor->id)]);
         $search = trim((string) ($filters['search'] ?? ''));
         $query->when($search !== '', fn ($query) => $query->where(function ($query) use ($search) {
             $query->where('title', 'like', "%{$search}%")->orWhere('description', 'like', "%{$search}%")

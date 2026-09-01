@@ -20,4 +20,12 @@ return [
     'delete_confirm' => 'Delete this prompt? Archive it if it may be needed again.', 'copy_title' => 'Copy of :title',
     'copy' => 'Copy prompt', 'copied' => 'Prompt copied', 'copy_failed' => 'Copy failed. Select and copy the content manually.', 'back' => 'Back to prompts',
     'revision' => 'Revision :number', 'private_preview' => 'Administrative preview. This prompt is not necessarily visible to users.',
+    'my_prompts' => 'My Prompts', 'private_workspace' => 'Private workspace', 'my_prompts_intro' => 'Create and organize private prompts, revisit favorites, and return to recently used prompts.',
+    'create_personal' => 'Create personal prompt', 'edit_personal' => 'Edit personal prompt', 'save_personal' => 'Save personal prompt',
+    'personal_private_note' => 'Personal prompts are private and visible only to you.', 'slug_optional' => 'Leave blank to generate it from the title.',
+    'sections' => ['personal' => 'Personal Prompts', 'favorites' => 'Favorites', 'recent' => 'Recently Used'],
+    'none_section' => 'Nothing here yet.', 'none_section_help' => 'Create a personal prompt, favorite a library prompt, or copy a prompt to build your recent list.',
+    'add_favorite' => 'Add to favorites', 'remove_favorite' => 'Remove favorite', 'favorite_added' => 'The prompt was added to your favorites.', 'favorite_removed' => 'The prompt was removed from your favorites.',
+    'personal_created' => 'Your personal prompt was created.', 'personal_updated' => 'Your personal prompt was updated.', 'personal_deleted' => 'Your personal prompt was deleted.', 'personal_duplicated' => 'A private copy was created.',
+    'personal_delete_confirm' => 'Delete this personal prompt?', 'back_my_prompts' => 'Back to My Prompts',
 ];

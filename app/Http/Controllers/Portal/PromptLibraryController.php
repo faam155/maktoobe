@@ -31,7 +31,11 @@ class PromptLibraryController
     {
         Gate::authorize('view', $prompt);
 
-        return view('portal.prompts.show', ['prompt' => $prompt->load(['category.translations', 'tags'])->loadCount('uses')]);
+        $prompt->load(['category.translations', 'tags'])->loadCount('uses')->loadExists([
+            'favorites as is_favorite' => fn ($favorites) => $favorites->where('user_id', request()->user()->id),
+        ]);
+
+        return view('portal.prompts.show', ['prompt' => $prompt]);
     }
 
     public function copy(Request $request, Prompt $prompt, RecordPromptCopy $action): JsonResponse

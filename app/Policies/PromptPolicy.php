@@ -16,6 +16,9 @@ class PromptPolicy
 
     public function view(User $actor, Prompt $prompt): bool
     {
+        if ($prompt->source === PromptSource::Personal) {
+            return $prompt->owner_id === $actor->id;
+        }
         if ($prompt->source === PromptSource::Library && $actor->can('manage-prompts')) {
             return true;
         }
@@ -30,7 +33,8 @@ class PromptPolicy
 
     public function update(User $actor, Prompt $prompt): bool
     {
-        return $prompt->source === PromptSource::Library && $actor->can('manage-prompts');
+        return ($prompt->source === PromptSource::Personal && $prompt->owner_id === $actor->id)
+            || ($prompt->source === PromptSource::Library && $actor->can('manage-prompts'));
     }
 
     public function delete(User $actor, Prompt $prompt): bool
@@ -45,6 +49,11 @@ class PromptPolicy
 
     public function duplicate(User $actor, Prompt $prompt): bool
     {
-        return $this->update($actor, $prompt);
+        return $prompt->source === PromptSource::Personal ? $prompt->owner_id === $actor->id : $this->update($actor, $prompt);
+    }
+
+    public function favorite(User $actor, Prompt $prompt): bool
+    {
+        return $prompt->source === PromptSource::Library && app(PromptAccess::class)->canView($actor, $prompt);
     }
 }

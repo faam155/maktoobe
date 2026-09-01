@@ -1,6 +1,6 @@
 # Maktoobe
 
-An internal AI productivity and event workspace developed incrementally with Laravel. The verified application currently includes its Laravel/MySQL foundation, bilingual authentication, permission-protected administration, separate dashboards, prompt categories, and an audience-scoped AI Prompt Library. Personal prompts, AI execution, events, brand, analytics and public API modules remain unavailable until their phases are requested.
+An internal AI productivity and event workspace developed incrementally with Laravel. The verified application currently includes its Laravel/MySQL foundation, bilingual authentication, permission-protected administration, separate dashboards, prompt categories, an audience-scoped AI Prompt Library, and private personal prompts with favorites and recent use. AI execution, events, brand, analytics and public API modules remain unavailable until their phases are requested.
 
 ## Requirements
 
