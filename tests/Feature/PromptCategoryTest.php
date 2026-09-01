@@ -3,15 +3,14 @@
 namespace Tests\Feature;
 
 use App\Actions\PromptCategories\DeletePromptCategory;
+use App\Models\Prompt;
 use App\Models\PromptCategory;
 use App\Models\User;
 use App\Support\Authorization\Access;
 use Database\Seeders\AccessControlSeeder;
 use Database\Seeders\PromptCategorySeeder;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
@@ -109,18 +108,10 @@ class PromptCategoryTest extends TestCase
         $this->signedIn($admin)->delete('/admin/prompt-categories/'.$free->id)->assertRedirect(route('admin.prompt-categories.index'));
         $this->assertSoftDeleted('prompt_categories', ['id' => $free->id]);
 
-        Schema::create('prompts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('category_id')->constrained('prompt_categories')->restrictOnDelete();
-        });
-        try {
-            $used = PromptCategory::factory()->create();
-            DB::table('prompts')->insert(['category_id' => $used->id]);
-            $this->expectException(ValidationException::class);
-            app(DeletePromptCategory::class)->handle($admin, $used);
-        } finally {
-            Schema::dropIfExists('prompts');
-        }
+        $used = PromptCategory::factory()->create();
+        Prompt::factory()->create(['category_id' => $used->id]);
+        $this->expectException(ValidationException::class);
+        app(DeletePromptCategory::class)->handle($admin, $used);
     }
 
     public function test_arabic_category_interface_is_rtl_and_reusable_card_localizes_content(): void

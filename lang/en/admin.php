@@ -143,5 +143,7 @@ return [
         'prompt_category_created' => 'Prompt category created', 'prompt_category_updated' => 'Prompt category updated',
         'prompt_category_status_changed' => 'Prompt category status changed', 'prompt_category_reordered' => 'Prompt category reordered',
         'prompt_category_deleted' => 'Prompt category deleted',
+        'prompt_created' => 'Prompt created', 'prompt_updated' => 'Prompt updated',
+        'prompt_status_changed' => 'Prompt status changed', 'prompt_duplicated' => 'Prompt duplicated', 'prompt_deleted' => 'Prompt deleted',
     ],
 ];

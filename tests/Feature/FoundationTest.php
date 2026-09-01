@@ -94,19 +94,19 @@ class FoundationTest extends TestCase
         $this->assertSame('maktoobe_test', DB::connection()->getDatabaseName());
         $this->assertSame('utf8mb4_unicode_ci', DB::selectOne('SELECT @@collation_database AS value')->value);
 
-        foreach (['users', 'password_reset_tokens', 'sessions', 'cache', 'cache_locks', 'jobs', 'job_batches', 'failed_jobs', 'roles', 'permissions', 'model_has_roles', 'model_has_permissions', 'role_has_permissions'] as $table) {
+        foreach (['users', 'password_reset_tokens', 'sessions', 'cache', 'cache_locks', 'jobs', 'job_batches', 'failed_jobs', 'roles', 'permissions', 'model_has_roles', 'model_has_permissions', 'role_has_permissions', 'prompt_categories', 'prompt_category_translations', 'prompts', 'tags', 'prompt_tag', 'prompt_user_access', 'prompt_role_access', 'prompt_uses'] as $table) {
             $this->assertTrue(Schema::hasTable($table));
         }
 
         $this->seed();
         $this->assertDatabaseCount('users', 0);
-        $this->assertFalse(Schema::hasTable('prompts'));
+        $this->assertDatabaseCount('prompts', 0);
         $this->assertFalse(Schema::hasTable('events'));
     }
 
     public function test_both_locales_have_matching_interface_keys(): void
     {
-        foreach (['foundation', 'validation', 'errors', 'auth', 'passwords', 'admin', 'dashboard', 'categories'] as $file) {
+        foreach (['foundation', 'validation', 'errors', 'auth', 'passwords', 'admin', 'dashboard', 'categories', 'prompts'] as $file) {
             $this->assertSame(array_keys(require lang_path("en/$file.php")), array_keys(require lang_path("ar/$file.php")));
         }
     }

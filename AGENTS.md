@@ -4,7 +4,7 @@
 
 This repository is for an internal AI Prompt Hub and Event Management Platform built with Laravel. The user explicitly requires incremental development and review of architecture/database design before Phase 1.
 
-**Current status: Phase 5 AI Prompt Categories completed and verified on 2026-09-01.** See the Phase 5 report for its checkpoint and evidence. Prompt records/library, event, AI, brand, analytics, API and MFA modules remain out of scope until explicitly requested. Stop after Phase 5.
+**Current status: Phase 6 AI Prompt Library completed and verified on 2026-09-01.** See the Phase 6 report for its checkpoint and evidence. Personal prompt management, events, AI execution, brand, analytics, API and MFA modules remain out of scope until explicitly requested. Stop after Phase 6.
 
 Read the current conversation first: explicit user approvals and changes take precedence over this recorded status. Once the user approves the design/phase, update this status and proceed with that scope without asking for the same approval again. Never treat the full specification as authorization to implement all phases at once.
 
@@ -24,8 +24,10 @@ Design references:
 - [Phase 4 implementation and verification](docs/phases/phase-04.md)
 - [Implemented prompt-category conventions](docs/PROMPT_CATEGORIES.md)
 - [Phase 5 implementation and verification](docs/phases/phase-05.md)
+- [Implemented prompt-library conventions](docs/PROMPT_LIBRARY.md)
+- [Phase 6 implementation and verification](docs/phases/phase-06.md)
 
-These files are the working baseline for completed Phases 1–5. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
+These files are the working baseline for completed Phases 1–6. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
 
 ## Architecture rules
 
@@ -40,6 +42,7 @@ These files are the working baseline for completed Phases 1–5. Document approv
 - Phase 3 uses Spatie Laravel Permission 8 with the `web` guard and a fixed `user` morph alias. The permission catalog is code-owned; roles are data and users may hold several. Policies and guarded Actions protect every mutation. There is no blanket super-administrator bypass. Role delegation is limited to permissions the actor holds, protected-role changes require a Super Administrator, and governance mutations lock the protected role before checking the last active Super Administrator. See AUTHORIZATION.md.
 - Phase 4 dashboard controllers delegate to feature-scoped Query classes. Queries authorize administrative access and return only data allowed by granular permissions. Unimplemented modules render explicit unavailable states without fake counts or routable links. See DASHBOARDS.md.
 - Phase 5 stores category identity/order/status separately from normalized English/Arabic translation rows. Category mutations use authorized Actions, searchable lists use an authorized Query, and deletion is a soft delete that is refused when future `prompts.category_id` references exist. See PROMPT_CATEGORIES.md.
+- Phase 6 uses one prompt entity with `source=library` for centralized prompts and reserves `source=personal` for a later phase. `PromptAccess` is the single audience scope used by lists, details, filters and copy tracking. Published status alone never grants access; source, category availability and private/user/role/all audience checks are applied first. See PROMPT_LIBRARY.md.
 
 ## Data and authorization rules
 

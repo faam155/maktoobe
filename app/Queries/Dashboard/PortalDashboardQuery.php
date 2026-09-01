@@ -24,9 +24,9 @@ class PortalDashboardQuery
 
         $quickActions = collect([
             ['key' => 'ai_assistant', 'authorized' => $user->can('use-ai')],
-            ['key' => 'prompt_library', 'authorized' => true],
+            ['key' => 'prompt_library', 'authorized' => true, 'route' => 'prompts.index'],
             ['key' => 'event_calendar', 'authorized' => true],
-        ])->where('authorized', true)->map(fn (array $action) => ['key' => $action['key']])->values();
+        ])->where('authorized', true)->map(fn (array $action) => ['key' => $action['key'], 'route' => $action['route'] ?? null])->values();
 
         return compact('sections', 'quickActions');
     }

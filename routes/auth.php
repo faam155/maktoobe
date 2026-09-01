@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\PasswordRecoveryController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Portal\DashboardController;
+use App\Http\Controllers\Portal\PromptLibraryController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\NewPasswordController;
@@ -38,6 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::view('/account/pending', 'auth.pending')->name('account.pending');
     Route::middleware(['active', 'verified'])->group(function () {
         Route::get('/app', DashboardController::class)->name('account.home');
+        Route::get('/app/prompts', [PromptLibraryController::class, 'index'])->name('prompts.index');
+        Route::get('/app/prompts/{prompt}', [PromptLibraryController::class, 'show'])->name('prompts.show');
+        Route::post('/app/prompts/{prompt}/copy', [PromptLibraryController::class, 'copy'])->middleware('throttle:60,1')->name('prompts.copy');
         Route::get('/account/security', [AccountController::class, 'security'])->name('account.security');
         Route::view('/confirm-password', 'auth.confirm-password')->name('password.confirm');
         Route::post('/confirm-password', [AccountController::class, 'confirm'])->middleware('throttle:login')->name('password.confirm.store');

@@ -143,5 +143,7 @@ return [
         'prompt_category_created' => 'إنشاء فئة موجّهات', 'prompt_category_updated' => 'تحديث فئة موجّهات',
         'prompt_category_status_changed' => 'تغيير حالة فئة موجّهات', 'prompt_category_reordered' => 'تغيير ترتيب فئة موجّهات',
         'prompt_category_deleted' => 'حذف فئة موجّهات',
+        'prompt_created' => 'إنشاء موجّه', 'prompt_updated' => 'تحديث موجّه',
+        'prompt_status_changed' => 'تغيير حالة موجّه', 'prompt_duplicated' => 'تكرار موجّه', 'prompt_deleted' => 'حذف موجّه',
     ],
 ];

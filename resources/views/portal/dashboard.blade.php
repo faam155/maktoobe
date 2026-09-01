@@ -9,11 +9,10 @@
     <div class="portal-section-heading"><div><h2 id="quick-access-title">{{ __('dashboard.quick_access') }}</h2><p>{{ __('dashboard.quick_access_intro') }}</p></div></div>
     <div class="portal-quick-grid">
         @foreach($quickActions as $action)
-            <div class="portal-quick-card" aria-disabled="true">
+            <div class="portal-quick-card" @if(!$action['route']) aria-disabled="true" @endif>
                 <span class="portal-card-mark" aria-hidden="true">0{{ $loop->iteration }}</span>
                 <h3>{{ __('dashboard.'.$action['key']) }}</h3>
-                <p>{{ __('dashboard.unavailable_description') }}</p>
-                <span class="portal-unavailable">{{ __('dashboard.unavailable') }}</span>
+                @if($action['route'])<p>{{ __('prompts.library_intro') }}</p><a href="{{ route($action['route']) }}">{{ __('prompts.browse_library') }}</a>@else<p>{{ __('dashboard.unavailable_description') }}</p><span class="portal-unavailable">{{ __('dashboard.unavailable') }}</span>@endif
             </div>
         @endforeach
     </div>

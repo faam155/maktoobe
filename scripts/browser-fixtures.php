@@ -3,6 +3,8 @@
 // CLI-only fixtures: never registered as HTTP routes or production seed data.
 use App\Actions\Identity\SetAccountStatus;
 use App\Enums\AccountStatus;
+use App\Models\Prompt;
+use App\Models\PromptCategory;
 use App\Models\User;
 use App\Services\Identity\LocalInbox;
 use App\Support\Authorization\Access;
@@ -37,6 +39,16 @@ if ($action === 'reset') {
     $user->assignRole(Access::STANDARD_USER);
     $administrator = User::factory()->create(['name' => 'Browser Administrator', 'username' => 'admin', 'email' => 'admin@example.test', 'password' => 'AdminBrowserPassword123']);
     $administrator->assignRole(Access::SUPER_ADMINISTRATOR);
+    $prompt = Prompt::factory()->published()->create([
+        'owner_id' => $administrator->id,
+        'category_id' => PromptCategory::where('slug', 'writing')->value('id'),
+        'title' => 'Browser Writing Assistant',
+        'slug' => 'browser-writing-assistant',
+        'description' => 'Turn rough notes into clear professional writing.',
+        'content' => 'Rewrite the following notes as concise professional copy while preserving every material fact.',
+        'published_by' => $administrator->id,
+    ]);
+    $prompt->tags()->create(['canonical_name' => 'writing', 'display_name' => 'Writing']);
     echo json_encode(['ready' => true]);
 } elseif ($action === 'inbox') {
     $messages = array_values(array_filter(app(LocalInbox::class)->messages(), fn ($message) => ($message['recipient'] ?? null) === $email));

@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Prompt;
 use App\Models\PromptCategory;
 use App\Models\User;
 use App\Policies\PermissionPolicy;
 use App\Policies\PromptCategoryPolicy;
+use App\Policies\PromptPolicy;
 use App\Policies\RolePolicy;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Gate;
@@ -32,5 +34,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Role::class, RolePolicy::class);
         Gate::policy(Permission::class, PermissionPolicy::class);
         Gate::policy(PromptCategory::class, PromptCategoryPolicy::class);
+        Gate::policy(Prompt::class, PromptPolicy::class);
     }
 }

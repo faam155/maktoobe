@@ -3,6 +3,7 @@
 namespace App\Queries\Dashboard;
 
 use App\Enums\AccountStatus;
+use App\Models\Prompt;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -35,8 +36,10 @@ class AdminDashboardQuery
             ]);
         }
 
+        $promptMetrics = $actor->can('manage-prompts')
+            ? collect([['key' => 'prompt_count', 'value' => Prompt::where('source', 'library')->count()]]) : collect();
+
         $unavailableMetrics = collect([
-            ['key' => 'prompt_count', 'authorized' => $actor->canAny(['manage-prompts', 'view-analytics'])],
             ['key' => 'ai_conversations', 'authorized' => $actor->canAny(['manage-ai-settings', 'view-analytics'])],
             ['key' => 'upcoming_events', 'authorized' => $actor->canAny(['manage-events', 'view-analytics'])],
             ['key' => 'completed_events', 'authorized' => $actor->canAny(['manage-events', 'view-analytics'])],
@@ -44,6 +47,7 @@ class AdminDashboardQuery
 
         return [
             'userMetrics' => $userMetrics,
+            'promptMetrics' => $promptMetrics,
             'unavailableMetrics' => $unavailableMetrics,
             'recentActivity' => $actor->can('manage-users') ? $this->recentActivity($actor) : null,
         ];

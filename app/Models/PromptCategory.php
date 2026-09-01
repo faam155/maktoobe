@@ -33,6 +33,11 @@ class PromptCategory extends Model
         return $this->hasMany(PromptCategoryTranslation::class, 'category_id');
     }
 
+    public function prompts(): HasMany
+    {
+        return $this->hasMany(Prompt::class, 'category_id');
+    }
+
     public function translation(string $locale): ?PromptCategoryTranslation
     {
         return $this->translations->firstWhere('locale', $locale);

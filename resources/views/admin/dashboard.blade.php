@@ -2,6 +2,7 @@
 <p class="admin-lead">{{ __('admin.dashboard_intro') }}</p>
 <div class="admin-cards admin-dashboard-cards">
 @foreach($userMetrics as $metric)<a class="admin-card" href="{{ route('admin.users.index',array_filter(['status'=>$metric['status']])) }}"><span>{{ __('admin.'.$metric['key']) }}</span><strong>{{ $metric['value'] }}</strong><small>{{ __('admin.manage_users') }}</small></a>@endforeach
+@foreach($promptMetrics as $metric)<a class="admin-card" href="{{ route('admin.prompts.index') }}"><span>{{ __('admin.'.$metric['key']) }}</span><strong>{{ $metric['value'] }}</strong><small>{{ __('admin.prompts') }}</small></a>@endforeach
 @foreach($unavailableMetrics as $metric)<article class="admin-card is-unavailable" aria-disabled="true"><span>{{ __('admin.'.$metric['key']) }}</span><strong>{{ __('admin.metric_unavailable') }}</strong><small>{{ __('admin.unavailable_metric_help') }}</small></article>@endforeach
 </div>
 
