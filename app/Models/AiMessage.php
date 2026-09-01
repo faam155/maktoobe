@@ -9,7 +9,7 @@ class AiMessage extends Model
 {
     public const UPDATED_AT = null;
 
-    protected $fillable = ['conversation_id', 'role', 'content', 'input_tokens', 'output_tokens', 'total_tokens'];
+    protected $fillable = ['conversation_id', 'role', 'model', 'content', 'input_tokens', 'output_tokens', 'total_tokens'];
 
     protected function casts(): array
     {

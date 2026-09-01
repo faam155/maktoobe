@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/app/assistant/{conversation}/messages', [AiAssistantController::class, 'send'])->middleware('throttle:10,1')->name('ai.send');
             Route::get('/app/assistant/{conversation}/requests/{aiRequest}', [AiAssistantController::class, 'status'])->middleware('throttle:60,1')->name('ai.status');
             Route::patch('/app/assistant/{conversation}', [AiAssistantController::class, 'rename'])->name('ai.rename');
+            Route::patch('/app/assistant/{conversation}/archive', [AiAssistantController::class, 'archive'])->name('ai.archive');
             Route::delete('/app/assistant/{conversation}', [AiAssistantController::class, 'destroy'])->name('ai.destroy');
             Route::post('/app/assistant/{conversation}/requests/{aiRequest}/cancel', [AiAssistantController::class, 'cancel'])->name('ai.cancel');
             Route::post('/app/assistant/{conversation}/requests/{aiRequest}/retry', [AiAssistantController::class, 'retry'])->middleware('throttle:10,1')->name('ai.retry');

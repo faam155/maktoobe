@@ -11,7 +11,12 @@ class AiConversation extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'title', 'model'];
+    protected $fillable = ['user_id', 'title', 'model', 'last_message_at', 'archived_at'];
+
+    protected function casts(): array
+    {
+        return ['last_message_at' => 'datetime', 'archived_at' => 'datetime'];
+    }
 
     public function user(): BelongsTo
     {

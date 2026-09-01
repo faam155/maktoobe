@@ -39,10 +39,11 @@ class SendMessage
         return DB::transaction(function () use ($actor, $conversation, $data, $model, $prompt, $content) {
             $conversation = AiConversation::lockForUpdate()->findOrFail($conversation->id);
             Gate::forUser($actor)->authorize('update', $conversation);
-            $message = $conversation->messages()->create(['role' => 'user', 'content' => $content]);
+            $message = $conversation->messages()->create(['role' => 'user', 'model' => $model, 'content' => $content]);
             if ($conversation->messages()->count() === 1) {
                 $conversation->update(['title' => Str::limit(preg_replace('/\s+/u', ' ', trim($data['content'])), 80), 'model' => $model]);
             }
+            $conversation->update(['last_message_at' => $message->created_at, 'archived_at' => null]);
             $request = AiRequest::create(['user_id' => $actor->id, 'conversation_id' => $conversation->id,
                 'prompt_id' => $prompt?->id, 'prompt_revision' => $prompt?->revision_number, 'prompt_snapshot' => $prompt?->content,
                 'user_message_id' => $message->id, 'client_operation_id' => $data['client_operation_id'], 'model' => $model,

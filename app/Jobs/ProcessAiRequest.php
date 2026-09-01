@@ -60,7 +60,7 @@ class ProcessAiRequest implements ShouldQueue
                 if ($locked->status === AiRequestStatus::Cancelled) {
                     return;
                 }
-                $assistant = $locked->conversation->messages()->create(['role' => 'assistant', 'content' => $result->content,
+                $assistant = $locked->conversation->messages()->create(['role' => 'assistant', 'model' => $locked->model, 'content' => $result->content,
                     'input_tokens' => $result->inputTokens, 'output_tokens' => $result->outputTokens, 'total_tokens' => $result->totalTokens]);
                 $locked->update(['assistant_message_id' => $assistant->id, 'status' => AiRequestStatus::Completed,
                     'provider_request_id' => $result->providerRequestId, 'input_tokens' => $result->inputTokens,
@@ -69,7 +69,7 @@ class ProcessAiRequest implements ShouldQueue
                     PromptUse::create(['user_id' => $locked->user_id, 'prompt_id' => $locked->prompt_id,
                         'ai_request_id' => $locked->id, 'kind' => 'ai', 'client_operation_id' => $locked->client_operation_id]);
                 }
-                $locked->conversation->touch();
+                $locked->conversation->update(['last_message_at' => $assistant->created_at]);
             });
         } catch (AiProviderException $exception) {
             AiRequest::whereKey($request->id)->where('status', AiRequestStatus::Processing)->update(['status' => AiRequestStatus::Failed, 'failure_code' => $exception->safeCode, 'finished_at' => now()]);

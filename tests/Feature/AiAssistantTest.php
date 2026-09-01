@@ -60,12 +60,61 @@ class AiAssistantTest extends TestCase
         $this->signIn($user)->post('/app/assistant', $this->payload())->assertRedirect();
         $conversation = AiConversation::firstOrFail();
         $this->assertSame($user->id, $conversation->user_id);
+        $this->assertSame('Help me prepare a concise project update.', $conversation->title);
+        $this->assertNotNull($conversation->last_message_at);
         $this->assertSame(['user', 'assistant'], $conversation->messages()->orderBy('id')->pluck('role')->all());
+        $this->assertSame(['gpt-test', 'gpt-test'], $conversation->messages()->orderBy('id')->pluck('model')->all());
         $request = AiRequest::firstOrFail();
         $this->assertSame(AiRequestStatus::Completed, $request->status);
         $this->assertSame(20, $request->total_tokens);
         $this->assertSame('resp_test', $request->provider_request_id);
         $this->get('/app/assistant/'.$conversation->id)->assertOk()->assertSee('Mocked assistant response');
+    }
+
+    public function test_history_can_be_searched_sorted_archived_restored_and_paginated(): void
+    {
+        $user = $this->user();
+        foreach (range(1, 17) as $number) {
+            AiConversation::create(['user_id' => $user->id, 'title' => sprintf('History %02d', $number), 'model' => 'gpt-test', 'last_message_at' => now()->subMinutes($number)]);
+        }
+        $target = AiConversation::where('title', 'History 12')->firstOrFail();
+
+        $this->signIn($user)->get('/app/assistant?search=History+12')->assertOk()->assertSee('History 12')->assertDontSee('History 11');
+        $this->get('/app/assistant?sort=oldest')->assertOk()->assertSeeInOrder(['History 17', 'History 16']);
+        $this->get('/app/assistant')->assertOk()->assertSee('History 01')->assertDontSee('History 17');
+        $this->get('/app/assistant?page=2')->assertOk()->assertSee('History 16');
+
+        $this->patch('/app/assistant/'.$target->id.'/archive', ['archived' => true])->assertRedirect('/app/assistant?status=archived');
+        $this->get('/app/assistant')->assertDontSee('History 12');
+        $this->get('/app/assistant?status=archived')->assertOk()->assertSee('History 12');
+        $this->patch('/app/assistant/'.$target->id.'/archive', ['archived' => false])->assertRedirect('/app/assistant?status=active');
+        $this->assertNull($target->fresh()->archived_at);
+    }
+
+    public function test_history_mutations_and_search_are_owner_scoped(): void
+    {
+        $owner = $this->user();
+        $other = $this->user();
+        $private = AiConversation::create(['user_id' => $owner->id, 'title' => 'Owner secret history', 'model' => 'gpt-test']);
+
+        $this->signIn($other)->get('/app/assistant?search=Owner+secret')->assertOk()->assertDontSee('Owner secret history');
+        $this->get('/app/assistant/'.$private->id)->assertForbidden();
+        $this->patch('/app/assistant/'.$private->id, ['title' => 'Stolen'])->assertForbidden();
+        $this->patch('/app/assistant/'.$private->id.'/archive', ['archived' => true])->assertForbidden();
+        $this->delete('/app/assistant/'.$private->id)->assertForbidden();
+        $this->assertDatabaseHas('ai_conversations', ['id' => $private->id, 'title' => 'Owner secret history', 'archived_at' => null]);
+    }
+
+    public function test_conversation_view_paginates_messages_without_loading_the_complete_history(): void
+    {
+        $user = $this->user();
+        $conversation = AiConversation::create(['user_id' => $user->id, 'title' => 'Long history', 'model' => 'gpt-test']);
+        foreach (range(1, 65) as $number) {
+            $conversation->messages()->create(['role' => $number % 2 ? 'user' : 'assistant', 'model' => 'gpt-test', 'content' => 'History message '.$number]);
+        }
+
+        $this->signIn($user)->get('/app/assistant/'.$conversation->id)->assertOk()->assertSee('History message 65')->assertDontSee('History message 1')->assertSee('Load older messages');
+        $this->get('/app/assistant/'.$conversation->id.'?messages=3')->assertOk()->assertSee('History message 1')->assertDontSee('History message 65')->assertSee('Return to latest messages');
     }
 
     public function test_provider_errors_are_safe_and_retryable(): void

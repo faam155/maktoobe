@@ -9,6 +9,7 @@ use App\Jobs\ProcessAiRequest;
 use App\Models\AiConversation;
 use App\Models\AiRequest;
 use App\Models\Prompt;
+use App\Queries\Ai\ConversationHistoryQuery;
 use App\Services\Ai\AiModelAccess;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -20,11 +21,9 @@ use Illuminate\View\View;
 
 class AiAssistantController
 {
-    public function index(Request $request): View
+    public function index(Request $request, ConversationHistoryQuery $history): View
     {
-        Gate::authorize('viewAny', AiConversation::class);
-
-        return view('portal.ai.index', ['conversations' => $request->user()->aiConversations()->latest('updated_at')->paginate(20)]);
+        return view('portal.ai.index', ['conversations' => $history->get($request->user(), $request->only(['search', 'status', 'sort']))]);
     }
 
     public function create(Request $request): View
@@ -55,8 +54,16 @@ class AiAssistantController
     {
         Gate::authorize('view', $conversation);
 
-        return view('portal.ai.show', ['conversation' => $conversation->load(['messages', 'requests' => fn ($query) => $query->latest('id')]),
-            'models' => app(AiModelAccess::class)->modelsFor($request->user())]);
+        $messages = $conversation->messages()->latest('id')->paginate(30, ['*'], 'messages')->withQueryString();
+        $messages->setCollection($messages->getCollection()->reverse()->values());
+        $messageIds = $messages->getCollection()->pluck('id');
+        $conversation->setRelation('requests', $conversation->requests()->whereIn('user_message_id', $messageIds)->latest('id')->get());
+
+        return view('portal.ai.show', compact('conversation', 'messages') + [
+            'models' => app(AiModelAccess::class)->modelsFor($request->user()),
+            'recentConversations' => $request->user()->aiConversations()->whereNull('archived_at')
+                ->orderByRaw('COALESCE(last_message_at, created_at) DESC')->limit(12)->get(),
+        ]);
     }
 
     public function send(Request $request, AiConversation $conversation, SendMessage $action): RedirectResponse
@@ -81,6 +88,16 @@ class AiAssistantController
         $conversation->update(['title' => trim($data['title'])]);
 
         return back()->with('status', __('ai.renamed'));
+    }
+
+    public function archive(Request $request, AiConversation $conversation): RedirectResponse
+    {
+        Gate::authorize('update', $conversation);
+        $data = $request->validate(['archived' => ['required', 'boolean']]);
+        $conversation->update(['archived_at' => $data['archived'] ? now() : null]);
+
+        return redirect()->route('ai.index', ['status' => $data['archived'] ? 'archived' : 'active'])
+            ->with('status', $data['archived'] ? __('ai.archived') : __('ai.restored'));
     }
 
     public function destroy(AiConversation $conversation): RedirectResponse

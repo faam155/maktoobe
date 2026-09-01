@@ -22,7 +22,7 @@ class PortalDashboardQuery
         })->whereHas('uses', fn ($uses) => $uses->where('user_id', $user->id))->count();
 
         $sections = collect([
-            ['key' => 'recent_ai_conversations', 'authorized' => $user->can('use-ai'), 'count' => $user->aiConversations()->count(), 'route' => 'ai.index'],
+            ['key' => 'recent_ai_conversations', 'authorized' => $user->can('use-ai'), 'count' => $user->aiConversations()->whereNull('archived_at')->count(), 'route' => 'ai.index'],
             ['key' => 'favorite_prompts', 'authorized' => true, 'count' => (clone $visibleLibrary)->whereHas('favorites', fn ($favorites) => $favorites->where('user_id', $user->id))->count(), 'route' => 'my-prompts.index', 'params' => ['section' => 'favorites']],
             ['key' => 'recent_prompts', 'authorized' => true, 'count' => $recentPromptCount, 'route' => 'my-prompts.index', 'params' => ['section' => 'recent']],
             ['key' => 'personal_prompts', 'authorized' => true, 'count' => $user->prompts()->where('source', PromptSource::Personal)->count(), 'route' => 'my-prompts.index', 'params' => ['section' => 'personal']],

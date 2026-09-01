@@ -1,6 +1,6 @@
 # AI Prompt Hub & Event Management Platform: proposed architecture
 
-Status: **working architecture baseline; Phase 8 OpenAI Integration and AI Assistant completed on 2026-09-01**. Later phases remain subject to their scope review. See the [Phase 8 report](phases/phase-08.md) for implementation and verification.
+Status: **working architecture baseline; Phase 9 AI Conversation History completed on 2026-09-02**. Later phases remain subject to their scope review. See the [Phase 9 report](phases/phase-09.md) for implementation and verification.
 
 Read with [environment findings](ENVIRONMENT.md), the [database design](DATABASE.md), and the [implementation roadmap](ROADMAP.md). The complete application is the eventual destination; each phase is a separately verified increment.
 
@@ -204,4 +204,4 @@ The architecture assumes one internal organization, not multi-tenant SaaS; pendi
 
 Before the relevant integration phase, choose the Google client/domain policy, SMS provider/sender region, mail transport, allowed AI models and budgets, document size limits, retention/deletion periods, malware scanner, and hosting/backup arrangement. Do not block architecture review on collecting credentials; keep secrets out of this document.
 
-Phase 1 implemented the framework foundation. Phase 2 implemented password, Google and SMS OTP authentication. Phase 3 implemented permission-protected user and role administration. Phase 4 added separate permission-aware dashboards. Phase 5 added prompt categories. Phase 6 added the centralized, audience-scoped Prompt Library and copy usage facts. Phase 7 added owner-only personal prompts, favorites and recent use. Phase 8 added the queued backend AI provider and owner-only Assistant. MFA and other business modules remain deferred. Do not start another phase automatically.
+Phase 1 implemented the framework foundation. Phase 2 implemented password, Google and SMS OTP authentication. Phase 3 implemented permission-protected user and role administration. Phase 4 added separate permission-aware dashboards. Phase 5 added prompt categories. Phase 6 added the centralized, audience-scoped Prompt Library and copy usage facts. Phase 7 added owner-only personal prompts, favorites and recent use. Phase 8 added the queued backend AI provider and owner-only Assistant. Phase 9 added indexed, paginated, searchable and archivable owner-only history. MFA and other business modules remain deferred. Do not start another phase automatically.

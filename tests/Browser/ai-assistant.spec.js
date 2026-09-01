@@ -53,3 +53,28 @@ test('authorized library prompt launches into the assistant with additional cont
     await page.goto('/app/my-prompts?section=recent');
     await expect(page.getByText('Browser Writing Assistant')).toBeVisible();
 });
+
+test('conversation history can be searched, renamed, archived and restored', async ({ page }) => {
+    fixture('reset');
+    const errors = [];
+    page.on('pageerror', error => errors.push(error.message));
+    page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await signIn(page);
+    await page.goto('/app/assistant/new');
+    await page.getByLabel('Message').fill('Create a launch readiness checklist for our internal team.');
+    await page.getByRole('button', { name: 'Send message' }).click();
+    await expect(page.getByText('This is a local verification response.')).toBeVisible();
+    await page.getByLabel('Conversation title').fill('Launch readiness notes');
+    await page.getByRole('button', { name: 'Rename', exact: true }).click();
+    await page.getByRole('button', { name: 'Archive', exact: true }).click();
+    await expect(page).toHaveURL(/status=archived/);
+    await expect(page.getByText('Launch readiness notes')).toBeVisible();
+    await page.getByRole('link', { name: /Launch readiness notes/ }).click();
+    await page.getByRole('button', { name: 'Restore', exact: true }).click();
+    await page.getByLabel('Search conversations').fill('Launch readiness');
+    await page.getByRole('button', { name: 'Apply filters' }).click();
+    await expect(page.getByText('Launch readiness notes')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    expect(errors).toEqual([]);
+});
