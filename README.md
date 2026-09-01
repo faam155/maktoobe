@@ -1,6 +1,6 @@
 # Maktoobe
 
-An internal AI productivity and event workspace developed incrementally with Laravel. The verified application currently includes its Laravel/MySQL foundation, bilingual authentication, permission-protected user and role administration, and separate user/admin dashboards. Prompt, AI, event, brand, analytics and public API modules remain unavailable until their phases are requested.
+An internal AI productivity and event workspace developed incrementally with Laravel. The verified application currently includes its Laravel/MySQL foundation, bilingual authentication, permission-protected user and role administration, separate user/admin dashboards, and bilingual AI prompt-category administration. Prompt records, AI, event, brand, analytics and public API modules remain unavailable until their phases are requested.
 
 ## Requirements
 
@@ -70,6 +70,6 @@ In a restricted Windows sandbox, Vite may need permission to resolve ancestor pa
 
 Read `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/ROADMAP.md` and the current phase report before changes. Interface strings belong in matching `lang/en` and `lang/ar` files. Livewire supplies Alpine; do not load it twice. Add packages and migrations only when the approved phase needs them.
 
-See [foundation conventions](docs/FOUNDATION.md), [identity conventions](docs/IDENTITY.md), [authorization conventions](docs/AUTHORIZATION.md), and [dashboard conventions](docs/DASHBOARDS.md) for the current boundaries. Database jobs wait for transaction commits. Local files are private and write failures throw. New local setups use daily info logs with 14-day retention; an existing `.env` should use `LOG_STACK=daily`, `LOG_LEVEL=info` and `LOG_DAILY_DAYS=14` to adopt those defaults.
+See [foundation conventions](docs/FOUNDATION.md), [identity conventions](docs/IDENTITY.md), [authorization conventions](docs/AUTHORIZATION.md), [dashboard conventions](docs/DASHBOARDS.md), and [prompt-category conventions](docs/PROMPT_CATEGORIES.md) for the current boundaries. Database jobs wait for transaction commits. Local files are private and write failures throw. New local setups use daily info logs with 14-day retention; an existing `.env` should use `LOG_STACK=daily`, `LOG_LEVEL=info` and `LOG_DAILY_DAYS=14` to adopt those defaults.
 
 This is a verified local application increment, not a deployment. Google and real SMS/email delivery require server-side production credentials/providers. HTTPS, production workers, secret management, backups, stricter CSP and operational hardening remain deployment responsibilities.

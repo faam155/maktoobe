@@ -140,5 +140,8 @@ return [
         'password_reset' => 'Password reset', 'google_linked' => 'Google identity linked',
         'phone_verified' => 'Mobile number verified', 'sessions_revoked' => 'Other sessions revoked',
         'otp_delivery_failed' => 'Mobile-code delivery failed', 'role_created' => 'Role created', 'role_updated' => 'Role updated',
+        'prompt_category_created' => 'Prompt category created', 'prompt_category_updated' => 'Prompt category updated',
+        'prompt_category_status_changed' => 'Prompt category status changed', 'prompt_category_reordered' => 'Prompt category reordered',
+        'prompt_category_deleted' => 'Prompt category deleted',
     ],
 ];

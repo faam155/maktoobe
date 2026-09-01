@@ -140,5 +140,8 @@ return [
         'password_reset' => 'إعادة تعيين كلمة المرور', 'google_linked' => 'ربط هوية Google',
         'phone_verified' => 'تأكيد رقم الجوال', 'sessions_revoked' => 'إلغاء الجلسات الأخرى',
         'otp_delivery_failed' => 'فشل إرسال رمز الجوال', 'role_created' => 'إنشاء دور', 'role_updated' => 'تحديث دور',
+        'prompt_category_created' => 'إنشاء فئة موجّهات', 'prompt_category_updated' => 'تحديث فئة موجّهات',
+        'prompt_category_status_changed' => 'تغيير حالة فئة موجّهات', 'prompt_category_reordered' => 'تغيير ترتيب فئة موجّهات',
+        'prompt_category_deleted' => 'حذف فئة موجّهات',
     ],
 ];

@@ -1,8 +1,8 @@
 # Proposed normalized MySQL schema
 
-Status: **target design with Phases 1–3 migrated; Phase 4 required no migration**. Create only the tables needed by the approved implementation phase. Remaining sections describe the future logical schema; framework/package details are resolved against locked versions when installed.
+Status: **target design with Phases 1–3 and Phase 5 category schema migrated; Phase 4 required no migration**. Create only the tables needed by the approved implementation phase. Remaining sections describe the future logical schema; framework/package details are resolved against locked versions when installed.
 
-Phase 1 implemented Laravel's user/password-reset/session/cache/queue baseline. Phase 2 extended users and added social identity, OTP challenge and account-audit records. Phase 3 added Spatie's normalized role/permission tables. No prompt, AI, event, file, brand, notification or analytics tables have been created. See the phase reports for the applied migration inventory; the remaining schema below is a future target.
+Phase 1 implemented Laravel's user/password-reset/session/cache/queue baseline. Phase 2 extended users and added social identity, OTP challenge and account-audit records. Phase 3 added Spatie's normalized role/permission tables. Phase 5 added `prompt_categories` and `prompt_category_translations`; prompt records and all AI, event, file, brand, notification and analytics tables remain uncreated. See the phase reports for the applied migration inventory; the remaining schema below is a future target.
 
 The eight Phase 1 framework tables remain the normalized foundation. [FOUNDATION.md](FOUNDATION.md#current-schema-and-eloquent-boundary) maps them to their Eloquent/framework owners, indexes and lifecycle rules. Identity and authorization added only their approved records; future domain foreign keys and relationships arrive with their modules, not as empty tables in advance.
 
@@ -46,8 +46,8 @@ Username is a canonical unique login string without `@`; email is always require
 
 | Table | Main columns | Constraints / lifecycle |
 | --- | --- | --- |
-| `prompt_categories` | id; slug; name; description?; sort_order; is_active; created_by? → users; timestamps; deleted_at? | U(slug); I(is_active, sort_order); actor SET NULL. Required category labels can use `prompt_category_translations` below. Archive referenced categories or reassign before hard deletion. |
-| `prompt_category_translations` | category_id → prompt_categories; locale; name; description? | Composite PK(category_id, locale); CHECK locale in en/ar initially; CASCADE category hard deletion. Base name is the fallback. |
+| `prompt_categories` | id; slug; icon?; display_order; is_active; created_by? → users; timestamps; deleted_at? | **Implemented Phase 5:** U(slug); I(display_order), I(is_active), I(is_active, display_order); actor SET NULL. Localized content is required in `prompt_category_translations`. Archive referenced categories or reassign before controlled hard deletion. |
+| `prompt_category_translations` | category_id → prompt_categories; locale; name; description? | **Implemented Phase 5:** composite PK(category_id, locale); locale constrained to en/ar initially; CASCADE category hard deletion. Application lookup falls back to the other required translation if the requested locale row is unexpectedly unavailable. |
 | `prompts` | id; owner_id → users; category_id? → prompt_categories; source (`personal`, `library`); title; description?; content LONGTEXT; content_locale?; visibility; status (`draft`, `published`, `archived`); published_at?; published_by? → users; revision_number; timestamps; deleted_at? | I(source, status, visibility, category_id), I(owner_id, updated_at), I(status, published_at); owner RESTRICT, optional publisher SET NULL; category RESTRICT until reassigned. Revision number supports stale-edit detection. |
 | `prompt_user_access` | prompt_id → prompts; user_id → users; granted_by? → users; created_at | PK(prompt_id, user_id); I(user_id, prompt_id); pivot parents CASCADE, grant actor SET NULL. |
 | `prompt_role_access` | prompt_id → prompts; role_id → roles; granted_by? → users; created_at | PK(prompt_id, role_id); I(role_id, prompt_id); same rules. |

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\PromptCategoryController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified'
     Route::get('/permissions', PermissionController::class)->name('permissions.index');
     Route::resource('users', UserController::class)->only(['index', 'create', 'show', 'edit']);
     Route::resource('roles', RoleController::class)->only(['index', 'create', 'show', 'edit']);
+    Route::resource('prompt-categories', PromptCategoryController::class)->only(['index', 'create', 'edit']);
 
     Route::middleware('recent-auth')->group(function () {
         Route::post('/users', [UserController::class, 'store'])->name('users.store');
@@ -20,5 +22,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified'
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
         Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
         Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+        Route::post('/prompt-categories', [PromptCategoryController::class, 'store'])->name('prompt-categories.store');
+        Route::put('/prompt-categories/{promptCategory}', [PromptCategoryController::class, 'update'])->name('prompt-categories.update');
+        Route::patch('/prompt-categories/{promptCategory}/status', [PromptCategoryController::class, 'status'])->name('prompt-categories.status');
+        Route::patch('/prompt-categories/{promptCategory}/move', [PromptCategoryController::class, 'move'])->name('prompt-categories.move');
+        Route::delete('/prompt-categories/{promptCategory}', [PromptCategoryController::class, 'destroy'])->name('prompt-categories.destroy');
     });
 });

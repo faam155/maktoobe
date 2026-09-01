@@ -1,0 +1,1 @@
+<x-layouts.admin :title="__('categories.create')"><form method="POST" action="{{ route('admin.prompt-categories.store') }}" class="admin-form">@csrf @include('admin.prompt-categories._form')</form></x-layouts.admin>

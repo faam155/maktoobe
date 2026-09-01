@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\PromptCategory;
 use App\Models\User;
 use App\Policies\PermissionPolicy;
+use App\Policies\PromptCategoryPolicy;
 use App\Policies\RolePolicy;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Gate;
@@ -29,5 +31,6 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap(['user' => User::class]);
         Gate::policy(Role::class, RolePolicy::class);
         Gate::policy(Permission::class, PermissionPolicy::class);
+        Gate::policy(PromptCategory::class, PromptCategoryPolicy::class);
     }
 }
