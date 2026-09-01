@@ -1,8 +1,19 @@
 <x-layouts.admin :title="__('admin.dashboard')">
 <p class="admin-lead">{{ __('admin.dashboard_intro') }}</p>
-<div class="admin-cards">
-@if($userCount !== null)<a class="admin-card" href="{{ route('admin.users.index') }}"><span>{{ __('admin.total_users') }}</span><strong>{{ $userCount }}</strong><small>{{ __('admin.manage_users') }}</small></a>@endif
-@if($roleCount !== null)<a class="admin-card" href="{{ route('admin.roles.index') }}"><span>{{ __('admin.total_roles') }}</span><strong>{{ $roleCount }}</strong><small>{{ __('admin.manage_roles') }}</small></a>@endif
-@can('manage-permissions')<a class="admin-card" href="{{ route('admin.permissions.index') }}"><span>{{ __('admin.permissions_title') }}</span><strong>{{ \Spatie\Permission\Models\Permission::count() }}</strong><small>{{ __('admin.view_permissions') }}</small></a>@endcan
+<div class="admin-cards admin-dashboard-cards">
+@foreach($userMetrics as $metric)<a class="admin-card" href="{{ route('admin.users.index',array_filter(['status'=>$metric['status']])) }}"><span>{{ __('admin.'.$metric['key']) }}</span><strong>{{ $metric['value'] }}</strong><small>{{ __('admin.manage_users') }}</small></a>@endforeach
+@foreach($unavailableMetrics as $metric)<article class="admin-card is-unavailable" aria-disabled="true"><span>{{ __('admin.'.$metric['key']) }}</span><strong>{{ __('admin.metric_unavailable') }}</strong><small>{{ __('admin.unavailable_metric_help') }}</small></article>@endforeach
 </div>
+
+@if($recentActivity !== null)
+<section class="admin-activity" aria-labelledby="recent-activity-title">
+    <div><h2 id="recent-activity-title">{{ __('admin.recent_activity') }}</h2><p>{{ __('admin.recent_activity_intro') }}</p></div>
+    @if($recentActivity->isEmpty())<p class="admin-activity-empty">{{ __('admin.no_recent_activity') }}</p>@else
+    <ol>@foreach($recentActivity as $activity)
+        @php($activityKey = 'admin.activities.'.str_replace('.', '_', $activity['action']))
+        <li><div><strong>{{ \Illuminate\Support\Facades\Lang::has($activityKey) ? __($activityKey) : __('admin.activity_recorded') }}</strong><span>{{ __('admin.activity_subject',['name'=>$activity['subject']]) }}</span><span>{{ $activity['actor'] ? __('admin.activity_actor',['name'=>$activity['actor']]) : __('admin.activity_system') }}</span></div><time datetime="{{ $activity['created_at']->toIso8601String() }}">{{ $activity['created_at']->translatedFormat('M j, Y · H:i') }}</time></li>
+    @endforeach</ol>
+    @endif
+</section>
+@endif
 </x-layouts.admin>

@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\Auth\PasswordRecoveryController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Portal\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\NewPasswordController;
@@ -36,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/email/verification-notification', [VerificationController::class, 'resend'])->middleware('throttle:1,1')->name('verification.send');
     Route::view('/account/pending', 'auth.pending')->name('account.pending');
     Route::middleware(['active', 'verified'])->group(function () {
-        Route::view('/app', 'auth.home')->name('account.home');
+        Route::get('/app', DashboardController::class)->name('account.home');
         Route::get('/account/security', [AccountController::class, 'security'])->name('account.security');
         Route::view('/confirm-password', 'auth.confirm-password')->name('password.confirm');
         Route::post('/confirm-password', [AccountController::class, 'confirm'])->middleware('throttle:login')->name('password.confirm.store');

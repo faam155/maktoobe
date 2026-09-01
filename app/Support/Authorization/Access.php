@@ -18,7 +18,7 @@ final class Access
         'access-admin', 'manage-users', 'create-users', 'edit-users', 'disable-users', 'delete-users',
         'manage-roles', 'manage-permissions', 'manage-prompts', 'publish-prompts', 'manage-categories',
         'manage-events', 'upload-event-files', 'manage-brand-guidelines', 'use-ai', 'manage-ai-settings',
-        'view-reports', 'view-analytics',
+        'view-reports', 'view-analytics', 'manage-system-settings',
     ];
 
     public const ROLE_PERMISSIONS = [

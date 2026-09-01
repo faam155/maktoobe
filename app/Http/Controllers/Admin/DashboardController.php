@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\User;
+use App\Queries\Dashboard\AdminDashboardQuery;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 
 class DashboardController
 {
-    public function __invoke(Request $request): mixed
+    public function __invoke(Request $request, AdminDashboardQuery $dashboard): mixed
     {
-        return view('admin.dashboard', [
-            'userCount' => $request->user()->can('manage-users') ? User::count() : null,
-            'roleCount' => $request->user()->can('manage-roles') ? Role::count() : null,
-        ]);
+        return view('admin.dashboard', $dashboard->get($request->user()));
     }
 }

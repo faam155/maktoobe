@@ -10,6 +10,7 @@ The code-owned catalog in `App\Support\Authorization\Access` contains:
 - Prompt and brand preparation: `manage-prompts`, `publish-prompts`, `manage-categories`, `manage-brand-guidelines`.
 - Events: `manage-events`, `upload-event-files`.
 - AI and reporting: `use-ai`, `manage-ai-settings`, `view-reports`, `view-analytics`.
+- System administration: `manage-system-settings`.
 
 Permission identifiers are stable machine names. Add a permission through the catalog, both translation files, the default role map, policies for its resource, and tests in one reviewed change. The UI intentionally does not create, rename, delete, or directly grant permissions. Permissions are assigned through roles.
 
@@ -17,11 +18,13 @@ The idempotent `AccessControlSeeder` creates these initial roles:
 
 | Role | Default permissions |
 | --- | --- |
-| Super Administrator | All 18 permissions |
+| Super Administrator | All 19 permissions |
 | Administrator | All except `manage-permissions` |
 | Content Manager | `manage-prompts`, `publish-prompts`, `manage-categories`, `manage-brand-guidelines`, `use-ai` |
 | Event Manager | `manage-events`, `upload-event-files`, `use-ai` |
 | Standard User | `use-ai` |
+
+The Administrator role intentionally does not receive `manage-permissions` or `manage-system-settings`. System Settings navigation therefore remains exclusive to actors explicitly granted the new permission. Dashboard navigation checks the exact capability for each destination, while the route/controller remains the server-side boundary when that module exists.
 
 Existing users without a role receive Standard User when the seeder runs. Registration and Google-created accounts receive it when the catalog exists. No role grants access by role-name checks except protection of the reserved Super Administrator identity.
 

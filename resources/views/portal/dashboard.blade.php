@@ -1,0 +1,33 @@
+<x-layouts.portal :title="__('dashboard.title')">
+<section class="portal-welcome">
+    <p class="portal-eyebrow">{{ __('dashboard.dashboard') }}</p>
+    <h2>{{ __('dashboard.welcome',['name'=>auth()->user()->name]) }}</h2>
+    <p>{{ __('dashboard.intro') }}</p>
+</section>
+
+<section class="portal-section" aria-labelledby="quick-access-title">
+    <div class="portal-section-heading"><div><h2 id="quick-access-title">{{ __('dashboard.quick_access') }}</h2><p>{{ __('dashboard.quick_access_intro') }}</p></div></div>
+    <div class="portal-quick-grid">
+        @foreach($quickActions as $action)
+            <div class="portal-quick-card" aria-disabled="true">
+                <span class="portal-card-mark" aria-hidden="true">0{{ $loop->iteration }}</span>
+                <h3>{{ __('dashboard.'.$action['key']) }}</h3>
+                <p>{{ __('dashboard.unavailable_description') }}</p>
+                <span class="portal-unavailable">{{ __('dashboard.unavailable') }}</span>
+            </div>
+        @endforeach
+    </div>
+</section>
+
+<section class="portal-section" aria-labelledby="workspace-summary-title">
+    <div class="portal-section-heading"><div><h2 id="workspace-summary-title">{{ __('dashboard.workspace_summary') }}</h2><p>{{ __('dashboard.workspace_summary_intro') }}</p></div></div>
+    <div class="portal-summary-grid">
+        @foreach($sections as $section)
+            <article class="portal-summary-card">
+                <div><h3>{{ __('dashboard.'.$section['key']) }}</h3><span>{{ __('dashboard.unavailable') }}</span></div>
+                <p>{{ __('dashboard.unavailable_description') }}</p>
+            </article>
+        @endforeach
+    </div>
+</section>
+</x-layouts.portal>

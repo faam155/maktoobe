@@ -106,7 +106,7 @@ class FoundationTest extends TestCase
 
     public function test_both_locales_have_matching_interface_keys(): void
     {
-        foreach (['foundation', 'validation', 'errors', 'auth', 'passwords', 'admin'] as $file) {
+        foreach (['foundation', 'validation', 'errors', 'auth', 'passwords', 'admin', 'dashboard'] as $file) {
             $this->assertSame(array_keys(require lang_path("en/$file.php")), array_keys(require lang_path("ar/$file.php")));
         }
     }

@@ -1,6 +1,6 @@
 # Proposed normalized MySQL schema
 
-Status: **target design with Phases 1–3 migrated**. Create only the tables needed by the approved implementation phase. Remaining sections describe the future logical schema; framework/package details are resolved against locked versions when installed.
+Status: **target design with Phases 1–3 migrated; Phase 4 required no migration**. Create only the tables needed by the approved implementation phase. Remaining sections describe the future logical schema; framework/package details are resolved against locked versions when installed.
 
 Phase 1 implemented Laravel's user/password-reset/session/cache/queue baseline. Phase 2 extended users and added social identity, OTP challenge and account-audit records. Phase 3 added Spatie's normalized role/permission tables. No prompt, AI, event, file, brand, notification or analytics tables have been created. See the phase reports for the applied migration inventory; the remaining schema below is a future target.
 

@@ -1,6 +1,6 @@
 # Maktoobe
 
-An internal AI productivity and event workspace developed incrementally with Laravel. The verified application currently includes its Laravel/MySQL foundation, bilingual authentication, and a permission-protected user and role administration area. Prompt, AI, event, brand, analytics and public API modules remain unavailable until their phases are requested.
+An internal AI productivity and event workspace developed incrementally with Laravel. The verified application currently includes its Laravel/MySQL foundation, bilingual authentication, permission-protected user and role administration, and separate user/admin dashboards. Prompt, AI, event, brand, analytics and public API modules remain unavailable until their phases are requested.
 
 ## Requirements
 
@@ -34,7 +34,7 @@ Keep `.runtime` and `.env*` private and untracked. Do not rerun initialization t
 composer dev
 ```
 
-Open `http://127.0.0.1:8000`. The PHP server is local-only. Registration, password/username login, recovery, verification, local OTP authentication and the authorized `/admin` area are available; `/app` remains a placeholder for later business modules. Use `php artisan serve --host=127.0.0.1 --port=8000 --no-reload` directly if preferred. Stop PHP with Ctrl+C and the project database with `scripts/mysql.ps1 -Action Stop`.
+Open `http://127.0.0.1:8000`. The PHP server is local-only. Registration, password/username login, recovery, verification, local OTP authentication, the personalized `/app` dashboard, and the authorized `/admin` dashboard are available. Future module cards are clearly unavailable until their phases create real routes and authorized data. Use `php artisan serve --host=127.0.0.1 --port=8000 --no-reload` directly if preferred. Stop PHP with Ctrl+C and the project database with `scripts/mysql.ps1 -Action Stop`.
 
 ## First Super Administrator
 
@@ -70,6 +70,6 @@ In a restricted Windows sandbox, Vite may need permission to resolve ancestor pa
 
 Read `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/ROADMAP.md` and the current phase report before changes. Interface strings belong in matching `lang/en` and `lang/ar` files. Livewire supplies Alpine; do not load it twice. Add packages and migrations only when the approved phase needs them.
 
-See [foundation conventions](docs/FOUNDATION.md), [identity conventions](docs/IDENTITY.md), and [authorization conventions](docs/AUTHORIZATION.md) for the current boundaries. Database jobs wait for transaction commits. Local files are private and write failures throw. New local setups use daily info logs with 14-day retention; an existing `.env` should use `LOG_STACK=daily`, `LOG_LEVEL=info` and `LOG_DAILY_DAYS=14` to adopt those defaults.
+See [foundation conventions](docs/FOUNDATION.md), [identity conventions](docs/IDENTITY.md), [authorization conventions](docs/AUTHORIZATION.md), and [dashboard conventions](docs/DASHBOARDS.md) for the current boundaries. Database jobs wait for transaction commits. Local files are private and write failures throw. New local setups use daily info logs with 14-day retention; an existing `.env` should use `LOG_STACK=daily`, `LOG_LEVEL=info` and `LOG_DAILY_DAYS=14` to adopt those defaults.
 
 This is a verified local application increment, not a deployment. Google and real SMS/email delivery require server-side production credentials/providers. HTTPS, production workers, secret management, backups, stricter CSP and operational hardening remain deployment responsibilities.
