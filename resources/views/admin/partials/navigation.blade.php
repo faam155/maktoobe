@@ -4,6 +4,7 @@
 @can('manage-prompts')<a href="{{ route('admin.prompts.index') }}" @class(['admin-nav-link','is-current'=>request()->routeIs('admin.prompts.*')])>{{ __('admin.prompts') }}</a>@endcan
 @can('manage-categories')<a href="{{ route('admin.prompt-categories.index') }}" class="admin-nav-link">{{ __('admin.prompt_categories') }}</a>@endcan
 @can('manage-events')<a href="{{ route('admin.events.index') }}" @class(['admin-nav-link','is-current'=>request()->routeIs('admin.events.*')])>{{ __('admin.events') }}</a>@endcan
+@can('manage-events')<a href="{{ route('admin.calendar') }}" @class(['admin-nav-link','is-current'=>request()->routeIs('admin.calendar')])>{{ __('calendar.title') }}</a>@endcan
 @can('manage-brand-guidelines')<a href="{{ route('admin.brand-guidelines.index') }}" @class(['admin-nav-link','is-current'=>request()->routeIs('admin.brand-guidelines.*')])>{{ __('admin.brand_guidelines') }}</a>@endcan
 @can('manage-ai-settings')<span class="admin-nav-link is-disabled" aria-disabled="true"><span>{{ __('admin.ai_settings') }}</span><small>{{ __('admin.coming_later') }}</small></span>@endcan
 @can('view-analytics')<span class="admin-nav-link is-disabled" aria-disabled="true"><span>{{ __('admin.analytics') }}</span><small>{{ __('admin.coming_later') }}</small></span>@endcan

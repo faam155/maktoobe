@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PromptCategoryController;
 use App\Http\Controllers\Admin\PromptController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\EventCalendarController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified', 'permission:access-admin'])->group(function () {
@@ -40,6 +41,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified'
 });
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified', 'permission:manage-events'])->group(function () {
+    Route::get('/calendar', EventCalendarController::class)->name('calendar');
     Route::resource('events', EventController::class)->only(['index', 'create', 'show', 'edit']);
     Route::middleware('recent-auth')->group(function () {
         Route::post('/events', [EventController::class, 'store'])->name('events.store');

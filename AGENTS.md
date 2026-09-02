@@ -4,7 +4,7 @@
 
 This repository is for an internal AI Prompt Hub and Event Management Platform built with Laravel. The user explicitly requires incremental development and review of architecture/database design before Phase 1.
 
-**Current status: Phase 11 Event Management Core completed and verified on 2026-09-02.** See the Phase 11 report for evidence. Event files, calendar views, analytics, API and MFA remain out of scope until explicitly requested. Stop after Phase 11.
+**Current status: Phase 12 Event Calendar completed and verified on 2026-09-02.** See the Phase 12 report for evidence. Event files, analytics, API and MFA remain out of scope until requested. Stop after Phase 12.
 
 Read the current conversation first: explicit user approvals and changes take precedence over this recorded status. Once the user approves the design/phase, update this status and proceed with that scope without asking for the same approval again. Never treat the full specification as authorization to implement all phases at once.
 
@@ -35,8 +35,10 @@ Design references:
 - [Phase 10 implementation and verification](docs/phases/phase-10.md)
 - [Implemented Event core conventions](docs/EVENTS.md)
 - [Phase 11 implementation and verification](docs/phases/phase-11.md)
+- [Implemented calendar conventions](docs/EVENT_CALENDAR.md)
+- [Phase 12 implementation and verification](docs/phases/phase-12.md)
 
-These files are the working baseline for completed Phases 1–11. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
+These files are the working baseline for completed Phases 1–12. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
 
 ## Architecture rules
 
@@ -59,6 +61,8 @@ These files are the working baseline for completed Phases 1–11. Document appro
 - Phase 11 uses `EventAccess` before lists/search/counts and `EventPolicy` for resource access. Explicit `manage-events` grants management; organizer/creator and audience grants alone provide read access. Mutations use Actions, UTC intervals, soft deletion and redacted event activity. Other workspace tabs remain unavailable. See EVENTS.md.
 
 ## Data and authorization rules
+
+- Phase 12 calendar queries reuse `EventAccess` before range filtering, option discovery and pagination. Use account-local dates converted to half-open UTC ranges; custom agendas are capped at 62 days and results at 100 per page. Mobile uses an agenda. See EVENT_CALENDAR.md.
 
 - MySQL is the required application database and integration-test target. Use real FKs, unique constraints, indexes and deliberate CASCADE/RESTRICT/SET NULL rules; document package polymorphic exceptions. Test with a separate disposable database.
 - Only run migrations after verifying the intended connection/database. Never run destructive refresh/reset operations on user data. Soft deletion is not erasure; physical file/content purge needs an explicit retention workflow.

@@ -28,4 +28,6 @@ Duplicate produces a new private draft, sets the actor as creator/updater/organi
 
 Administration provides list/search/status filter, creation, editing, overview, audience details and lifecycle controls. The portal provides authorized search, upcoming/past/all lists, pagination and an overview workspace. English LTR and Arabic RTL use the existing responsive layouts and compact navigation.
 
-Photos, Documents, Reports, Communications and Activity are explicitly disabled workspace tabs. Monthly/weekly calendars, attendance responses, per-event manager delegation, uploads, notifications and communications are not implemented. They will reuse event policy/audience rules in their own phases.
+Photos, Documents, Reports, Communications and Activity are explicitly disabled workspace tabs. Attendance responses, per-event manager delegation, uploads, notifications and communications are not implemented. They will reuse event policy/audience rules in their own phases.
+
+Phase 12 now supplies authorized month/week/agenda views; see [calendar conventions](EVENT_CALENDAR.md). Other workspace tabs remain deferred.

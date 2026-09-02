@@ -1,6 +1,6 @@
 # AI Prompt Hub & Event Management Platform: proposed architecture
 
-Status: **working architecture baseline; Phase 11 Event Management Core completed and verified on 2026-09-02**. Later phases remain subject to their scope review. See the [Phase 11 report](phases/phase-11.md) for implementation and verification.
+Status: **working architecture baseline; Phase 12 Event Calendar completed and verified on 2026-09-02**. Later phases remain subject to their scope review. See the [Phase 12 report](phases/phase-12.md) for implementation and verification.
 
 Read with [environment findings](ENVIRONMENT.md), the [database design](DATABASE.md), and the [implementation roadmap](ROADMAP.md). The complete application is the eventual destination; each phase is a separately verified increment.
 
@@ -169,8 +169,8 @@ Keep user-visible `event_activities` separate from restricted `audit_logs`. Writ
 | As needed | SMS provider SDK, only if its API requires it | Provider remains behind the Phase 2 gateway interface; no fabricated production delivery |
 | 6 | PDF/DOCX extractor and image processor | Select maintained, licensed, sandboxable tools after real Arabic/English sample evaluation; PHP GD/Imagick prerequisite for chosen image path |
 | 7 | Laravel HTTP client already included | No additional OpenAI PHP package required. First-party Laravel AI SDK may be reconsidered only if it demonstrably simplifies required privacy/state behavior |
-| 8 | `@fullcalendar/core`, day-grid, time-grid, list, interaction packages | Standard calendar views, no premium resource scheduling required; lock matching versions after review. [FullCalendar docs](https://fullcalendar.io/docs) |
-| 12 | `laravel/sanctum` | Install when versioned API authentication is actually introduced. [Sanctum](https://laravel.com/docs/13.x/sanctum) |
+| Future review only | FullCalendar, if interactive timed-grid requirements justify it | Phase 12 uses server-rendered Blade month/week/agenda views and adds no package. |
+| Future API phase | `laravel/sanctum` | Install when versioned API authentication is actually introduced. [Sanctum](https://laravel.com/docs/13.x/sanctum) |
 | As needed | Redis / Horizon, object storage Flysystem adapter, Scout | Optional operational upgrades, not initial required packages |
 
 Use custom admin Blade/Livewire screens instead of a second administration framework. Laravel's official Livewire starter kit is an alternative scaffold, but it adds Flux UI; the default proposal is a plain Laravel skeleton plus Livewire and Fortify to keep the requested stack explicit. [Starter kit composition](https://laravel.com/docs/13.x/starter-kits).

@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\Auth\PasswordRecoveryController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\EventCalendarController;
 use App\Http\Controllers\Portal\AiAssistantController;
 use App\Http\Controllers\Portal\DashboardController;
 use App\Http\Controllers\Portal\EventController;
@@ -44,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['active', 'verified'])->group(function () {
         Route::get('/app', DashboardController::class)->name('account.home');
         Route::get('/app/events', [EventController::class, 'index'])->name('events.index');
+        Route::get('/app/calendar', EventCalendarController::class)->name('events.calendar');
         Route::get('/app/events/{event}', [EventController::class, 'show'])->name('events.show');
         Route::middleware('permission:use-ai')->group(function () {
             Route::get('/app/assistant', [AiAssistantController::class, 'index'])->name('ai.index');
