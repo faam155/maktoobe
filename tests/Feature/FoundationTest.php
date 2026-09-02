@@ -101,7 +101,8 @@ class FoundationTest extends TestCase
         $this->seed();
         $this->assertDatabaseCount('users', 0);
         $this->assertDatabaseCount('prompts', 0);
-        $this->assertFalse(Schema::hasTable('events'));
+        $this->assertTrue(Schema::hasTable('events'));
+        $this->assertDatabaseCount('events', 0);
     }
 
     public function test_both_locales_have_matching_interface_keys(): void

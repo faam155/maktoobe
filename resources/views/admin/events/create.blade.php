@@ -1,0 +1,1 @@
+<x-layouts.admin :title="__('events.create')"><div class="admin-heading-row"><div><h1>{{ __('events.create') }}</h1><p>{{ __('events.admin_intro') }}</p></div></div><form class="admin-form" method="post" action="{{ route('admin.events.store') }}">@csrf @include('admin.events._form')</form></x-layouts.admin>

@@ -113,7 +113,7 @@ class DashboardTest extends TestCase
 
         $this->signedIn($super)->get('/admin')->assertOk()
             ->assertSee('Total users')->assertSee('Active users')->assertSee('Disabled users')
-            ->assertSee('Prompt count')->assertSee('AI conversations')->assertSee('Not available')
+            ->assertSee('Prompt count')->assertSee('AI conversations')->assertSee('Upcoming events')->assertSee('Completed events')
             ->assertSee('Account status changed')->assertSee('Account: Active Member')->assertSee('By Dashboard Administrator')
             ->assertDontSee('private audit reason')
             ->assertSee('System Settings');

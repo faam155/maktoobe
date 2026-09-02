@@ -3,9 +3,12 @@
 namespace App\Queries\Dashboard;
 
 use App\Enums\AccountStatus;
+use App\Enums\EventStatus;
 use App\Models\AiConversation;
+use App\Models\Event;
 use App\Models\Prompt;
 use App\Models\User;
+use App\Services\Events\EventAccess;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -43,15 +46,18 @@ class AdminDashboardQuery
         $aiMetrics = $actor->canAny(['manage-ai-settings', 'view-analytics'])
             ? collect([['key' => 'ai_conversations', 'value' => AiConversation::count()]]) : collect();
 
-        $unavailableMetrics = collect([
-            ['key' => 'upcoming_events', 'authorized' => $actor->canAny(['manage-events', 'view-analytics'])],
-            ['key' => 'completed_events', 'authorized' => $actor->canAny(['manage-events', 'view-analytics'])],
-        ])->where('authorized', true)->map(fn (array $metric) => ['key' => $metric['key']])->values();
+        $visibleEvents = app(EventAccess::class)->visibleTo(Event::query(), $actor);
+        $eventMetrics = $actor->canAny(['manage-events', 'view-analytics']) ? collect([
+            ['key' => 'upcoming_events', 'value' => (clone $visibleEvents)->where('ends_at', '>=', now())->where('status', '!=', EventStatus::Cancelled)->count()],
+            ['key' => 'completed_events', 'value' => (clone $visibleEvents)->where('status', EventStatus::Completed)->count()],
+        ]) : collect();
+        $unavailableMetrics = collect();
 
         return [
             'userMetrics' => $userMetrics,
             'promptMetrics' => $promptMetrics,
             'aiMetrics' => $aiMetrics,
+            'eventMetrics' => $eventMetrics,
             'unavailableMetrics' => $unavailableMetrics,
             'recentActivity' => $actor->can('manage-users') ? $this->recentActivity($actor) : null,
         ];

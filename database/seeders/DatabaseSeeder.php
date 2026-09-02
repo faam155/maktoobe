@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(AccessControlSeeder::class);
         $this->call(PromptCategorySeeder::class);
+        $this->call(EventCategorySeeder::class);
     }
 }

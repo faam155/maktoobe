@@ -4,6 +4,7 @@
 @foreach($userMetrics as $metric)<a class="admin-card" href="{{ route('admin.users.index',array_filter(['status'=>$metric['status']])) }}"><span>{{ __('admin.'.$metric['key']) }}</span><strong>{{ $metric['value'] }}</strong><small>{{ __('admin.manage_users') }}</small></a>@endforeach
 @foreach($promptMetrics as $metric)<a class="admin-card" href="{{ route('admin.prompts.index') }}"><span>{{ __('admin.'.$metric['key']) }}</span><strong>{{ $metric['value'] }}</strong><small>{{ __('admin.prompts') }}</small></a>@endforeach
 @foreach($aiMetrics as $metric)<article class="admin-card"><span>{{ __('admin.'.$metric['key']) }}</span><strong>{{ $metric['value'] }}</strong><small>{{ __('dashboard.ai_assistant') }}</small></article>@endforeach
+@foreach($eventMetrics as $metric)<a class="admin-card" href="{{ route(auth()->user()->can('manage-events') ? 'admin.events.index' : 'events.index') }}"><span>{{ __('admin.'.$metric['key']) }}</span><strong>{{ $metric['value'] }}</strong><small>{{ __('admin.events') }}</small></a>@endforeach
 @foreach($unavailableMetrics as $metric)<article class="admin-card is-unavailable" aria-disabled="true"><span>{{ __('admin.'.$metric['key']) }}</span><strong>{{ __('admin.metric_unavailable') }}</strong><small>{{ __('admin.unavailable_metric_help') }}</small></article>@endforeach
 </div>
 

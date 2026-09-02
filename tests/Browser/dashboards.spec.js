@@ -61,7 +61,8 @@ test('admin dashboard uses real metrics and permission-aware navigation at deskt
         await expect(page.getByRole('heading', { level: 1, name: 'Administration overview' })).toBeVisible();
         await expect(page.getByText('Total users')).toBeVisible();
         await expect(page.getByText('System Settings').first()).toBeAttached();
-        await expect(page.getByText('Not available').first()).toBeVisible();
+        await expect(page.getByText('Upcoming events', {exact:true})).toBeVisible();
+        await expect(page.getByText('Completed events', {exact:true})).toBeVisible();
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
         if (size.width <= 1023) {
             await page.locator('.admin-menu summary').click();

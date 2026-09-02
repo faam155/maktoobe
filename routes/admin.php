@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BrandGuidelineController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\PromptCategoryController;
 use App\Http\Controllers\Admin\PromptController;
@@ -35,6 +36,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified'
         Route::patch('/prompts/{prompt}/status', [PromptController::class, 'status'])->name('prompts.status');
         Route::post('/prompts/{prompt}/duplicate', [PromptController::class, 'duplicate'])->name('prompts.duplicate');
         Route::delete('/prompts/{prompt}', [PromptController::class, 'destroy'])->name('prompts.destroy');
+    });
+});
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified', 'permission:manage-events'])->group(function () {
+    Route::resource('events', EventController::class)->only(['index', 'create', 'show', 'edit']);
+    Route::middleware('recent-auth')->group(function () {
+        Route::post('/events', [EventController::class, 'store'])->name('events.store');
+        Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
+        Route::patch('/events/{event}/status', [EventController::class, 'status'])->name('events.status');
+        Route::post('/events/{event}/duplicate', [EventController::class, 'duplicate'])->name('events.duplicate');
+        Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
     });
 });
 

@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Portal\AiAssistantController;
 use App\Http\Controllers\Portal\DashboardController;
+use App\Http\Controllers\Portal\EventController;
 use App\Http\Controllers\Portal\MyPromptController;
 use App\Http\Controllers\Portal\PromptFavoriteController;
 use App\Http\Controllers\Portal\PromptLibraryController;
@@ -42,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::view('/account/pending', 'auth.pending')->name('account.pending');
     Route::middleware(['active', 'verified'])->group(function () {
         Route::get('/app', DashboardController::class)->name('account.home');
+        Route::get('/app/events', [EventController::class, 'index'])->name('events.index');
+        Route::get('/app/events/{event}', [EventController::class, 'show'])->name('events.show');
         Route::middleware('permission:use-ai')->group(function () {
             Route::get('/app/assistant', [AiAssistantController::class, 'index'])->name('ai.index');
             Route::get('/app/assistant/new', [AiAssistantController::class, 'create'])->name('ai.create');

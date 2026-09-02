@@ -12,7 +12,7 @@
             <div class="portal-quick-card" @if(!$action['route']) aria-disabled="true" @endif>
                 <span class="portal-card-mark" aria-hidden="true">0{{ $loop->iteration }}</span>
                 <h3>{{ __('dashboard.'.$action['key']) }}</h3>
-                @if($action['route'])<p>{{ $action['key']==='ai_assistant' ? __('ai.intro') : __('prompts.library_intro') }}</p><a href="{{ route($action['route']) }}">{{ $action['key']==='ai_assistant' ? __('ai.new') : __('prompts.browse_library') }}</a>@else<p>{{ __('dashboard.unavailable_description') }}</p><span class="portal-unavailable">{{ __('dashboard.unavailable') }}</span>@endif
+                @if($action['route'])<p>{{ $action['key']==='ai_assistant' ? __('ai.intro') : ($action['key']==='events' ? __('events.portal_intro') : __('prompts.library_intro')) }}</p><a href="{{ route($action['route']) }}">{{ $action['key']==='ai_assistant' ? __('ai.new') : ($action['key']==='events' ? __('events.view') : __('prompts.browse_library')) }}</a>@else<p>{{ __('dashboard.unavailable_description') }}</p><span class="portal-unavailable">{{ __('dashboard.unavailable') }}</span>@endif
             </div>
         @endforeach
     </div>
@@ -24,7 +24,7 @@
         @foreach($sections as $section)
             <article class="portal-summary-card">
                 <div><h3>{{ __('dashboard.'.$section['key']) }}</h3><span>{{ array_key_exists('count',$section) ? $section['count'] : __('dashboard.unavailable') }}</span></div>
-                @if(isset($section['route']))<p><a href="{{ route($section['route'],$section['params']??[]) }}">{{ __('prompts.my_prompts') }}</a></p>@else<p>{{ __('dashboard.unavailable_description') }}</p>@endif
+                @if(isset($section['route']))<p><a href="{{ route($section['route'],$section['params']??[]) }}">{{ str_contains($section['key'],'events') ? __('events.view') : __('prompts.my_prompts') }}</a></p>@else<p>{{ __('dashboard.unavailable_description') }}</p>@endif
             </article>
         @endforeach
     </div>

@@ -64,6 +64,16 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return $this->hasMany(AiConversation::class);
     }
 
+    public function organizedEvents(): HasMany
+    {
+        return $this->hasMany(Event::class, 'organizer_id');
+    }
+
+    public function accessibleEvents(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'event_user_access')->withPivot(['granted_by', 'created_at']);
+    }
+
     public function favoritePrompts(): BelongsToMany
     {
         return $this->belongsToMany(Prompt::class, 'prompt_favorites')->withPivot('created_at');

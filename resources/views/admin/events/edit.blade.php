@@ -1,0 +1,1 @@
+<x-layouts.admin :title="__('events.edit')"><div class="admin-heading-row"><div><h1>{{ __('events.edit') }}</h1><p>{{ $event->title }}</p></div></div><form class="admin-form" method="post" action="{{ route('admin.events.update',$event) }}">@csrf @method('PUT') @include('admin.events._form')</form></x-layouts.admin>

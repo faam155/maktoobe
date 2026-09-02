@@ -51,3 +51,5 @@ No production password or privileged account is seeded. On a new installation:
 The one-time action selects an existing account, makes it active and email-verified, assigns only the Super Administrator role, revokes prior sessions, and audits the promotion. It refuses to run once any active Super Administrator exists. Later super-role assignments happen only through the protected administration workflow.
 
 The role and permission cache is cleared by the seeder and package mutation APIs. Queue jobs that depend on permissions must reload the user and authorize again when they execute. New resource modules must add policies and collection visibility rules; an administrative role alone must never reveal personal prompts, AI conversations, or private event content.
+
+Phase 11 adds a scoped administration route group requiring manage-events (not access-admin). This permits Event Managers to manage events without user/role administration access. EventAccess and EventPolicy separate read audiences from management. Explicit manage-events grants event-wide management; merely holding an administrative role name does not.

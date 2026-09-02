@@ -5,10 +5,12 @@ namespace App\Providers;
 use App\Contracts\AiProvider;
 use App\Contracts\GuidelineFileScanner;
 use App\Models\AiConversation;
+use App\Models\Event;
 use App\Models\Prompt;
 use App\Models\PromptCategory;
 use App\Models\User;
 use App\Policies\AiConversationPolicy;
+use App\Policies\EventPolicy;
 use App\Policies\PermissionPolicy;
 use App\Policies\PromptCategoryPolicy;
 use App\Policies\PromptPolicy;
@@ -44,5 +46,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(PromptCategory::class, PromptCategoryPolicy::class);
         Gate::policy(Prompt::class, PromptPolicy::class);
         Gate::policy(AiConversation::class, AiConversationPolicy::class);
+        Gate::policy(Event::class, EventPolicy::class);
     }
 }
