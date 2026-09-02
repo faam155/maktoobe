@@ -2,7 +2,7 @@
 
 return [
     'title' => 'Event files', 'upload' => 'Upload files', 'choose' => 'Choose files',
-    'help' => 'Up to 5 files, 2 MiB each and 6 MiB total. PNG, JPEG, WebP, PDF, DOCX and UTF-8 text. Photos must be images.',
+    'help' => 'Up to 5 files, 2 MiB each and 6 MiB total. PNG, JPEG, WebP, PDF, DOCX, XLSX and UTF-8 text. Photos must be images.',
     'category' => 'File category', 'photos' => 'Photos', 'reports' => 'Reports', 'communications' => 'Communications', 'designs' => 'Designs', 'other' => 'Other Documents', 'all' => 'All files',
     'caption' => 'Caption', 'order' => 'Display order', 'save' => 'Save details', 'edit' => 'Edit details',
     'preview' => 'Preview photo', 'download' => 'Download', 'delete' => 'Delete file',

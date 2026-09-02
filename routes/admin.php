@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\EventCalendarController;
 use App\Http\Controllers\EventFileController;
+use App\Http\Controllers\EventReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified', 'permission:access-admin'])->group(function () {
@@ -43,6 +44,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified'
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified', 'permission:manage-events'])->group(function () {
     Route::get('/calendar', EventCalendarController::class)->name('calendar');
+    Route::get('/events/{event}/reports', [EventReportController::class, 'index'])->name('events.reports.index');
+    Route::get('/events/{event}/reports/{report}/versions/{version}/download', [EventReportController::class, 'download'])->name('events.reports.download');
+    Route::post('/events/{event}/reports', [EventReportController::class, 'store'])->middleware(['recent-auth', 'throttle:20,1'])->name('events.reports.store');
+    Route::delete('/events/{event}/reports/{report}', [EventReportController::class, 'destroy'])->middleware(['recent-auth', 'throttle:20,1'])->name('events.reports.destroy');
     Route::get('/events/{event}/files', [EventFileController::class, 'index'])->name('events.files.index');
     Route::get('/events/{event}/files/{file}/download', [EventFileController::class, 'download'])->name('events.files.download');
     Route::get('/events/{event}/files/{file}/preview', [EventFileController::class, 'preview'])->name('events.files.preview');

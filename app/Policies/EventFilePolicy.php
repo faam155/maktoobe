@@ -16,12 +16,17 @@ class EventFilePolicy
 
     public function view(User $user, EventFile $file): bool
     {
+        $version = $file->reportVersion;
+        if ($version && ($version->trashed() || ! $version->report)) {
+            return false;
+        }
+
         return ! $file->trashed() && $file->scan_status === 'clean' && $file->event && app(EventAccess::class)->canView($user, $file->event);
     }
 
     public function update(User $user, EventFile $file): bool
     {
-        return $this->view($user, $file) && $user->can('upload-event-files') && ($file->uploaded_by === $user->id || $user->can('manage-events'));
+        return ! $file->reportVersion()->exists() && $this->view($user, $file) && $user->can('upload-event-files') && ($file->uploaded_by === $user->id || $user->can('manage-events'));
     }
 
     public function delete(User $user, EventFile $file): bool

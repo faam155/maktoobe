@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\EventFile;
 use App\Models\User;
 use App\Services\Events\EventFileInspector;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
@@ -19,14 +20,14 @@ use Throwable;
 
 class UploadEventFiles
 {
-    public function handle(User $actor, Event $event, array $input): void
+    public function handle(User $actor, Event $event, array $input, ?\Closure $afterStore = null): Collection
     {
         Gate::forUser($actor)->authorize('create', [EventFile::class, $event]);
         $data = Validator::make($input, [
             'category' => ['required', Rule::enum(EventFileCategory::class)],
             'caption' => ['nullable', 'string', 'max:500'],
             'files' => ['required', 'array', 'min:1', 'max:5'],
-            'files.*' => ['required', 'file', 'max:2048', 'extensions:pdf,docx,png,jpg,jpeg,webp,txt'],
+            'files.*' => ['required', 'file', 'max:2048', 'extensions:pdf,docx,xlsx,png,jpg,jpeg,webp,txt'],
         ])->validate();
         if (array_sum(array_map(fn ($file) => $file->getSize(), $data['files'])) > 6 * 1024 * 1024) {
             throw ValidationException::withMessages(['files' => __('event_files.total_limit')]);
@@ -60,14 +61,22 @@ class UploadEventFiles
                     throw ValidationException::withMessages(['files' => __('event_files.failed')]);
                 }
             }
-            DB::transaction(function () use ($actor, $event, $prepared) {
+
+            return DB::transaction(function () use ($actor, $event, $prepared, $afterStore) {
                 $locked = Event::whereKey($event->id)->lockForUpdate()->firstOrFail();
                 Gate::forUser($actor)->authorize('create', [EventFile::class, $locked]);
                 $order = (int) $locked->files()->max('display_order');
+                $created = collect();
                 foreach ($prepared as $item) {
                     $file = $locked->files()->create($item['metadata'] + ['display_order' => min(++$order, 1000000)]);
+                    $created->push($file);
                     $locked->activities()->create(['actor_id' => $actor->id, 'action' => 'event.file_uploaded', 'metadata' => ['file_id' => $file->id, 'category' => $file->category->value], 'created_at' => now()]);
                 }
+                // Internal composition hook: report metadata joins the same
+                // transaction and storage cleanup boundary as its physical file.
+                $afterStore?->__invoke($locked, $created);
+
+                return $created;
             });
         } catch (Throwable $exception) {
             foreach ($written as $path) {

@@ -13,12 +13,15 @@ class EventFileInspector
     {
         $extension = strtolower($file->getClientOriginalExtension());
         // Limit archive work and reject macros, embedded binaries and traversal entries.
-        if ($extension === 'docx') {
+        if (in_array($extension, ['docx', 'xlsx'], true)) {
             $zip = new ZipArchive;
             if ($zip->open($file->getRealPath()) !== true) {
                 $this->invalid();
             }
             try {
+                if ($extension === 'xlsx' && ($zip->locateName('[Content_Types].xml') === false || $zip->locateName('xl/workbook.xml') === false)) {
+                    $this->invalid();
+                }
                 $total = 0;
                 if ($zip->numFiles > 500) {
                     $this->invalid();
@@ -34,6 +37,14 @@ class EventFileInspector
             } finally {
                 $zip->close();
             }
+        }
+        if ($extension === 'xlsx') {
+            $mime = (string) $file->getMimeType();
+            if (! in_array($mime, ['application/zip', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'], true)) {
+                $this->invalid();
+            }
+
+            return ['extension' => 'xlsx', 'mime_type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
         }
         try {
             $inspected = app(GuidelineFileInspector::class)->inspect($file);

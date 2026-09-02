@@ -69,4 +69,9 @@ class Event extends Model
     {
         return $this->hasMany(EventFile::class);
     }
+
+    public function reports(): HasMany
+    {
+        return $this->hasMany(EventReport::class);
+    }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\EventCalendarController;
 use App\Http\Controllers\EventFileController;
+use App\Http\Controllers\EventReportController;
 use App\Http\Controllers\Portal\AiAssistantController;
 use App\Http\Controllers\Portal\DashboardController;
 use App\Http\Controllers\Portal\EventController;
@@ -48,6 +49,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/app/events', [EventController::class, 'index'])->name('events.index');
         Route::get('/app/calendar', EventCalendarController::class)->name('events.calendar');
         Route::get('/app/events/{event}', [EventController::class, 'show'])->name('events.show');
+        Route::get('/app/events/{event}/reports', [EventReportController::class, 'index'])->name('events.reports.index');
+        Route::get('/app/events/{event}/reports/{report}/versions/{version}/download', [EventReportController::class, 'download'])->name('events.reports.download');
+        Route::post('/app/events/{event}/reports', [EventReportController::class, 'store'])->middleware(['recent-auth', 'throttle:20,1'])->name('events.reports.store');
+        Route::delete('/app/events/{event}/reports/{report}', [EventReportController::class, 'destroy'])->middleware(['recent-auth', 'throttle:20,1'])->name('events.reports.destroy');
         Route::get('/app/events/{event}/files', [EventFileController::class, 'index'])->name('events.files.index');
         Route::get('/app/events/{event}/files/{file}/download', [EventFileController::class, 'download'])->name('events.files.download');
         Route::get('/app/events/{event}/files/{file}/preview', [EventFileController::class, 'preview'])->name('events.files.preview');

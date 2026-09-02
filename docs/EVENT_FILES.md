@@ -1,6 +1,6 @@
 # Event photos and files
 
-Phase 13 enables Photos and Documents in both event workspaces. Report and communication categories are file collections only: report versioning, report editing and communication authoring are not implemented. Their specialized tabs remain disabled.
+Phase 13 enables Photos and Documents in both event workspaces. Phase 14 adds structured versioned reports in the Reports tab; see [report conventions](EVENT_REPORTS.md). Structured report files are excluded from generic lists and cannot be mutated through generic file actions. Communication authoring remains deferred.
 
 ## Data and authorization
 
@@ -8,12 +8,12 @@ Phase 13 enables Photos and Documents in both event workspaces. Report and commu
 
 Reads inherit the current `EventAccess` audience. Upload requires that audience access plus `upload-event-files`; event ownership alone grants no upload ability. Update/delete additionally require uploader ownership or `manage-events`. Managers still need `upload-event-files`. Explicit event/file parent matching prevents using an accessible event ID with an unrelated file ID. Policies protect shared Actions and controller operations; active/verified middleware protects both portal/admin requests and recent authentication plus throttling protects mutations.
 
-`UploadEventFiles` validates the entire batch before creating metadata. The event row is locked and its access rechecked before inserts and redacted activity records. Caption/category/order updates and deletes use authorized transactional Actions. Physical contents are immutable: changing metadata never replaces bytes. A future report-version row can refer to a new `event_file_id`.
+`UploadEventFiles` validates the entire batch before creating metadata. The event row is locked and its access rechecked before inserts and redacted activity records. Caption/category/order updates and deletes use authorized transactional Actions. Physical contents are immutable: changing metadata never replaces bytes. Each Phase 14 report-version row refers to a new `event_file_id`.
 
 ## File handling
 
 - Current limits match inspected local PHP settings: 5 files, 2 MiB per file, 6 MiB aggregate (PHP limits are 2M/8M). Raising these requires coordinated application, PHP/web-server and test changes.
-- Accepted: PNG, JPEG, WebP, PDF, DOCX and UTF-8 TXT. Photos require an image. SVG, HTML, scripts, generic archives, macros and arbitrary executable formats are not accepted. PDF/DOCX/TXT download as attachments; inline preview is image-only.
+- Accepted: PNG, JPEG, WebP, PDF, DOCX, XLSX and UTF-8 TXT. Photos require an image. SVG, HTML, scripts, generic archives, macros and arbitrary executable formats are not accepted. PDF/DOCX/TXT download as attachments; inline preview is image-only.
 - Extension, server-detected MIME and signature/package checks are applied. Image dimensions are bounded to 8000 per axis and 24 million pixels. DOCX packages are bounded to 500 entries and 20 MiB expanded size; encrypted, traversal and embedded binary/executable entries are rejected. No archive extraction occurs.
 - PHP's private, non-addressable upload temp files are the initial quarantine. The whole batch must pass inspection and `PrivateFileScanner` before files become available in private application storage. Database failure cleans up newly written paths; unreferenced bytes from a process crash require a later safe retention cleanup process.
 - `PrivateFileScanner` currently delegates to the existing `GuidelineFileScanner` binding, retaining compatibility with Phase 10. The local/testing/browser implementation is only a test adapter: it rejects the antivirus test marker but is not a real malware scanner. Outside those environments it fails closed. Bind an actual scanner to `PrivateFileScanner` (or the shared guideline adapter) before enabling production uploads; do not remove the environment guard.

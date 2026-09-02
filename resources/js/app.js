@@ -30,7 +30,13 @@ document.querySelectorAll('[data-event-upload]').forEach((form) => {
         request.ontimeout = failed;
         request.onload = () => {
             if (request.status >= 200 && request.status < 300 && request.response?.redirect) {
-                window.location.assign(request.response.redirect);
+                const destination = new URL(request.response.redirect, window.location.href);
+                if (destination.origin === window.location.origin && destination.pathname === window.location.pathname && destination.search === window.location.search) {
+                    window.location.hash = destination.hash;
+                    window.location.reload();
+                } else {
+                    window.location.assign(destination.href);
+                }
             } else if (request.status === 200 && request.responseURL && new URL(request.responseURL).pathname === '/confirm-password') {
                 window.location.assign(request.responseURL);
             } else {

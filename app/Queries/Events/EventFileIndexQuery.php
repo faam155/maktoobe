@@ -15,7 +15,7 @@ class EventFileIndexQuery
     {
         Gate::forUser($actor)->authorize('view', $event);
         $filters = Validator::make($input, ['category' => ['nullable', Rule::enum(EventFileCategory::class)], 'page' => ['nullable', 'integer', 'min:1', 'max:100000']])->validate();
-        $files = $event->files()->where('scan_status', 'clean')
+        $files = $event->files()->where('scan_status', 'clean')->whereDoesntHave('reportVersion')
             ->when(filled($filters['category'] ?? null), fn ($query) => $query->where('category', $filters['category']))
             ->with('uploader:id,name')->orderBy('display_order')->orderBy('id')->paginate(24)->withQueryString();
 

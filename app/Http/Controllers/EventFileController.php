@@ -8,9 +8,9 @@ use App\Actions\Events\UploadEventFiles;
 use App\Models\Event;
 use App\Models\EventFile;
 use App\Queries\Events\EventFileIndexQuery;
+use App\Services\Events\EventFileResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 
 class EventFileController
 {
@@ -64,13 +64,7 @@ class EventFileController
     private function serve(Event $event, EventFile $file, bool $preview)
     {
         $this->parent($event, $file);
-        Gate::authorize('view', $file);
-        abort_if($preview && ! $file->isImage(), 404);
-        abort_unless($file->storage_disk === 'local' && preg_match('~^event-files/'.$event->id.'/[a-f0-9-]{36}\.(png|jpe?g|webp|pdf|docx|txt)$~D', $file->storage_path), 404);
-        $disk = Storage::disk('local');
-        abort_unless($disk->exists($file->storage_path), 404);
-        $headers = ['Content-Type' => $file->mime_type, 'X-Content-Type-Options' => 'nosniff', 'Cache-Control' => 'private, no-store', 'Content-Security-Policy' => "default-src 'none'; sandbox", 'Referrer-Policy' => 'no-referrer'];
 
-        return $disk->response($file->storage_path, $file->original_name, $headers, $preview ? 'inline' : 'attachment');
+        return app(EventFileResponse::class)->handle(auth()->user(), $file, $preview);
     }
 }

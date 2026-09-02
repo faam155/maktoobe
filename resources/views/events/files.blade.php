@@ -8,7 +8,7 @@
 @if(app()->environment(['local','browser']))<p class="form-help">{{ __('event_files.local_scanner') }}</p>@endif
 <form method="post" enctype="multipart/form-data" action="{{ route($fileRoutePrefix.'.store',$event) }}" data-event-upload data-failed="{{ __('event_files.failed') }}" data-processing="{{ __('event_files.processing') }}">
     @csrf
-    <label>{{ __('event_files.choose') }}<input type="file" name="files[]" multiple required accept=".png,.jpg,.jpeg,.webp,.pdf,.docx,.txt"></label>
+    <label>{{ __('event_files.choose') }}<input type="file" name="files[]" multiple required accept=".png,.jpg,.jpeg,.webp,.pdf,.docx,.xlsx,.txt"></label>
     <label>{{ __('event_files.category') }}<select name="category">@foreach(\App\Enums\EventFileCategory::cases() as $category)<option value="{{ $category->value }}" @selected(old('category',$filters['category']??'other')===$category->value)>{{ __('event_files.'.$category->value) }}</option>@endforeach</select></label>
     <label class="event-file-wide">{{ __('event_files.caption') }}<textarea name="caption" maxlength="500" rows="2">{{ old('caption') }}</textarea></label>
     <div><button class="admin-button">{{ __('event_files.upload') }}</button></div>
