@@ -3,11 +3,13 @@
 namespace App\Actions\Prompts;
 
 use App\Actions\Identity\RecordAccountAudit;
+use App\Actions\Notifications\RecordWorkspaceNotice;
 use App\Enums\PromptStatus;
 use App\Models\Prompt;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class ChangePromptStatus
@@ -18,6 +20,7 @@ class ChangePromptStatus
 
         return DB::transaction(function () use ($actor, $prompt, $status) {
             $prompt = Prompt::lockForUpdate()->with(['category', 'allowedUsers', 'allowedRoles'])->findOrFail($prompt->id);
+            $previousStatus = $prompt->status;
             if ($status === PromptStatus::Published) {
                 if ($prompt->category_id && (! $prompt->category || ! $prompt->category->is_active || $prompt->category->trashed())) {
                     throw ValidationException::withMessages(['category_id' => __('prompts.category_must_be_active')]);
@@ -35,6 +38,9 @@ class ChangePromptStatus
                 'published_by' => $status === PromptStatus::Published ? $actor->id : null,
             ]);
             app(RecordAccountAudit::class)->handle($actor, 'prompt.status_changed', ['prompt_id' => $prompt->id, 'status' => $status->value], $actor);
+            if ($status === PromptStatus::Published && $previousStatus !== $status) {
+                app(RecordWorkspaceNotice::class)->handle('prompt_published', 'prompt:'.Str::uuid(), ['prompt_id' => $prompt->id]);
+            }
 
             return $prompt;
         });

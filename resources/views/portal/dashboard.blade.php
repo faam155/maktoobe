@@ -24,7 +24,7 @@
         @foreach($sections as $section)
             <article class="portal-summary-card">
                 <div><h3>{{ __('dashboard.'.$section['key']) }}</h3><span>{{ array_key_exists('count',$section) ? $section['count'] : __('dashboard.unavailable') }}</span></div>
-                @if(isset($section['route']))<p><a href="{{ route($section['route'],$section['params']??[]) }}">{{ str_contains($section['key'],'events') ? __('events.view') : __('prompts.my_prompts') }}</a></p>@else<p>{{ __('dashboard.unavailable_description') }}</p>@endif
+                @if(isset($section['route']))<p><a href="{{ route($section['route'],$section['params']??[]) }}">{{ $section['key']==='notifications' ? __('notifications.view_all') : (str_contains($section['key'],'events') ? __('events.view') : __('prompts.my_prompts')) }}</a></p>@else<p>{{ __('dashboard.unavailable_description') }}</p>@endif
             </article>
         @endforeach
     </div>

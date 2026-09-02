@@ -73,3 +73,14 @@ Read `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/ROADMAP.md` 
 See [foundation conventions](docs/FOUNDATION.md), [identity conventions](docs/IDENTITY.md), [authorization conventions](docs/AUTHORIZATION.md), [dashboard conventions](docs/DASHBOARDS.md), [prompt-category conventions](docs/PROMPT_CATEGORIES.md), and [Prompt Library conventions](docs/PROMPT_LIBRARY.md) for current boundaries. Database jobs wait for transaction commits. Local files are private and write failures throw. New local setups use daily info logs with 14-day retention; an existing `.env` should use `LOG_STACK=daily`, `LOG_LEVEL=info` and `LOG_DAILY_DAYS=14` to adopt those defaults.
 
 This is a verified local application increment, not a deployment. Google and real SMS/email delivery require server-side production credentials/providers. HTTPS, production workers, secret management, backups, stricter CSP and operational hardening remain deployment responsibilities.
+
+## In-app notifications and reminders
+
+Phase 16 adds the Notifications page/panel, authorized event/prompt/report notices and permission-protected bilingual system notices. No external email, SMS or push is sent. See [notification conventions](docs/NOTIFICATIONS.md).
+
+Run separately from the AI worker:
+
+    php artisan queue:work --queue=notifications --tries=3 --sleep=1 --timeout=60
+    php artisan schedule:work
+
+The scheduler creates one reminder per upcoming Planned/Confirmed event/start within 24 hours and resumes pending deliveries. In production, supervise the worker and invoke schedule:run once per minute from the host scheduler instead of schedule:work. Delivery and inbox reads are authorized; inaccessible resources disappear. Counts refresh on navigation. No historical backfill is performed.

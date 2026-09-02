@@ -2,6 +2,7 @@
 
 namespace App\Actions\Events;
 
+use App\Actions\Notifications\RecordWorkspaceNotice;
 use App\Enums\EventStatus;
 use App\Enums\EventVisibility;
 use App\Models\Event;
@@ -59,6 +60,8 @@ class SaveEvent
                 $event = Event::lockForUpdate()->findOrFail($event->id);
             }
             $timezone = $data['timezone'];
+            $previousUsers = $event?->allowedUsers()->pluck('users.id')->all() ?? [];
+            $previousOrganizer = $event?->organizer_id;
             $attributes = [
                 'title' => trim($data['title']), 'description' => filled($data['description'] ?? null) ? trim($data['description']) : null,
                 'category_id' => $data['category_id'] ?? null,
@@ -77,7 +80,18 @@ class SaveEvent
             $roleIds = $data['visibility'] === EventVisibility::SelectedRoles->value ? ($data['role_ids'] ?? []) : [];
             $event->allowedUsers()->sync(collect($userIds)->mapWithKeys(fn ($id) => [$id => ['granted_by' => $actor->id, 'created_at' => now()]])->all());
             $event->allowedRoles()->sync(collect($roleIds)->mapWithKeys(fn ($id) => [$id => ['granted_by' => $actor->id, 'created_at' => now()]])->all());
-            EventActivity::create(['event_id' => $event->id, 'actor_id' => $actor->id, 'action' => $creating ? 'event.created' : 'event.updated', 'metadata' => ['visibility' => $event->visibility->value], 'created_at' => now()]);
+            $activity = EventActivity::create(['event_id' => $event->id, 'actor_id' => $actor->id, 'action' => $creating ? 'event.created' : 'event.updated', 'metadata' => ['visibility' => $event->visibility->value], 'created_at' => now()]);
+            if ($event->status !== EventStatus::Draft) {
+                $notices = app(RecordWorkspaceNotice::class);
+                $notices->handle($creating ? 'event_published' : 'event_updated', 'event:'.$activity->id, ['event_id' => $event->id]);
+                $assigned = array_diff($userIds, $previousUsers);
+                if ($previousOrganizer !== $event->organizer_id) {
+                    $assigned[] = $event->organizer_id;
+                }
+                foreach (array_unique($assigned) as $id) {
+                    $notices->handle('event_assigned', 'assignment:'.$activity->id.':'.$id, ['event_id' => $event->id, 'target_user_id' => $id, 'broadcast' => false]);
+                }
+            }
 
             return $event->fresh();
         });

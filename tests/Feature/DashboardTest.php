@@ -54,8 +54,8 @@ class DashboardTest extends TestCase
             ->assertSee('Favorite prompts')
             ->assertSee('Upcoming events')
             ->assertSee('Notifications')
-            ->assertSee('Not available yet')
-            ->assertSee('aria-disabled="true"', false)
+            ->assertSee(route('notifications.index'), false)
+            ->assertDontSee('aria-disabled="true"', false)
             ->assertDontSee('Open administration')
             ->assertDontSee('href="/ai', false)
             ->assertDontSee('href="/events', false);

@@ -194,3 +194,9 @@ This diagram omits most access pivots and nullable audit references; the tables 
 Down migrations reverse dependency order; run rollback tests only on a disposable test database. Use additive changes and explicit data backfills on deployed databases; never run `migrate:fresh` on user data.
 
 Retention periods are a review item before deployment: password/OTP/session expiry, failed jobs, AI content and snapshots, orphan uploads, event records, audit facts and backups need documented windows. Soft deletion is reversible hiding, not erasure. Hard-purge actions must cancel pending jobs, remove private content/continuation/context references and physical objects, invalidate search/vector indexes if present, and preserve only the agreed anonymized usage/audit facts. Default to retaining owned records until this policy is agreed rather than silently cascading their deletion.
+
+## Phase 16 additions
+
+Implemented Laravel database notifications with a durable workspace_notices ledger: normalized nullable event/prompt/report-version references (RESTRICT physical deletion), nullable target/creator users (SET NULL), explicit broadcast flag, unique operation_key, occurrence time, audience ceiling, delivery cursor and completed_at/id recovery index. System-only bilingual text is JSON; private resource content is not duplicated.
+
+The notifications table retains Laravel UUID/type/notifiable/data/read_at/timestamps and the fixed user morph. Concrete user_id (CASCADE) and notice_id (RESTRICT) supplement that polymorphic relation. Unique user_id/notice_id prevents duplicate delivery; dismissed_at preserves deduplication. An inbox index covers user/dismissed/read/created fields. Authorization applies before lists, counts and links; these tables never permanently grant resource access. See NOTIFICATIONS.md.

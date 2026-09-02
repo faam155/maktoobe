@@ -71,3 +71,5 @@ Log safe event names, resource IDs, correlation IDs, status and duration. Never 
 - Before local migrations, confirm the connection/database. Use `php artisan migrate` and `php artisan migrate --env=testing`; never reset development data. After queue tests, a final testing migration may restore the disposable schema if the last test rolled it back.
 
 Setup and verification commands are in [README.md](../README.md); evidence belongs in the [Phase 1 report](phases/phase-01.md).
+
+Phase 16 now registers notifications:dispatch every minute. It creates duplicate-safe upcoming-event reminders and resumes incomplete notification work. The durable workspace_notices ledger closes the commit/enqueue recovery gap for this feature. Run a dedicated notifications worker; see NOTIFICATIONS.md. No destructive pruning is scheduled.

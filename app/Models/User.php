@@ -84,6 +84,11 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return $this->locale ?? 'en';
     }
 
+    public function notifications()
+    {
+        return $this->morphMany(WorkspaceDatabaseNotification::class, 'notifiable')->latest();
+    }
+
     public function sendEmailVerificationNotification(): void
     {
         $this->notify(new VerifyAccountEmail);

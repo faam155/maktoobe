@@ -2,6 +2,7 @@
 
 // CLI-only fixtures: never registered as HTTP routes or production seed data.
 use App\Actions\Identity\SetAccountStatus;
+use App\Actions\Notifications\RecordWorkspaceNotice;
 use App\Enums\AccountStatus;
 use App\Models\Event;
 use App\Models\EventCategory;
@@ -57,6 +58,14 @@ if ($action === 'reset') {
     foreach (['Calendar Public Forum' => 'all_users', 'Calendar Private Secret' => 'private'] as $title => $visibility) {
         Event::factory()->create(['title' => $title, 'organizer_id' => $administrator->id, 'starts_at' => '2027-01-15 08:00:00', 'ends_at' => '2027-01-16 10:00:00', 'visibility' => $visibility, 'category_id' => EventCategory::firstOrFail()->id]);
     }
+    echo json_encode(['ready' => true]);
+} elseif ($action === 'notifications') {
+    foreach (Event::all() as $event) {
+        app(RecordWorkspaceNotice::class)->handle('event_published', 'browser-event:'.$event->id, ['event_id' => $event->id]);
+    }
+    app(RecordWorkspaceNotice::class)->handle('system', 'browser-system', [
+        'system_content' => ['en' => ['title' => 'Scheduled maintenance', 'body' => 'Please save your work.'], 'ar' => ['title' => 'صيانة مجدولة', 'body' => 'يرجى حفظ عملك.']],
+    ]);
     echo json_encode(['ready' => true]);
 } elseif ($action === 'inbox') {
     $messages = array_values(array_filter(app(LocalInbox::class)->messages(), fn ($message) => ($message['recipient'] ?? null) === $email));

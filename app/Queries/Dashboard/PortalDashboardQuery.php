@@ -6,6 +6,7 @@ use App\Enums\PromptSource;
 use App\Models\Event;
 use App\Models\Prompt;
 use App\Models\User;
+use App\Queries\Notifications\NotificationInbox;
 use App\Services\Events\EventAccess;
 use App\Services\Prompts\PromptAccess;
 use Illuminate\Support\Collection;
@@ -31,7 +32,7 @@ class PortalDashboardQuery
             ['key' => 'personal_prompts', 'authorized' => true, 'count' => $user->prompts()->where('source', PromptSource::Personal)->count(), 'route' => 'my-prompts.index', 'params' => ['section' => 'personal']],
             ['key' => 'upcoming_events', 'authorized' => true, 'count' => (clone $visibleEvents)->where('ends_at', '>=', now())->count(), 'route' => 'events.index'],
             ['key' => 'recent_events', 'authorized' => true, 'count' => (clone $visibleEvents)->where('ends_at', '<', now())->count(), 'route' => 'events.index', 'params' => ['period' => 'past']],
-            ['key' => 'notifications', 'authorized' => true],
+            ['key' => 'notifications', 'authorized' => true, 'count' => app(NotificationInbox::class)->unread($user), 'route' => 'notifications.index'],
         ])->where('authorized', true)->map(fn (array $section) => collect($section)->except('authorized')->all())->values();
 
         $quickActions = collect([

@@ -4,7 +4,7 @@
 <a href="{{ route('my-prompts.index') }}" @class(['portal-nav-link','is-current'=>request()->routeIs('my-prompts.*')])>{{ __('dashboard.my_prompts') }}</a>
 <a href="{{ route('events.index') }}" @class(['portal-nav-link','is-current'=>request()->routeIs('events.*') && !request()->routeIs('events.calendar')])>{{ __('dashboard.events') }}</a>
 <a href="{{ route('events.calendar') }}" @class(['portal-nav-link','is-current'=>request()->routeIs('events.calendar')])>{{ __('calendar.title') }}</a>
-<span class="portal-nav-link is-disabled" aria-disabled="true"><span>{{ __('dashboard.notifications') }}</span><small>{{ __('dashboard.coming_later') }}</small></span>
+<a class="portal-nav-link" href="{{ route('notifications.index') }}">{{ __('dashboard.notifications') }}</a>
 <a href="{{ route('account.security') }}" @class(['portal-nav-link','is-current'=>request()->routeIs('account.*') && !request()->routeIs('account.home')])>{{ __('dashboard.profile') }}</a>
 @can('access-admin')<a href="{{ route('admin.dashboard') }}" class="portal-nav-link">{{ __('dashboard.administration') }}</a>@endcan
 @if(auth()->user()->can('manage-events') && !auth()->user()->can('access-admin'))<a href="{{ route('admin.events.index') }}" class="portal-nav-link">{{ __('events.manage') }}</a>@endif

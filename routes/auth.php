@@ -11,6 +11,7 @@ use App\Http\Controllers\EventCalendarController;
 use App\Http\Controllers\EventCommunicationController;
 use App\Http\Controllers\EventFileController;
 use App\Http\Controllers\EventReportController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Portal\AiAssistantController;
 use App\Http\Controllers\Portal\DashboardController;
 use App\Http\Controllers\Portal\EventController;
@@ -46,6 +47,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/email/verification-notification', [VerificationController::class, 'resend'])->middleware('throttle:1,1')->name('verification.send');
     Route::view('/account/pending', 'auth.pending')->name('account.pending');
     Route::middleware(['active', 'verified'])->group(function () {
+        Route::get('/app/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::middleware('throttle:60,1')->group(function () {
+            Route::post('/app/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
+            Route::post('/app/notifications/{notification}/read', [NotificationController::class, 'read'])->name('notifications.read');
+            Route::post('/app/notifications/{notification}/open', [NotificationController::class, 'open'])->name('notifications.open');
+            Route::delete('/app/notifications/{notification}', [NotificationController::class, 'dismiss'])->name('notifications.dismiss');
+        });
+        Route::post('/app/notifications/system', [NotificationController::class, 'system'])->middleware(['recent-auth', 'throttle:5,1'])->name('notifications.system');
         Route::get('/app', DashboardController::class)->name('account.home');
         Route::get('/app/events', [EventController::class, 'index'])->name('events.index');
         Route::get('/app/calendar', EventCalendarController::class)->name('events.calendar');

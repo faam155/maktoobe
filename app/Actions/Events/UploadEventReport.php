@@ -2,6 +2,7 @@
 
 namespace App\Actions\Events;
 
+use App\Actions\Notifications\RecordWorkspaceNotice;
 use App\Enums\EventReportType;
 use App\Models\Event;
 use App\Models\EventReport;
@@ -39,6 +40,7 @@ class UploadEventReport
             $number = (int) $report->versions()->withTrashed()->max('version_number') + 1;
             $version = $report->versions()->create(['event_id' => $locked->id, 'event_file_id' => $files->sole()->id, 'version_number' => $number, 'title' => trim($data['title']), 'notes' => $data['notes'] ?? null]);
             $report->touch();
+            app(RecordWorkspaceNotice::class)->handle('report_uploaded', 'report:'.$version->id, ['event_id' => $locked->id, 'report_version_id' => $version->id]);
             $locked->activities()->create(['actor_id' => $actor->id, 'action' => 'event.report_version_uploaded', 'metadata' => ['report_id' => $report->id, 'version_id' => $version->id, 'type' => $report->type->value], 'created_at' => now()]);
         });
     }

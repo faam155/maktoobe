@@ -22,7 +22,7 @@
             <div><p class="admin-kicker">{{ __('admin.title') }}</p><h1>{{ $title }}</h1></div>
             <div class="admin-top-actions">
                 <form method="POST" action="{{ route('locale.update') }}" class="admin-locale">@csrf<label class="sr-only" for="admin-locale">{{ __('admin.language') }}</label><select id="admin-locale" name="locale"><option value="en" @selected(app()->getLocale()==='en')>English</option><option value="ar" @selected(app()->getLocale()==='ar')>العربية</option></select><button type="submit">{{ __('admin.change_language') }}</button></form>
-                <form method="POST" action="{{ route('logout') }}">@csrf<button class="admin-link-button" type="submit">{{ __('admin.logout') }}</button></form>
+                <x-notification-panel /><form method="POST" action="{{ route('logout') }}">@csrf<button class="admin-link-button" type="submit">{{ __('admin.logout') }}</button></form>
             </div>
         </header>
         <main id="admin-main" tabindex="-1" class="admin-main">

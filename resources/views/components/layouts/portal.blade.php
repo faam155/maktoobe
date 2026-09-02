@@ -22,7 +22,7 @@
             <div><p class="portal-kicker">{{ __('foundation.brand') }}</p><h1>{{ $title }}</h1></div>
             <div class="portal-top-actions">
                 <form method="POST" action="{{ route('locale.update') }}" class="portal-locale">@csrf<label class="sr-only" for="portal-locale">{{ __('dashboard.language') }}</label><select id="portal-locale" name="locale"><option value="en" @selected(app()->getLocale()==='en')>English</option><option value="ar" @selected(app()->getLocale()==='ar')>العربية</option></select><button type="submit">{{ __('dashboard.change_language') }}</button></form>
-                <form method="POST" action="{{ route('logout') }}">@csrf<button class="portal-link-button" type="submit">{{ __('dashboard.logout') }}</button></form>
+                <x-notification-panel /><form method="POST" action="{{ route('logout') }}">@csrf<button class="portal-link-button" type="submit">{{ __('dashboard.logout') }}</button></form>
             </div>
         </header>
         <main id="portal-main" tabindex="-1" class="portal-main">
