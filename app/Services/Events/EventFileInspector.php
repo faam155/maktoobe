@@ -5,12 +5,18 @@ namespace App\Services\Events;
 use App\Services\Brand\GuidelineFileInspector;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\Mime\Exception\InvalidArgumentException;
 use ZipArchive;
 
 class EventFileInspector
 {
     public function inspect(UploadedFile $file): array
     {
+        // Temporary uploads can disappear (for example, external quarantine)
+        // after Laravel validation but before MIME inspection.
+        if (! is_readable($file->getPathname())) {
+            $this->invalid();
+        }
         $extension = strtolower($file->getClientOriginalExtension());
         // Limit archive work and reject macros, embedded binaries and traversal entries.
         if (in_array($extension, ['docx', 'xlsx'], true)) {
@@ -48,7 +54,7 @@ class EventFileInspector
         }
         try {
             $inspected = app(GuidelineFileInspector::class)->inspect($file);
-        } catch (ValidationException) {
+        } catch (ValidationException|InvalidArgumentException) {
             $this->invalid();
         }
         if (in_array($extension, ['png', 'jpg', 'jpeg', 'webp'], true)) {

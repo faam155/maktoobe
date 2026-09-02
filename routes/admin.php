@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PromptController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\EventCalendarController;
+use App\Http\Controllers\EventCommunicationController;
 use App\Http\Controllers\EventFileController;
 use App\Http\Controllers\EventReportController;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified'
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified', 'permission:manage-events'])->group(function () {
     Route::get('/calendar', EventCalendarController::class)->name('calendar');
+    Route::get('/events/{event}/communications', [EventCommunicationController::class, 'index'])->name('events.communications.index');
+    Route::get('/events/{event}/communications/generations/{generation}', [EventCommunicationController::class, 'status'])->middleware('throttle:60,1')->name('events.communications.status');
+    Route::middleware(['recent-auth', 'throttle:20,1'])->group(function () {
+        Route::post('/events/{event}/communications', [EventCommunicationController::class, 'store'])->name('events.communications.store');
+        Route::post('/events/{event}/communications/generate', [EventCommunicationController::class, 'generate'])->name('events.communications.generate');
+        Route::post('/events/{event}/communications/generations/{generation}/apply', [EventCommunicationController::class, 'apply'])->name('events.communications.apply');
+        Route::delete('/events/{event}/communications/{communication}', [EventCommunicationController::class, 'archive'])->name('events.communications.archive');
+    });
     Route::get('/events/{event}/reports', [EventReportController::class, 'index'])->name('events.reports.index');
     Route::get('/events/{event}/reports/{report}/versions/{version}/download', [EventReportController::class, 'download'])->name('events.reports.download');
     Route::post('/events/{event}/reports', [EventReportController::class, 'store'])->middleware(['recent-auth', 'throttle:20,1'])->name('events.reports.store');

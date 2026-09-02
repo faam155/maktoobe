@@ -1,6 +1,47 @@
 // Alpine is supplied once by Livewire. Do not import or start a second instance.
 const sections = new Set(['#overview', '#foundation', '#preferences']);
 
+document.querySelectorAll('[data-generation-status]').forEach((status) => {
+    const refresh = status.parentElement.querySelector('.generation-refresh');
+    const timer = setInterval(async () => {
+        try {
+            const response = await fetch(status.dataset.generationStatus, {headers: {Accept: 'application/json'}});
+            if (!response.ok) { clearInterval(timer); refresh.hidden = false; return; }
+            const data = await response.json();
+            if (!['queued', 'processing'].includes(data.status)) {
+                clearInterval(timer);
+                // Never reload over an editor's unsaved changes.
+                refresh.hidden = false;
+                status.hidden = true;
+            }
+        } catch { clearInterval(timer); refresh.hidden = false; }
+    }, 8000);
+});
+
+document.querySelectorAll('[data-communication-copy]').forEach((button) => {
+    button.addEventListener('click', async () => {
+        const feedback = button.parentElement.querySelector('[role=status]');
+        try {
+            const content = document.getElementById(button.dataset.communicationCopy).textContent;
+            try {
+                await navigator.clipboard.writeText(content);
+            } catch {
+                const fallback = document.createElement('textarea');
+                fallback.value = content;
+                fallback.setAttribute('readonly', '');
+                fallback.style.position = 'fixed';
+                fallback.style.opacity = '0';
+                document.body.appendChild(fallback);
+                try {
+                    fallback.select();
+                    if (!document.execCommand('copy')) throw new Error('Clipboard unavailable');
+                } finally { fallback.remove(); button.focus(); }
+            }
+            feedback.textContent = button.dataset.copied;
+        } catch { feedback.textContent = button.dataset.failed; }
+    });
+});
+
 document.querySelectorAll('[data-event-upload]').forEach((form) => {
     form.addEventListener('submit', (event) => {
         event.preventDefault();

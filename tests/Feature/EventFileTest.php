@@ -6,6 +6,7 @@ use App\Actions\Events\UploadEventFiles;
 use App\Models\Event;
 use App\Models\EventFile;
 use App\Models\User;
+use App\Services\Events\EventFileInspector;
 use App\Support\Authorization\Access;
 use Database\Seeders\AccessControlSeeder;
 use Illuminate\Filesystem\FilesystemAdapter;
@@ -22,6 +23,14 @@ class EventFileTest extends TestCase
     private User $manager;
 
     private Event $event;
+
+    public function test_missing_temporary_upload_is_a_validation_error(): void
+    {
+        $file = UploadedFile::fake()->createWithContent('missing.txt', 'Temporary upload');
+        unlink($file->getPathname());
+        $this->expectException(ValidationException::class);
+        app(EventFileInspector::class)->inspect($file);
+    }
 
     protected function setUp(): void
     {

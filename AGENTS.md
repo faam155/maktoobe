@@ -4,7 +4,7 @@
 
 This repository is for an internal AI Prompt Hub and Event Management Platform built with Laravel. The user explicitly requires incremental development and review of architecture/database design before Phase 1.
 
-**Current status: Phase 14 Event Reports completed and verified on 2026-09-02.** Only structured pre/post-event reporting is authorized. AI report processing, communications editing, analytics, API and MFA remain deferred. Stop after Phase 14.
+**Current status: Phase 15 Event Communications completed and verified on 2026-09-02.** Bilingual manual drafts and queued AI suggestions are authorized. No external sending/publishing, report AI, analytics, API or MFA. Stop after Phase 15.
 
 Read the current conversation first: explicit user approvals and changes take precedence over this recorded status. Once the user approves the design/phase, update this status and proceed with that scope without asking for the same approval again. Never treat the full specification as authorization to implement all phases at once.
 
@@ -41,8 +41,10 @@ Design references:
 - [Phase 13 implementation and verification](docs/phases/phase-13.md)
 - [Implemented report conventions](docs/EVENT_REPORTS.md)
 - [Phase 14 implementation and verification](docs/phases/phase-14.md)
+- [Implemented communication conventions](docs/EVENT_COMMUNICATIONS.md)
+- [Phase 15 implementation and verification](docs/phases/phase-15.md)
 
-These files are the working baseline for completed Phases 1–14. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
+These files are the working baseline for completed Phases 1–15. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
 
 ## Architecture rules
 
@@ -65,6 +67,8 @@ These files are the working baseline for completed Phases 1–14. Document appro
 - Phase 11 uses `EventAccess` before lists/search/counts and `EventPolicy` for resource access. Explicit `manage-events` grants management; organizer/creator and audience grants alone provide read access. Mutations use Actions, UTC intervals, soft deletion and redacted event activity. Other workspace tabs remain unavailable. See EVENTS.md.
 
 ## Data and authorization rules
+
+- Phase 15 uses event-scoped communication slots and immutable revisions, manage-events for editing and use-ai for generation. Suggestions use a dedicated encrypted ledger and existing provider/Brand contracts, recheck access in the worker and require explicit revision-checked application. Never send email or publish to LinkedIn. See EVENT_COMMUNICATIONS.md.
 
 - Phase 14 report uploads append immutable versions under the event lock. Reads inherit EventAccess; mutations require upload-event-files and existing-report ownership or manage-events. Generic file mutations cannot bypass report history. See EVENT_REPORTS.md.
 

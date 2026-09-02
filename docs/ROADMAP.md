@@ -1,6 +1,6 @@
 # Incremental implementation roadmap
 
-Status: **Phase 14 Event Reports completed and verified on 2026-09-02**. See the [Phase 14 report](phases/phase-14.md). Later phases remain gated by explicit scope requests.
+Status: **Phase 15 Event Communications completed and verified on 2026-09-02**. See the [Phase 15 report](phases/phase-15.md). Later phases remain gated by explicit scope requests.
 
 ## 1. Phase gates
 
@@ -42,11 +42,11 @@ The baseline command set is `composer validate --strict`, `composer check-platfo
 | **12 — Event Calendar (completed)** | User-approved month/week/agenda, authorized range/filter queries, mobile agenda and bilingual navigation | End-time and category/start indexes | Audience checks before data/option retrieval, bounded ranges and pagination, timezone overlap and responsive RTL/LTR tests |
 | **13 — Event Photos and File Management (completed)** | Requested multiple upload, gallery, private preview/download, captions/order, file categories and confirmed delete | event_files metadata, private bytes, uploader/event FKs and gallery index | Audience/capability/ownership boundaries, batch validation and scanning, private paths and parent checks, bilingual responsive UI; report versioning deferred |
 | **14 — Event Reports (completed)** | Pre/post-event reports and immutable version history using private event files | event_reports and event_report_versions | Report/event/file parent constraints, immutable version history, private downloads and authorized lifecycle; approved Phase 14 scope |
-| **Later, scope to be assigned — Event communications** | Arabic/English internal email, LinkedIn and general copy drafts, manual edits, saved versions, AI generation/regeneration and copy; activity records | event_communications and immutable revisions; nullable AI request communication-target FK | Six event/type/language combinations isolated correctly; AI respects event access and guideline context; regeneration does not overwrite current edits; stale saves rejected; no unintended external sending/publishing |
+| **15 — Event communications (completed)** | Arabic/English internal email, LinkedIn and general copy drafts, manual edits, saved versions, AI generation/regeneration and copy; activity records | event_communications, immutable revisions and encrypted event_communication_generations | Six event/type/language combinations isolated correctly; AI respects event access and guideline context; regeneration does not overwrite current edits; stale saves rejected; no unintended external sending/publishing |
 | **Later, scope to be assigned — Search, notifications and analytics** | Cross-module authorized search, in-app notification center, event/publication/upload updates and reminder scheduling, full real dashboard, administration analytics | notifications/delivery deduplication; only justified settings/indexes/rollups | Search/snippets/counts and notifications never leak revoked access; reminders avoid duplicates and cancelled events; analytics match fixtures and defined time windows; failed queues recover observably; Arabic queries exercised |
-| **15 — API and release hardening** | Versioned REST endpoints for completed capabilities when approved, API Resources and Sanctum auth; security/accessibility/performance review, operations/runbooks/backup restore, production readiness | Sanctum tokens and proven tuning indexes, no speculative mobile schema | API cannot bypass web policies; tokens expire/revoke and disabled users lose access; MySQL migration path and backup restoration verified; workers/scheduler/storage/HTTPS configured and monitored; all module regression/browser checks pass |
+| **Later, scope to be assigned — API and release hardening** | Versioned REST endpoints for completed capabilities when approved, API Resources and Sanctum auth; security/accessibility/performance review, operations/runbooks/backup restore, production readiness | Sanctum tokens and proven tuning indexes, no speculative mobile schema | API cannot bypass web policies; tokens expire/revoke and disabled users lose access; MySQL migration path and backup restoration verified; workers/scheduler/storage/HTTPS configured and monitored; all module regression/browser checks pass |
 
-Phase 15 prepares the Laravel backend for Flutter; it does not build a Flutter app. Deployment is a separate explicitly requested operation after a concrete release candidate exists.
+A later explicitly approved API phase can prepare the Laravel backend for Flutter; Phase 15 does not build APIs or a Flutter app. Deployment is a separate explicitly requested operation after a concrete release candidate exists.
 
 ## 3. Phase 1 detailed boundary for review
 
@@ -71,7 +71,7 @@ Do not install all optional packages, create all target schema tables, build una
 | Phase 2 provider smoke checks | Google client/callback and allowed account policy; selected SMS provider, sender and test number | Test doubles are permitted for development; do not claim real OAuth/SMS functionality has been verified |
 | Phase 8 | OpenAI project key in server environment, allowed model IDs, quotas and approved internal-data policy | Test with HTTP fakes; real generation remains unverified without a safe authenticated smoke test |
 | Phase 10 | Scanner, bounded extraction tools, representative Arabic/English documents, upload limits and image processing runtime | Unscanned files stay quarantined; extraction/OCR limitations are explicit; no production scanner bypass |
-| Phase 15 | Hosting, secret storage, production MySQL/workers/scheduler/private storage, retention/backup/monitoring choices | A deployable candidate is not a production deployment; document release blockers |
+| Later release phase | Hosting, secret storage, production MySQL/workers/scheduler/private storage, retention/backup/monitoring choices | A deployable candidate is not a production deployment; document release blockers |
 
 Ask for missing integration inputs when needed, after completing independent in-scope work. Never print tokens or request that secrets be committed. No paid integration or provider account is created during planning.
 

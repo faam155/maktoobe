@@ -28,6 +28,6 @@ Duplicate produces a new private draft, sets the actor as creator/updater/organi
 
 Administration provides list/search/status filter, creation, editing, overview, audience details and lifecycle controls. The portal provides authorized search, upcoming/past/all lists, pagination and an overview workspace. English LTR and Arabic RTL use the existing responsive layouts and compact navigation.
 
-Phase 13 enables Photos and Documents; see [event-file conventions](EVENT_FILES.md). Phase 14 enables Reports; see [report conventions](EVENT_REPORTS.md). Communications and Activity remain disabled specialized tabs. Attendance responses, per-event manager delegation, notifications and communication editing remain deferred.
+Phase 13 enables Photos and Documents; see [event-file conventions](EVENT_FILES.md). Phase 14 enables Reports; see [report conventions](EVENT_REPORTS.md). Phase 15 enables Communications with reviewed AI suggestions; see [communication conventions](EVENT_COMMUNICATIONS.md). Activity remains a disabled tab. Attendance responses, per-event manager delegation, notifications and external communication delivery remain deferred.
 
-Phase 12 now supplies authorized month/week/agenda views; see [calendar conventions](EVENT_CALENDAR.md). Communication and activity tabs remain deferred.
+Phase 12 now supplies authorized month/week/agenda views; see [calendar conventions](EVENT_CALENDAR.md). The activity tab remains deferred.

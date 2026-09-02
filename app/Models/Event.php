@@ -74,4 +74,9 @@ class Event extends Model
     {
         return $this->hasMany(EventReport::class);
     }
+
+    public function communications(): HasMany
+    {
+        return $this->hasMany(EventCommunication::class);
+    }
 }
