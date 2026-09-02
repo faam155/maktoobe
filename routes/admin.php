@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PromptController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\EventCalendarController;
+use App\Http\Controllers\EventFileController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified', 'permission:access-admin'])->group(function () {
@@ -42,6 +43,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified'
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified', 'permission:manage-events'])->group(function () {
     Route::get('/calendar', EventCalendarController::class)->name('calendar');
+    Route::get('/events/{event}/files', [EventFileController::class, 'index'])->name('events.files.index');
+    Route::get('/events/{event}/files/{file}/download', [EventFileController::class, 'download'])->name('events.files.download');
+    Route::get('/events/{event}/files/{file}/preview', [EventFileController::class, 'preview'])->name('events.files.preview');
+    Route::middleware(['recent-auth', 'throttle:20,1'])->group(function () {
+        Route::post('/events/{event}/files', [EventFileController::class, 'store'])->name('events.files.store');
+        Route::patch('/events/{event}/files/{file}', [EventFileController::class, 'update'])->name('events.files.update');
+        Route::delete('/events/{event}/files/{file}', [EventFileController::class, 'destroy'])->name('events.files.destroy');
+    });
     Route::resource('events', EventController::class)->only(['index', 'create', 'show', 'edit']);
     Route::middleware('recent-auth')->group(function () {
         Route::post('/events', [EventController::class, 'store'])->name('events.store');

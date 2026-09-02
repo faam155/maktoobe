@@ -1,6 +1,48 @@
 // Alpine is supplied once by Livewire. Do not import or start a second instance.
 const sections = new Set(['#overview', '#foundation', '#preferences']);
 
+document.querySelectorAll('[data-event-upload]').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const button = form.querySelector('button');
+        if (button.disabled) return;
+        const body = new FormData(form);
+        const feedback = form.querySelector('[data-upload-feedback]');
+        const progress = feedback.querySelector('progress');
+        const status = feedback.querySelector('[role=status]');
+        feedback.hidden = false;
+        progress.value = 0;
+        status.textContent = '';
+        button.disabled = true;
+        const request = new XMLHttpRequest();
+        request.open('POST', form.action);
+        request.setRequestHeader('Accept', 'application/json');
+        request.responseType = 'json';
+        request.timeout = 120000;
+        request.upload.onprogress = (upload) => {
+            if (upload.lengthComputable) {
+                progress.value = Math.round(upload.loaded / upload.total * 100);
+                status.textContent = progress.value === 100 ? form.dataset.processing : `${progress.value}%`;
+            }
+        };
+        const failed = () => { status.textContent = form.dataset.failed; button.disabled = false; };
+        request.onerror = failed;
+        request.ontimeout = failed;
+        request.onload = () => {
+            if (request.status >= 200 && request.status < 300 && request.response?.redirect) {
+                window.location.assign(request.response.redirect);
+            } else if (request.status === 200 && request.responseURL && new URL(request.responseURL).pathname === '/confirm-password') {
+                window.location.assign(request.responseURL);
+            } else {
+                status.textContent = request.status === 422 && request.response?.errors
+                    ? Object.values(request.response.errors).flat().join(' ') : form.dataset.failed;
+                button.disabled = false;
+            }
+        };
+        request.send(body);
+    });
+});
+
 function updateNavigation() {
     const current = sections.has(window.location.hash) ? window.location.hash : '#overview';
 

@@ -64,4 +64,9 @@ class Event extends Model
     {
         return $this->hasMany(EventActivity::class);
     }
+
+    public function files(): HasMany
+    {
+        return $this->hasMany(EventFile::class);
+    }
 }

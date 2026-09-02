@@ -4,7 +4,7 @@ namespace App\Contracts;
 
 use Illuminate\Http\UploadedFile;
 
-interface GuidelineFileScanner extends PrivateFileScanner
+interface PrivateFileScanner
 {
     public function assertSafe(UploadedFile $file): void;
 }

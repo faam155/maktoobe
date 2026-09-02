@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Contracts\AiProvider;
 use App\Contracts\GuidelineFileScanner;
+use App\Contracts\PrivateFileScanner;
 use App\Models\AiConversation;
 use App\Models\Event;
 use App\Models\Prompt;
@@ -33,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(AiProvider::class, fn ($app) => config('ai.provider') === 'local' ? $app->make(LocalAiProvider::class) : $app->make(OpenAiResponsesProvider::class));
         $this->app->bind(GuidelineFileScanner::class, LocalGuidelineFileScanner::class);
+        $this->app->bind(PrivateFileScanner::class, fn ($app) => $app->make(GuidelineFileScanner::class));
     }
 
     /**

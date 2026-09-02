@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\PasswordRecoveryController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\EventCalendarController;
+use App\Http\Controllers\EventFileController;
 use App\Http\Controllers\Portal\AiAssistantController;
 use App\Http\Controllers\Portal\DashboardController;
 use App\Http\Controllers\Portal\EventController;
@@ -47,6 +48,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/app/events', [EventController::class, 'index'])->name('events.index');
         Route::get('/app/calendar', EventCalendarController::class)->name('events.calendar');
         Route::get('/app/events/{event}', [EventController::class, 'show'])->name('events.show');
+        Route::get('/app/events/{event}/files', [EventFileController::class, 'index'])->name('events.files.index');
+        Route::get('/app/events/{event}/files/{file}/download', [EventFileController::class, 'download'])->name('events.files.download');
+        Route::get('/app/events/{event}/files/{file}/preview', [EventFileController::class, 'preview'])->name('events.files.preview');
+        Route::middleware(['recent-auth', 'throttle:20,1'])->group(function () {
+            Route::post('/app/events/{event}/files', [EventFileController::class, 'store'])->name('events.files.store');
+            Route::patch('/app/events/{event}/files/{file}', [EventFileController::class, 'update'])->name('events.files.update');
+            Route::delete('/app/events/{event}/files/{file}', [EventFileController::class, 'destroy'])->name('events.files.destroy');
+        });
         Route::middleware('permission:use-ai')->group(function () {
             Route::get('/app/assistant', [AiAssistantController::class, 'index'])->name('ai.index');
             Route::get('/app/assistant/new', [AiAssistantController::class, 'create'])->name('ai.create');

@@ -4,7 +4,7 @@
 
 This repository is for an internal AI Prompt Hub and Event Management Platform built with Laravel. The user explicitly requires incremental development and review of architecture/database design before Phase 1.
 
-**Current status: Phase 12 Event Calendar completed and verified on 2026-09-02.** See the Phase 12 report for evidence. Event files, analytics, API and MFA remain out of scope until requested. Stop after Phase 12.
+**Current status: Phase 13 Event Photos and File Management completed and verified on 2026-09-02.** See the Phase 13 report. Report versioning, communications editing, analytics, API and MFA remain deferred until requested. Stop after Phase 13.
 
 Read the current conversation first: explicit user approvals and changes take precedence over this recorded status. Once the user approves the design/phase, update this status and proceed with that scope without asking for the same approval again. Never treat the full specification as authorization to implement all phases at once.
 
@@ -37,8 +37,10 @@ Design references:
 - [Phase 11 implementation and verification](docs/phases/phase-11.md)
 - [Implemented calendar conventions](docs/EVENT_CALENDAR.md)
 - [Phase 12 implementation and verification](docs/phases/phase-12.md)
+- [Implemented event-file conventions](docs/EVENT_FILES.md)
+- [Phase 13 implementation and verification](docs/phases/phase-13.md)
 
-These files are the working baseline for completed Phases 1–12. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
+These files are the working baseline for completed Phases 1–13. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
 
 ## Architecture rules
 
@@ -61,6 +63,8 @@ These files are the working baseline for completed Phases 1–12. Document appro
 - Phase 11 uses `EventAccess` before lists/search/counts and `EventPolicy` for resource access. Explicit `manage-events` grants management; organizer/creator and audience grants alone provide read access. Mutations use Actions, UTC intervals, soft deletion and redacted event activity. Other workspace tabs remain unavailable. See EVENTS.md.
 
 ## Data and authorization rules
+
+- Phase 13 stores event files as private metadata plus immutable bytes. Reads inherit EventAccess; uploads require upload-event-files plus audience access; edits/deletes also require uploader ownership or manage-events. Batch scanning fails closed in production; confirmed soft deletion revokes all serving access. See EVENT_FILES.md.
 
 - Phase 12 calendar queries reuse `EventAccess` before range filtering, option discovery and pagination. Use account-local dates converted to half-open UTC ranges; custom agendas are capped at 62 days and results at 100 per page. Mobile uses an agenda. See EVENT_CALENDAR.md.
 
