@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\PromptCategoryController;
 use App\Http\Controllers\Admin\PromptController;
+use App\Http\Controllers\Admin\ReportingController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\EventCalendarController;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'active', 'verified', 'permission:access-admin'])->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
+    Route::get('/analytics', [ReportingController::class, 'analytics'])->middleware(['permission:view-analytics', 'throttle:30,1'])->name('analytics');
+    Route::get('/audit-logs', [ReportingController::class, 'audits'])->middleware(['permission:view-audit-logs', 'throttle:30,1'])->name('audits');
     Route::get('/permissions', PermissionController::class)->name('permissions.index');
     Route::resource('users', UserController::class)->only(['index', 'create', 'show', 'edit']);
     Route::resource('roles', RoleController::class)->only(['index', 'create', 'show', 'edit']);

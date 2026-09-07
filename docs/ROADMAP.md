@@ -1,6 +1,6 @@
 # Incremental implementation roadmap
 
-Status: **Phase 15 Event Communications completed and verified on 2026-09-02**. See the [Phase 15 report](phases/phase-15.md). Later phases remain gated by explicit scope requests.
+Status: **Phase 17 Analytics and Audit Logs completed and verified on 2026-09-07**. See the [Phase 17 report](phases/phase-17.md). Later phases remain gated by explicit scope requests.
 
 ## 1. Phase gates
 
@@ -44,7 +44,8 @@ The baseline command set is `composer validate --strict`, `composer check-platfo
 | **14 — Event Reports (completed)** | Pre/post-event reports and immutable version history using private event files | event_reports and event_report_versions | Report/event/file parent constraints, immutable version history, private downloads and authorized lifecycle; approved Phase 14 scope |
 | **15 — Event communications (completed)** | Arabic/English internal email, LinkedIn and general copy drafts, manual edits, saved versions, AI generation/regeneration and copy; activity records | event_communications, immutable revisions and encrypted event_communication_generations | Six event/type/language combinations isolated correctly; AI respects event access and guideline context; regeneration does not overwrite current edits; stale saves rejected; no unintended external sending/publishing |
 | **16 — Notifications (completed)** | Database inbox, read/dismiss/count/panel, authorized event/prompt/report/system notices, scheduled reminders | workspace_notices and Laravel notifications with concrete user FK and unique deliveries | Current access governs delivery and display; duplicate-safe reminders/batches; bilingual responsive inbox; real queue commit/rollback |
-| **Later, scope to be assigned — Search and analytics** | Cross-module authorized search and real administration analytics | Justified settings/indexes/rollups | Search/snippets/counts never leak revoked access; analytics match fixtures and time windows |
+| **17 — Analytics and Audit Logs** | Authorized date-filtered analytics, read-only audit search and safe configuration-change detection | audit_logs, audited_configurations and reporting indexes | Current access/ownership before aggregates; local date semantics; sanitized transactional audit facts; separate permissions and bilingual responsive verification |
+| **Later, scope to be assigned — Search** | Cross-module authorized search | Justified search indexes | Search/snippets/counts never leak revoked access |
 | **Later, scope to be assigned — API and release hardening** | Versioned REST endpoints for completed capabilities when approved, API Resources and Sanctum auth; security/accessibility/performance review, operations/runbooks/backup restore, production readiness | Sanctum tokens and proven tuning indexes, no speculative mobile schema | API cannot bypass web policies; tokens expire/revoke and disabled users lose access; MySQL migration path and backup restoration verified; workers/scheduler/storage/HTTPS configured and monitored; all module regression/browser checks pass |
 
 A later explicitly approved API phase can prepare the Laravel backend for Flutter; Phase 15 does not build APIs or a Flutter app. Deployment is a separate explicitly requested operation after a concrete release candidate exists.

@@ -1,0 +1,14 @@
+<?php
+
+return [
+    'analytics_title' => 'Analytics', 'audit_title' => 'Audit logs', 'period' => 'Period', 'today' => 'Today', '7days' => 'Last 7 days', '30days' => 'Last 30 days', 'month' => 'Current month', 'custom' => 'Custom range', 'from' => 'From date', 'to' => 'To date', 'apply' => 'Apply filters', 'invalid_range' => 'Choose an ordered range of no more than 366 days.',
+    'scope' => 'Counts respect current access. Personal prompts, favorites, conversations and AI requests refer to your own workspace. User counts require user-management permission. Rankings include only library prompts you can currently access.',
+    'dates' => 'Users, prompts, favorites, conversations, photos, reports and communications are counted by creation date. AI requests use request date; events use start date. Statuses are current, not historical snapshots. Deleted records are excluded. Reports count logical reports, not versions.',
+    'ranking_note' => 'Usage combines copy and AI execution facts in the chosen period. Categories are ranked by those same facts, not by prompt inventory.',
+    'top_prompts' => 'Most-used prompts', 'categories' => 'Popular prompt categories', 'empty' => 'No matching records for this period.', 'uses' => 'Uses',
+    'total_users' => 'Total users', 'active_users' => 'Active users', 'disabled_users' => 'Disabled users', 'administrator_prompts' => 'Accessible published library prompts', 'personal_prompts' => 'My personal prompts', 'favorite_prompts' => 'My saved favorites', 'ai_requests' => 'My AI requests', 'ai_conversations' => 'My AI conversations', 'ai_tokens' => 'Known tokens from successful requests', 'unknown_tokens' => 'Successful requests without token totals',
+    'total_events' => 'Total accessible events', 'upcoming_events' => 'Upcoming planned / confirmed events', 'completed_events' => 'Completed events', 'cancelled_events' => 'Cancelled events', 'event_photos' => 'Event photos', 'event_reports' => 'Event reports', 'event_communications' => 'Event communications',
+    'audit_intro' => 'Read-only audit facts. Your audit permission and module permissions determine which resource types are visible. Metadata is allowlisted; no credentials, private content or document paths are displayed.',
+    'search' => 'Search action, resource type or actor name', 'actor' => 'Actor user ID', 'action' => 'Action', 'resource_type' => 'Resource type', 'resource_id' => 'Resource ID', 'all' => 'All', 'timestamp' => 'Timestamp', 'actor_name' => 'Actor', 'resource' => 'Resource', 'metadata' => 'Safe metadata', 'system_actor' => 'System / unavailable actor',
+    'types' => ['user' => 'User', 'role' => 'Role / permissions', 'prompt' => 'Library prompt', 'prompt_category' => 'Prompt category', 'event' => 'Event', 'brand_guideline' => 'Brand Guideline', 'system' => 'System', 'ai_configuration' => 'AI configuration'],
+];

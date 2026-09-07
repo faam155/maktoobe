@@ -1,6 +1,7 @@
 <?php
 
 // CLI-only fixtures: never registered as HTTP routes or production seed data.
+use App\Actions\Identity\RecordAccountAudit;
 use App\Actions\Identity\SetAccountStatus;
 use App\Actions\Notifications\RecordWorkspaceNotice;
 use App\Enums\AccountStatus;
@@ -8,6 +9,7 @@ use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\Prompt;
 use App\Models\PromptCategory;
+use App\Models\PromptUse;
 use App\Models\User;
 use App\Services\Identity\LocalInbox;
 use App\Support\Authorization\Access;
@@ -15,6 +17,7 @@ use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 if (PHP_SAPI !== 'cli') {
     exit(1);
@@ -66,6 +69,13 @@ if ($action === 'reset') {
     app(RecordWorkspaceNotice::class)->handle('system', 'browser-system', [
         'system_content' => ['en' => ['title' => 'Scheduled maintenance', 'body' => 'Please save your work.'], 'ar' => ['title' => 'صيانة مجدولة', 'body' => 'يرجى حفظ عملك.']],
     ]);
+    echo json_encode(['ready' => true]);
+} elseif ($action === 'reporting') {
+    $actor = User::where('username', 'admin')->firstOrFail();
+    app(RecordAccountAudit::class)->handle($actor, 'account.updated_by_admin', ['email_changed' => true, 'password' => 'must-not-appear'], $actor);
+    $event = Event::where('title', 'Calendar Public Forum')->firstOrFail();
+    $event->activities()->create(['actor_id' => $actor->id, 'action' => 'event.created', 'metadata' => ['event_id' => $event->id], 'created_at' => now()]);
+    PromptUse::create(['user_id' => $actor->id, 'prompt_id' => Prompt::where('slug', 'browser-writing-assistant')->value('id'), 'kind' => 'copy', 'client_operation_id' => Str::uuid()]);
     echo json_encode(['ready' => true]);
 } elseif ($action === 'inbox') {
     $messages = array_values(array_filter(app(LocalInbox::class)->messages(), fn ($message) => ($message['recipient'] ?? null) === $email));

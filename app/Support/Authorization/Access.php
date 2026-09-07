@@ -18,7 +18,7 @@ final class Access
         'access-admin', 'manage-users', 'create-users', 'edit-users', 'disable-users', 'delete-users',
         'manage-roles', 'manage-permissions', 'manage-prompts', 'publish-prompts', 'manage-categories',
         'manage-events', 'upload-event-files', 'manage-brand-guidelines', 'use-ai', 'manage-ai-settings',
-        'view-reports', 'view-analytics', 'manage-system-settings',
+        'view-reports', 'view-analytics', 'manage-system-settings', 'view-audit-logs',
     ];
 
     public const ROLE_PERMISSIONS = [
@@ -27,7 +27,7 @@ final class Access
             'access-admin', 'manage-users', 'create-users', 'edit-users', 'disable-users', 'delete-users',
             'manage-roles', 'manage-prompts', 'publish-prompts', 'manage-categories', 'manage-events',
             'upload-event-files', 'manage-brand-guidelines', 'use-ai', 'manage-ai-settings', 'view-reports',
-            'view-analytics',
+            'view-analytics', 'view-audit-logs',
         ],
         self::CONTENT_MANAGER => ['manage-prompts', 'publish-prompts', 'manage-categories', 'manage-brand-guidelines', 'use-ai'],
         self::EVENT_MANAGER => ['manage-events', 'upload-event-files', 'use-ai'],

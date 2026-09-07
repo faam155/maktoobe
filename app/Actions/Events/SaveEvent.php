@@ -62,6 +62,7 @@ class SaveEvent
             $timezone = $data['timezone'];
             $previousUsers = $event?->allowedUsers()->pluck('users.id')->all() ?? [];
             $previousOrganizer = $event?->organizer_id;
+            $previousVisibility = $event?->visibility->value;
             $attributes = [
                 'title' => trim($data['title']), 'description' => filled($data['description'] ?? null) ? trim($data['description']) : null,
                 'category_id' => $data['category_id'] ?? null,
@@ -81,6 +82,9 @@ class SaveEvent
             $event->allowedUsers()->sync(collect($userIds)->mapWithKeys(fn ($id) => [$id => ['granted_by' => $actor->id, 'created_at' => now()]])->all());
             $event->allowedRoles()->sync(collect($roleIds)->mapWithKeys(fn ($id) => [$id => ['granted_by' => $actor->id, 'created_at' => now()]])->all());
             $activity = EventActivity::create(['event_id' => $event->id, 'actor_id' => $actor->id, 'action' => $creating ? 'event.created' : 'event.updated', 'metadata' => ['visibility' => $event->visibility->value], 'created_at' => now()]);
+            if (! $creating && $previousVisibility !== $event->visibility->value) {
+                EventActivity::create(['event_id' => $event->id, 'actor_id' => $actor->id, 'action' => 'event.visibility_changed', 'metadata' => ['from' => $previousVisibility, 'to' => $event->visibility->value], 'created_at' => now()]);
+            }
             if ($event->status !== EventStatus::Draft) {
                 $notices = app(RecordWorkspaceNotice::class);
                 $notices->handle($creating ? 'event_published' : 'event_updated', 'event:'.$activity->id, ['event_id' => $event->id]);

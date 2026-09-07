@@ -4,7 +4,7 @@
 
 This repository is for an internal AI Prompt Hub and Event Management Platform built with Laravel. The user explicitly requires incremental development and review of architecture/database design before Phase 1.
 
-**Current status: Phase 16 Notification System completed and verified on 2026-09-02.** Database inbox, current-access delivery/display checks, event/prompt/report/system notices and scheduled reminders are implemented. Email, SMS, push delivery, analytics and APIs remain deferred. Stop after Phase 16.
+**Current status: Phase 17 Analytics and Audit Logs completed and verified on 2026-09-07.** Authorized analytics, read-only audit history and safe configuration change detection are implemented. External delivery, public APIs and other future phases remain deferred. Stop after Phase 17.
 
 Read the current conversation first: explicit user approvals and changes take precedence over this recorded status. Once the user approves the design/phase, update this status and proceed with that scope without asking for the same approval again. Never treat the full specification as authorization to implement all phases at once.
 
@@ -45,8 +45,10 @@ Design references:
 - [Phase 15 implementation and verification](docs/phases/phase-15.md)
 - [Notification conventions](docs/NOTIFICATIONS.md)
 - [Phase 16 implementation and verification](docs/phases/phase-16.md)
+- [Analytics and audit conventions](docs/ANALYTICS_AUDIT.md)
+- [Phase 17 implementation and verification](docs/phases/phase-17.md)
 
-These files are the working baseline for completed Phases 1–16. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
+These files are the working baseline for Phases 1–17. Document approved changes rather than silently departing from them; later-phase specifics remain subject to their own scope review.
 
 ## Architecture rules
 
@@ -69,6 +71,8 @@ These files are the working baseline for completed Phases 1–16. Document appro
 - Phase 11 uses `EventAccess` before lists/search/counts and `EventPolicy` for resource access. Explicit `manage-events` grants management; organizer/creator and audience grants alone provide read access. Mutations use Actions, UTC intervals, soft deletion and redacted event activity. Other workspace tabs remain unavailable. See EVENTS.md.
 
 ## Data and authorization rules
+
+- Phase 17 reports require view-analytics and preserve owner-only private workspace counts and current PromptAccess/EventAccess. Audit browsing requires view-audit-logs plus module permissions; safe transactional mirrors are read-only, indexed and sanitized through SafeAuditMetadata. Configuration checks observe only approved non-secret key fingerprints. See ANALYTICS_AUDIT.md for date semantics, import and operational limits.
 
 - Phase 16 uses Laravel database notifications with a durable notice ledger, after-commit delivery on the notifications queue and current audience checks before delivery, counts and opens. Dismissal preserves uniqueness. The Scheduler records duplicate-safe 24-hour reminders and resumes batches. No external channels. See NOTIFICATIONS.md.
 - Phase 15 uses event-scoped communication slots and immutable revisions, manage-events for editing and use-ai for generation. Suggestions use a dedicated encrypted ledger and existing provider/Brand contracts, recheck access in the worker and require explicit revision-checked application. Never send email or publish to LinkedIn. See EVENT_COMMUNICATIONS.md.

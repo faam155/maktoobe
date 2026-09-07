@@ -7,6 +7,7 @@
 @can('manage-events')<a href="{{ route('admin.calendar') }}" @class(['admin-nav-link','is-current'=>request()->routeIs('admin.calendar')])>{{ __('calendar.title') }}</a>@endcan
 @can('manage-brand-guidelines')<a href="{{ route('admin.brand-guidelines.index') }}" @class(['admin-nav-link','is-current'=>request()->routeIs('admin.brand-guidelines.*')])>{{ __('admin.brand_guidelines') }}</a>@endcan
 @can('manage-ai-settings')<span class="admin-nav-link is-disabled" aria-disabled="true"><span>{{ __('admin.ai_settings') }}</span><small>{{ __('admin.coming_later') }}</small></span>@endcan
-@can('view-analytics')<span class="admin-nav-link is-disabled" aria-disabled="true"><span>{{ __('admin.analytics') }}</span><small>{{ __('admin.coming_later') }}</small></span>@endcan
+@can('view-analytics')<a class="admin-nav-link" href="{{ route('admin.analytics') }}">{{ __('admin.analytics') }}</a>@endcan
+@can('view-audit-logs')<a class="admin-nav-link" href="{{ route('admin.audits') }}">{{ __('reporting.audit_title') }}</a>@endcan
 @can('manage-system-settings')<span class="admin-nav-link is-disabled" aria-disabled="true"><span>{{ __('admin.system_settings') }}</span><small>{{ __('admin.coming_later') }}</small></span>@endcan
 <a href="{{ route('account.home') }}" class="admin-nav-link">{{ __('admin.back_workspace') }}</a>

@@ -35,11 +35,11 @@ class SyncUserRoles
             if ($user->hasRole(Access::SUPER_ADMINISTRATOR) && ! $roles->contains('name', Access::SUPER_ADMINISTRATOR)) {
                 $guard->assertCanRemoveActiveSuper($user);
             }
-            $before = $user->roles()->pluck('name')->sort()->values()->all();
+            $before = $user->roles()->pluck('id')->sort()->values()->all();
             $user->syncRoles($roles);
             app(RevokeCredentials::class)->handle($user);
             app(RecordAccountAudit::class)->handle($user, 'account.roles_changed', [
-                'before' => $before, 'after' => $roles->pluck('name')->sort()->values()->all(),
+                'before_ids' => $before, 'after_ids' => $roles->pluck('id')->sort()->values()->all(),
             ], $actor);
         });
     }

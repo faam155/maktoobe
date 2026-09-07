@@ -130,6 +130,7 @@ return [
         'manage-brand-guidelines' => 'Manage brand guidelines', 'use-ai' => 'Use AI features',
         'manage-ai-settings' => 'Manage AI settings', 'view-reports' => 'View reports',
         'view-analytics' => 'View analytics',
+        'view-audit-logs' => 'View audit logs',
         'manage-system-settings' => 'Manage system settings',
     ],
     'activities' => [

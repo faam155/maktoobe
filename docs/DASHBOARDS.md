@@ -9,3 +9,5 @@ Navigation visibility is a usability aid. Every implemented destination has serv
 The portal uses a persistent sidebar on desktop and a native compact disclosure menu on mobile. English sets LTR and Arabic sets RTL through the shared locale middleware and document attributes. CSS uses logical properties, responsive grids and touch-sized controls. Dashboard browser coverage includes 1440×900, 1280×800, 768×1024, 390×844 and 360px.
 
 Phase 11 replaces event placeholders with real event summaries. Portal counts use EventAccess before counting; administration event metrics require event-management or analytics capability. The quick action opens the event list, not an unimplemented monthly/weekly calendar.
+
+Phase 17 adds dedicated analytics and audit destinations in admin navigation. The overview AI conversation count now requires use-ai and counts only the actor's own conversations, matching private-workspace rules. Detailed reporting uses its own bounded date filters and Query classes; it does not run on every dashboard or navigation render. See ANALYTICS_AUDIT.md.

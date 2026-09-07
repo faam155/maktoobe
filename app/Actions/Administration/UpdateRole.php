@@ -43,6 +43,11 @@ class UpdateRole
                 'after' => ['name' => $role->name, 'permissions' => $role->permissions()->pluck('name')->sort()->values()->all()],
             ], $actor);
 
+            $afterPermissions = $role->permissions()->pluck('name')->sort()->values()->all();
+            if ($before['permissions'] !== $afterPermissions) {
+                app(RecordAccountAudit::class)->handle($actor, 'role.permissions_changed', ['role_id' => $role->id, 'before' => ['permissions' => $before['permissions']], 'after' => ['permissions' => $afterPermissions]], $actor);
+            }
+
             return $role;
         });
     }

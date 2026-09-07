@@ -43,8 +43,8 @@ class AdminDashboardQuery
         $promptMetrics = $actor->can('manage-prompts')
             ? collect([['key' => 'prompt_count', 'value' => Prompt::where('source', 'library')->count()]]) : collect();
 
-        $aiMetrics = $actor->canAny(['manage-ai-settings', 'view-analytics'])
-            ? collect([['key' => 'ai_conversations', 'value' => AiConversation::count()]]) : collect();
+        $aiMetrics = $actor->can('use-ai') && $actor->canAny(['manage-ai-settings', 'view-analytics'])
+            ? collect([['key' => 'ai_conversations', 'value' => AiConversation::where('user_id', $actor->id)->count()]]) : collect();
 
         $visibleEvents = app(EventAccess::class)->visibleTo(Event::query(), $actor);
         $eventMetrics = $actor->canAny(['manage-events', 'view-analytics']) ? collect([

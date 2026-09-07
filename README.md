@@ -1,6 +1,6 @@
 # Maktoobe
 
-An internal AI productivity and event workspace developed incrementally with Laravel. The verified application currently includes its Laravel/MySQL foundation, bilingual authentication, permission-protected administration, separate dashboards, prompt categories, an audience-scoped AI Prompt Library, private personal prompts with favorites and recent use, a queued AI Assistant with searchable conversation history, and private versioned Brand Guidelines with explicit bounded AI context. Core event management now includes authorized event lists, lifecycle controls, user/role audiences and an overview workspace. Phase 12 adds authorized month, week and agenda calendars with mobile layouts and date filters. Phase 13 adds protected photo galleries and categorized files with private downloads, captions and confirmed deletion. Phase 14 adds versioned pre/post-event reports; see docs/EVENT_REPORTS.md. Phase 15 adds bilingual event communications with immutable revisions and opt-in AI suggestions; see docs/EVENT_COMMUNICATIONS.md. No email or LinkedIn publishing occurs. Production uploads require a real malware scanner; retained deleted files require a separate purge workflow. Analytics and public API modules remain deferred. See docs/EVENT_CALENDAR.md and docs/EVENT_FILES.md.
+An internal AI productivity and event workspace developed incrementally with Laravel. The verified application currently includes its Laravel/MySQL foundation, bilingual authentication, permission-protected administration, separate dashboards, prompt categories, an audience-scoped AI Prompt Library, private personal prompts with favorites and recent use, a queued AI Assistant with searchable conversation history, and private versioned Brand Guidelines with explicit bounded AI context. Core event management now includes authorized event lists, lifecycle controls, user/role audiences and an overview workspace. Phase 12 adds authorized month, week and agenda calendars with mobile layouts and date filters. Phase 13 adds protected photo galleries and categorized files with private downloads, captions and confirmed deletion. Phase 14 adds versioned pre/post-event reports; see docs/EVENT_REPORTS.md. Phase 15 adds bilingual event communications with immutable revisions and opt-in AI suggestions; see docs/EVENT_COMMUNICATIONS.md. No email or LinkedIn publishing occurs. Production uploads require a real malware scanner; retained deleted files require a separate purge workflow. Phase 16 adds in-app notifications and scheduled reminders. Phase 17 adds authorized analytics and read-only audit logs; see docs/ANALYTICS_AUDIT.md. Public APIs remain deferred. See docs/EVENT_CALENDAR.md and docs/EVENT_FILES.md.
 
 ## Requirements
 
@@ -84,3 +84,14 @@ Run separately from the AI worker:
     php artisan schedule:work
 
 The scheduler creates one reminder per upcoming Planned/Confirmed event/start within 24 hours and resumes pending deliveries. In production, supervise the worker and invoke schedule:run once per minute from the host scheduler instead of schedule:work. Delivery and inbox reads are authorized; inaccessible resources disappear. Counts refresh on navigation. No historical backfill is performed.
+
+## Analytics and audit logs
+
+Phase 17 adds permission-protected `/admin/analytics` and `/admin/audit-logs`. Reports use account-local date ranges and current access; private workspace metrics refer to the signed-in user. Audit history is read-only and metadata is allowlisted. See [reporting conventions](docs/ANALYTICS_AUDIT.md) and [verification](docs/phases/phase-17.md).
+
+After applying migrations to the verified intended database, import existing audit facts once (safe to repeat) and establish the configuration baseline:
+
+    php artisan audit:import-legacy
+    php artisan audit:configuration
+
+Run the configuration command after deployment configuration/cache changes. The existing scheduler also checks hourly. It records changed non-secret key names, not values or API credentials; it is not a complete file-change monitor. Production audit retention and privileged-database tamper protection remain operational responsibilities.

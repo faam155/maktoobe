@@ -130,6 +130,7 @@ return [
         'manage-brand-guidelines' => 'إدارة إرشادات الهوية', 'use-ai' => 'استخدام مزايا الذكاء الاصطناعي',
         'manage-ai-settings' => 'إدارة إعدادات الذكاء الاصطناعي', 'view-reports' => 'عرض التقارير',
         'view-analytics' => 'عرض التحليلات',
+        'view-audit-logs' => 'عرض سجلات التدقيق',
         'manage-system-settings' => 'إدارة إعدادات النظام',
     ],
     'activities' => [
