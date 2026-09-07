@@ -133,6 +133,9 @@ return [
         'view-audit-logs' => 'View audit logs',
         'manage-system-settings' => 'Manage system settings',
     ],
+    'bootstrap_seed_first' => 'Seed access control before bootstrapping an administrator.',
+    'bootstrap_exists' => 'An active Super Administrator already exists.',
+    'bootstrap_register_first' => 'Register the account before promoting it.',
     'activities' => [
         'account_registered' => 'Account registered', 'account_google_registered' => 'Account registered with Google',
         'account_created_by_admin' => 'Account created by an administrator', 'account_updated_by_admin' => 'Account profile updated',

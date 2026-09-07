@@ -1,6 +1,6 @@
 @props(['title'])
 <!doctype html>
-<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale()==='ar' ? 'rtl':'ltr' }}">
+<html lang="{{ app()->getLocale() }}" dir="{{ \App\Enums\Locale::resolve(app()->getLocale())->direction() }}">
 <head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="robots" content="noindex,nofollow">
@@ -21,7 +21,7 @@
         <header class="portal-topbar">
             <div><p class="portal-kicker">{{ __('foundation.brand') }}</p><h1>{{ $title }}</h1></div>
             <div class="portal-top-actions">
-                <form method="POST" action="{{ route('locale.update') }}" class="portal-locale">@csrf<label class="sr-only" for="portal-locale">{{ __('dashboard.language') }}</label><select id="portal-locale" name="locale"><option value="en" @selected(app()->getLocale()==='en')>English</option><option value="ar" @selected(app()->getLocale()==='ar')>العربية</option></select><button type="submit">{{ __('dashboard.change_language') }}</button></form>
+                <form method="POST" action="{{ route('locale.update') }}" class="portal-locale">@csrf<label class="sr-only" for="portal-locale">{{ __('dashboard.language') }}</label><select id="portal-locale" name="locale"><option value="en" lang="en" @selected(app()->getLocale()==='en')>{{ __('foundation.english') }}</option><option value="ar" lang="ar" @selected(app()->getLocale()==='ar')>{{ __('foundation.arabic') }}</option></select><button type="submit">{{ __('dashboard.change_language') }}</button></form>
                 <x-notification-panel /><form method="POST" action="{{ route('logout') }}">@csrf<button class="portal-link-button" type="submit">{{ __('dashboard.logout') }}</button></form>
             </div>
         </header>

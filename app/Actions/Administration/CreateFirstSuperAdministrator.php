@@ -19,14 +19,14 @@ class CreateFirstSuperAdministrator
         return DB::transaction(function () use ($email) {
             $role = app(SuperAdministratorGuard::class)->lockGovernance();
             if (! $role) {
-                throw ValidationException::withMessages(['email' => 'Seed access control before bootstrapping an administrator.']);
+                throw ValidationException::withMessages(['email' => __('admin.bootstrap_seed_first')]);
             }
             if (User::role(Access::SUPER_ADMINISTRATOR)->where('status', AccountStatus::Active)->lockForUpdate()->exists()) {
-                throw ValidationException::withMessages(['email' => 'An active Super Administrator already exists.']);
+                throw ValidationException::withMessages(['email' => __('admin.bootstrap_exists')]);
             }
             $user = User::where('email', Identifiers::canonical($email))->lockForUpdate()->first();
             if (! $user) {
-                throw ValidationException::withMessages(['email' => 'Register the account before promoting it.']);
+                throw ValidationException::withMessages(['email' => __('admin.bootstrap_register_first')]);
             }
             $user->forceFill(['status' => AccountStatus::Active, 'email_verified_at' => $user->email_verified_at ?? now(), 'disabled_at' => null])->save();
             $user->syncRoles([$role]);

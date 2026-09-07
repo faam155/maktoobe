@@ -4,7 +4,7 @@ return [
     'library' => 'مكتبة الموجّهات', 'library_intro' => 'تصفح الموجّهات المعتمدة والمتاحة لحسابك.', 'browse_library' => 'تصفح المكتبة',
     'admin_title' => 'موجّهات الذكاء الاصطناعي', 'admin_intro' => 'إنشاء الموجّهات المركزية ومراجعتها ونشرها لجمهور محدد بوضوح.',
     'create' => 'إنشاء موجّه', 'edit' => 'تعديل الموجّه', 'preview' => 'معاينة', 'save' => 'حفظ كمسودة',
-    'title' => 'العنوان', 'slug' => 'المعرّف النصي', 'description' => 'الوصف', 'content' => 'محتوى الموجّه', 'content_locale' => 'رمز لغة المحتوى',
+    'title' => 'العنوان', 'slug' => 'المعرّف النصي', 'description' => 'الوصف', 'content' => 'محتوى الموجّه', 'content_locale' => 'رمز لغة المحتوى', 'content_locale_placeholder' => 'ar',
     'category' => 'الفئة', 'no_category' => 'دون فئة', 'tags' => 'الوسوم', 'tags_hint' => 'افصل بين 10 وسوم كحد أقصى بفواصل.',
     'visibility' => 'الظهور', 'status' => 'الحالة', 'owner' => 'أنشأه', 'published' => 'تاريخ النشر', 'updated' => 'آخر تحديث', 'uses' => 'مرات الاستخدام',
     'visibilities' => ['private' => 'خاص (للمنشئ فقط)', 'selected_roles' => 'أدوار محددة', 'selected_users' => 'مستخدمون محددون', 'all_users' => 'جميع المستخدمين'],

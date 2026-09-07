@@ -1,6 +1,6 @@
 @props(['title','wide'=>false])
 <!doctype html>
-<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale()==='ar' ? 'rtl':'ltr' }}">
+<html lang="{{ app()->getLocale() }}" dir="{{ \App\Enums\Locale::resolve(app()->getLocale())->direction() }}">
 <head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex,nofollow">
@@ -15,7 +15,7 @@
     <form method="POST" action="{{ route('locale.update') }}" class="auth-locale">
         @csrf
         <label class="sr-only" for="auth-locale">{{ __('auth.language') }}</label>
-        <select id="auth-locale" name="locale"><option value="en" @selected(app()->getLocale()==='en')>English</option><option value="ar" @selected(app()->getLocale()==='ar')>العربية</option></select>
+        <select id="auth-locale" name="locale"><option value="en" lang="en" @selected(app()->getLocale()==='en')>{{ __('foundation.english') }}</option><option value="ar" lang="ar" @selected(app()->getLocale()==='ar')>{{ __('foundation.arabic') }}</option></select>
         <button type="submit">{{ __('auth.save_language') }}</button>
     </form>
 </header>

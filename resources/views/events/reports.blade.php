@@ -34,7 +34,7 @@
     <div class="report-history">@foreach($section['versions'] as $version)<article class="report-version">
         <div><span class="event-badge">{{ __('event_reports.version',['number'=>$version->version_number]) }} · {{ __($version->id===$current?->id ? 'event_reports.current' : 'event_reports.previous') }}</span><h4>{{ $version->title }}</h4><p>{{ $version->notes }}</p></div>
         <dl><div><dt>{{ __('event_reports.uploaded_at') }}</dt><dd><time datetime="{{ $version->created_at->toIso8601String() }}">{{ $version->created_at->setTimezone(auth()->user()->timezone ?: 'UTC')->translatedFormat('j M Y H:i') }}</time></dd></div><div><dt>{{ __('event_reports.uploader') }}</dt><dd>{{ $version->file?->uploader?->name ?? __('event_reports.unknown') }}</dd></div></dl>
-        @if($version->file)<p><bdi>{{ $version->file->original_name }}</bdi> · <bdi>{{ number_format($version->file->file_size/1024,1) }} KiB</bdi></p>@endif
+        @if($version->file)<p><bdi>{{ $version->file->original_name }}</bdi> · <bdi>{{ __('foundation.file_size_kib',['size'=>number_format($version->file->file_size/1024,1)]) }}</bdi></p>@endif
         <a href="{{ route($reportRoute.'.download',[$event,$report,$version]) }}">{{ __('event_reports.download') }}</a>
     </article>@endforeach</div>
     {{ $section['versions']->fragment($type)->links() }}

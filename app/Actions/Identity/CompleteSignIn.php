@@ -19,6 +19,10 @@ class CompleteSignIn
             return app(Pipeline::class)->send(new SignInAttempt($fresh, $request, $method, $remember))
                 ->through([EnsureSignInAllowed::class, ...config('identity.additional_sign_in_checks', [])])
                 ->then(function (SignInAttempt $attempt) {
+                    $sessionLocale = $attempt->request->session()->get('locale');
+                    if (is_string($sessionLocale) && in_array($sessionLocale, ['en', 'ar'], true) && $attempt->user->locale !== $sessionLocale) {
+                        $attempt->user->forceFill(['locale' => $sessionLocale])->saveQuietly();
+                    }
                     Auth::guard('web')->login($attempt->user, $attempt->remember);
                     $attempt->request->session()->regenerate();
                     $attempt->request->session()->put([

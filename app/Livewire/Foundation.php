@@ -19,7 +19,7 @@ class Foundation extends Component
 
     public function saveLocale(): void
     {
-        // This public preference can change only the caller's session, never a user record.
+        // Anonymous visitors use the session; signed-in users also retain the preference across browsers.
         $key = 'locale-preference:'.hash('sha256', session()->getId());
 
         if (RateLimiter::tooManyAttempts($key, 20)) {
@@ -35,6 +35,9 @@ class Foundation extends Component
         ]);
 
         session()->put('locale', $this->locale);
+        if (auth()->check() && auth()->user()->locale !== $this->locale) {
+            auth()->user()->forceFill(['locale' => $this->locale])->saveQuietly();
+        }
         session()->flash('locale_updated', true);
 
         // A full navigation updates the document language, direction and all UI together.

@@ -167,7 +167,9 @@ h3 { font-size: 14px; font-weight: 600; line-height: 1.6; }
 .mobile-dialog::backdrop { background: rgb(28 35 26 / .3); }
 .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
 .drawer-note { margin-top: 40px; color: var(--muted); font-size: 12px; }
-[dir='rtl'] .directional { transform: scaleX(-1); }
+[dir='rtl'] .directional,
+[dir='rtl'] .back-arrow { transform: scaleX(-1); }
+.back-arrow { display: inline-block; }
 [dir='rtl'] h1 { font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 43px; line-height: 1.7; letter-spacing: 0; font-weight: 600; }
 [dir='rtl'] h1 em { font-style: normal; }
 [dir='rtl'] .eyebrow, [dir='rtl'] h2, [dir='rtl'] .brand-name, [dir='rtl'] .sidebar-label { letter-spacing: 0; }

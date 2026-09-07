@@ -7,7 +7,7 @@ return [
     'status' => 'الحالة', 'all_statuses' => 'جميع الحالات', 'active' => 'نشطة', 'inactive' => 'غير نشطة',
     'filter' => 'تطبيق المرشحات', 'clear' => 'مسح', 'slug' => 'المعرّف النصي', 'slug_hint' => 'generated-from-english-name',
     'name_en' => 'الاسم بالإنجليزية', 'name_ar' => 'الاسم بالعربية', 'description_en' => 'الوصف بالإنجليزية',
-    'description_ar' => 'الوصف بالعربية', 'icon' => 'معرّف الأيقونة', 'active_label' => 'متاحة للمستخدمين',
+    'description_ar' => 'الوصف بالعربية', 'icon' => 'معرّف الأيقونة', 'icon_placeholder' => 'folder', 'active_label' => 'متاحة للمستخدمين',
     'order' => 'الترتيب', 'actions' => 'الإجراءات', 'activate' => 'تفعيل', 'deactivate' => 'إلغاء التفعيل',
     'move_up' => 'نقل :name إلى أعلى', 'move_down' => 'نقل :name إلى أسفل', 'cancel' => 'إلغاء',
     'none' => 'لا توجد فئات تطابق هذه المرشحات.', 'created' => 'تم إنشاء الفئة.',

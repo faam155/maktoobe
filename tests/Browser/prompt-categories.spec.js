@@ -12,7 +12,6 @@ async function signIn(page) {
 }
 
 test.describe.configure({ mode: 'serial' });
-test.beforeAll(() => fixture('reset'));
 
 for (const size of [
     { name: 'desktop', width: 1440, height: 900 },
@@ -22,6 +21,7 @@ for (const size of [
     { name: 'narrow-mobile', width: 360, height: 800 },
 ]) {
     test(`${size.name}: category administration is responsive in English and Arabic`, async ({ page }) => {
+        fixture('reset');
         const errors = [];
         page.on('pageerror', error => errors.push(error.message));
         page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });

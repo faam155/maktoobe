@@ -7,7 +7,7 @@ return [
     'status' => 'Status', 'all_statuses' => 'All statuses', 'active' => 'Active', 'inactive' => 'Inactive',
     'filter' => 'Apply filters', 'clear' => 'Clear', 'slug' => 'Slug', 'slug_hint' => 'generated-from-english-name',
     'name_en' => 'English name', 'name_ar' => 'Arabic name', 'description_en' => 'English description',
-    'description_ar' => 'Arabic description', 'icon' => 'Icon identifier', 'active_label' => 'Available to users',
+    'description_ar' => 'Arabic description', 'icon' => 'Icon identifier', 'icon_placeholder' => 'folder', 'active_label' => 'Available to users',
     'order' => 'Order', 'actions' => 'Actions', 'activate' => 'Activate', 'deactivate' => 'Deactivate',
     'move_up' => 'Move :name up', 'move_down' => 'Move :name down', 'cancel' => 'Cancel',
     'none' => 'No categories match these filters.', 'created' => 'The category was created.',

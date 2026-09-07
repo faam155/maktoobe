@@ -12,6 +12,9 @@ class LocaleController
     {
         $data = $request->validate(['locale' => ['required', Rule::enum(Locale::class)]]);
         $request->session()->put('locale', $data['locale']);
+        if ($request->user() && $request->user()->locale !== $data['locale']) {
+            $request->user()->forceFill(['locale' => $data['locale']])->saveQuietly();
+        }
         // Only return to same-origin paths; do not trust a posted redirect URL.
         $previous = url()->previous();
 

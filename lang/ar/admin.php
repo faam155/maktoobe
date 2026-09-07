@@ -133,6 +133,9 @@ return [
         'view-audit-logs' => 'عرض سجلات التدقيق',
         'manage-system-settings' => 'إدارة إعدادات النظام',
     ],
+    'bootstrap_seed_first' => 'هيّئ الأدوار والصلاحيات قبل إنشاء المدير العام الأول.',
+    'bootstrap_exists' => 'يوجد مدير عام نشط بالفعل.',
+    'bootstrap_register_first' => 'سجّل الحساب قبل ترقيته.',
     'activities' => [
         'account_registered' => 'تسجيل حساب', 'account_google_registered' => 'تسجيل حساب باستخدام Google',
         'account_created_by_admin' => 'إنشاء حساب بواسطة مدير', 'account_updated_by_admin' => 'تحديث ملف الحساب',

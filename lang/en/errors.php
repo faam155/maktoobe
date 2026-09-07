@@ -2,7 +2,7 @@
 
 return [
     '404_title' => 'This page isn’t here yet.',
-    '404_body' => 'Only the foundation is available in this release. Return to the overview to see what’s ready.',
+    '404_body' => 'The page may not exist, or your account may not have access to it.',
     '419_title' => 'Let’s refresh your session.',
     '419_body' => 'Your session has expired or this request could not be verified. Return to the overview and try again.',
     '429_title' => 'A moment, please.',

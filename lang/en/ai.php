@@ -6,7 +6,7 @@ return [
     'history' => 'Conversation history', 'history_intro' => 'Find, reopen and manage your private conversations.', 'view_all_history' => 'View all history',
     'search' => 'Search conversations', 'search_placeholder' => 'Search by conversation title', 'status_label' => 'History status', 'active' => 'Active', 'archived_label' => 'Archived', 'all' => 'All',
     'sort' => 'Sort conversations', 'sort_recent' => 'Recently active', 'sort_oldest' => 'Oldest activity', 'sort_title' => 'Title', 'apply_filters' => 'Apply filters', 'no_results' => 'No matching conversations.',
-    'message_count' => '{0} No messages|{1} :count message|[2,*] :count messages', 'conversation_title' => 'Conversation title',
+    'message_count' => '{0} No messages|{1} :count message|[2,*] :count messages', 'token_count' => '{1} :count token|[2,*] :count tokens', 'conversation_title' => 'Conversation title',
     'model' => 'Model', 'message' => 'Message', 'message_placeholder' => 'Describe what you need…', 'additional_context' => 'Additional context',
     'send' => 'Send message', 'queued' => 'Your message is queued for processing.', 'processing' => 'Generating a response…',
     'failed' => 'The AI request could not be completed.', 'retry' => 'Retry', 'cancel' => 'Stop', 'cancelled' => 'The request was cancelled.',

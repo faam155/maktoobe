@@ -4,7 +4,7 @@ return [
     'library' => 'Prompt Library', 'library_intro' => 'Browse approved prompts available to your account.', 'browse_library' => 'Browse library',
     'admin_title' => 'AI Prompts', 'admin_intro' => 'Create, review and publish centralized prompts with explicit audiences.',
     'create' => 'Create prompt', 'edit' => 'Edit prompt', 'preview' => 'Preview', 'save' => 'Save as draft',
-    'title' => 'Title', 'slug' => 'Slug', 'description' => 'Description', 'content' => 'Prompt content', 'content_locale' => 'Content language code',
+    'title' => 'Title', 'slug' => 'Slug', 'description' => 'Description', 'content' => 'Prompt content', 'content_locale' => 'Content language code', 'content_locale_placeholder' => 'en',
     'category' => 'Category', 'no_category' => 'No category', 'tags' => 'Tags', 'tags_hint' => 'Separate up to 10 tags with commas.',
     'visibility' => 'Visibility', 'status' => 'Status', 'owner' => 'Created by', 'published' => 'Published', 'updated' => 'Updated', 'uses' => 'Uses',
     'visibilities' => ['private' => 'Private (creator only)', 'selected_roles' => 'Selected roles', 'selected_users' => 'Selected users', 'all_users' => 'All users'],

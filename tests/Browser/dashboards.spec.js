@@ -12,7 +12,6 @@ async function signIn(page, login, password) {
 }
 
 test.describe.configure({ mode: 'serial' });
-test.beforeAll(() => fixture('reset'));
 
 const viewports = [
     { name: 'desktop', width: 1440, height: 900 },
@@ -24,6 +23,7 @@ const viewports = [
 
 for (const size of viewports) {
     test(`${size.name}: user dashboard navigation is responsive in English and Arabic`, async ({ page }) => {
+        fixture('reset');
         const errors = [];
         page.on('pageerror', error => errors.push(error.message));
         page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
