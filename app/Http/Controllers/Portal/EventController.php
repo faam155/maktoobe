@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Portal;
 
 use App\Models\Event;
 use App\Queries\Events\PortalEventIndexQuery;
+use App\Queries\Social\EventSocialQuery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
@@ -21,6 +22,6 @@ class EventController
     {
         Gate::authorize('view', $event);
 
-        return view('portal.events.show', ['event' => $event->load(['category.translations', 'organizer:id,name'])]);
+        return view('portal.events.show', ['socialPerformance' => app(EventSocialQuery::class)->get(auth()->user(), $event), 'event' => $event->load(['category.translations', 'organizer:id,name'])]);
     }
 }

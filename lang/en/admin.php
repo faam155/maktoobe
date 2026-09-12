@@ -121,6 +121,40 @@ return [
         'Standard User' => 'Standard User',
     ],
     'permissions' => [
+        'linkedin' => [
+            'dashboard' => [
+                'view' => 'LinkedIn: dashboard view',
+            ],
+            'posts' => [
+                'view' => 'LinkedIn: posts view',
+                'create' => 'LinkedIn: posts create',
+                'edit' => 'LinkedIn: posts edit',
+                'delete' => 'LinkedIn: posts delete',
+            ],
+            'metrics' => [
+                'manage' => 'LinkedIn: metrics manage',
+            ],
+            'import' => 'LinkedIn: import',
+            'export' => 'LinkedIn: export',
+            'targets' => [
+                'view' => 'LinkedIn: targets view',
+                'manage' => 'LinkedIn: targets manage',
+            ],
+            'campaigns' => [
+                'manage' => 'LinkedIn: campaigns manage',
+            ],
+            'audience' => [
+                'view' => 'LinkedIn: audience view',
+            ],
+            'ai' => [
+                'view' => 'LinkedIn: ai view',
+                'generate' => 'LinkedIn: ai generate',
+            ],
+            'settings' => [
+                'manage' => 'LinkedIn: settings manage',
+            ],
+            'sync' => 'LinkedIn: sync',
+        ],
         'access-admin' => 'Access administration', 'manage-users' => 'View and manage users',
         'create-users' => 'Create users', 'edit-users' => 'Edit users', 'disable-users' => 'Disable and reactivate users',
         'delete-users' => 'Delete users', 'manage-roles' => 'Manage roles and assignments',

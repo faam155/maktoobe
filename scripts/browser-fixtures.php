@@ -13,6 +13,7 @@ use App\Models\PromptUse;
 use App\Models\User;
 use App\Services\Identity\LocalInbox;
 use App\Support\Authorization\Access;
+use Database\Seeders\SocialMediaDemoSeeder;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -55,6 +56,9 @@ if ($action === 'reset') {
         'published_by' => $administrator->id,
     ]);
     $prompt->tags()->create(['canonical_name' => 'writing', 'display_name' => 'Writing']);
+    echo json_encode(['ready' => true]);
+} elseif ($action === 'social') {
+    Artisan::call('db:seed', ['--class' => SocialMediaDemoSeeder::class, '--force' => true]);
     echo json_encode(['ready' => true]);
 } elseif ($action === 'calendar') {
     $administrator = User::where('username', 'admin')->firstOrFail();

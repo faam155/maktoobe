@@ -1,5 +1,7 @@
 # AI Prompt Hub & Event Management Platform: proposed architecture
 
+The later approved LinkedIn extension is documented in [SOCIAL_MEDIA.md](SOCIAL_MEDIA.md), including its separate corporate account model, shared analytics queries, encrypted AI ledger and fail-closed provider adapter. Earlier phase status paragraphs below are historical baselines.
+
 Status: **working architecture baseline; Phase 13 Event Photos and File Management completed and verified on 2026-09-02**. Later phases remain subject to their scope review. See the [Phase 13 report](phases/phase-13.md) for implementation and verification.
 
 Read with [environment findings](ENVIRONMENT.md), the [database design](DATABASE.md), and the [implementation roadmap](ROADMAP.md). The complete application is the eventual destination; each phase is a separately verified increment.

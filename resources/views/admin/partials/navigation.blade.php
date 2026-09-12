@@ -11,3 +11,4 @@
 @can('view-audit-logs')<a class="admin-nav-link" href="{{ route('admin.audits') }}">{{ __('reporting.audit_title') }}</a>@endcan
 @can('manage-system-settings')<span class="admin-nav-link is-disabled" aria-disabled="true"><span>{{ __('admin.system_settings') }}</span><small>{{ __('admin.coming_later') }}</small></span>@endcan
 <a href="{{ route('account.home') }}" class="admin-nav-link">{{ __('admin.back_workspace') }}</a>
+@can('linkedin.settings.manage')<a href="{{ route('social.accounts') }}" class="admin-nav-link">{{ __('social.accounts') }} · LinkedIn</a>@endcan

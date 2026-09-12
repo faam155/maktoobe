@@ -20,7 +20,8 @@ async function auditRoutes(page, locale, direction) {
         await expect(page.locator('html')).toHaveAttribute('lang', locale);
         await expect(page.locator('html')).toHaveAttribute('dir', direction);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-        await expect(page.locator('body')).not.toContainText(/(?:foundation|validation|dashboard|admin|prompts|events|calendar|reporting)\.[a-z_]+/);
+        // Permission identifiers such as linkedin.dashboard.view are intentionally displayed.
+        await expect(page.locator('body')).not.toContainText(/(?<!\.)(?:foundation|validation|dashboard|admin|prompts|events|calendar|reporting)\.[a-z_]+/);
     }
 }
 

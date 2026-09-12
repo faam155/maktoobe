@@ -7,6 +7,7 @@ Route::get('/', Foundation::class)->name('foundation');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';
+require __DIR__.'/social.php';
 
 // Unimplemented business modules remain unavailable.
 Route::fallback(fn () => abort(404));

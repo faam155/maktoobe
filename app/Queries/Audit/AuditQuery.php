@@ -13,7 +13,7 @@ class AuditQuery
 {
     public function types(User $actor): array
     {
-        $permissions = ['user' => 'manage-users', 'role' => 'manage-roles', 'prompt' => 'manage-prompts', 'prompt_category' => 'manage-categories', 'event' => 'manage-events', 'brand_guideline' => 'manage-brand-guidelines', 'system' => 'manage-system-settings', 'ai_configuration' => 'manage-ai-settings'];
+        $permissions = ['social' => 'linkedin.settings.manage', 'user' => 'manage-users', 'role' => 'manage-roles', 'prompt' => 'manage-prompts', 'prompt_category' => 'manage-categories', 'event' => 'manage-events', 'brand_guideline' => 'manage-brand-guidelines', 'system' => 'manage-system-settings', 'ai_configuration' => 'manage-ai-settings'];
 
         return array_keys(array_filter($permissions, fn ($permission) => $permission === 'manage-roles' ? $actor->canAny(['manage-roles', 'manage-permissions']) : $actor->can($permission)));
     }

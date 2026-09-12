@@ -78,6 +78,10 @@ Do not install all optional packages, create all target schema tables, build una
 
 Ask for missing integration inputs when needed, after completing independent in-scope work. Never print tokens or request that secrets be committed. No paid integration or provider account is created during planning.
 
+## LinkedIn extension (authorized 2026-09-12)
+
+The attached LinkedIn Analytics phase supersedes the prior Phase 18 stopping boundary for this module only. Scope, metric acceptance and operational boundaries are in [SOCIAL_MEDIA.md](SOCIAL_MEDIA.md); verification is recorded in [the LinkedIn phase report](phases/phase-linkedin.md). Public APIs, mobile code, external publishing and further platforms remain deferred. Stop after this increment.
+
 ## 5. Phase report template
 
 Each implemented phase gets `docs/phases/phase-NN.md` containing:

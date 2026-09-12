@@ -68,6 +68,8 @@ In a restricted Windows sandbox, Vite may need permission to resolve ancestor pa
 
 ## Conventions
 
+The LinkedIn analytics module is available at `/app/social-media/linkedin` to users with its explicit permissions. See [social media conventions and setup](docs/SOCIAL_MEDIA.md) for additive migration, metric/import semantics, workers and PDF runtime prerequisites. Normal setup creates no demo statistics. LinkedIn live synchronization remains unconfigured; manual metrics, imports and local reports are available.
+
 Read `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/ROADMAP.md` and the current phase report before changes. Interface strings belong in matching `lang/en` and `lang/ar` files. Livewire supplies Alpine; do not load it twice. Add packages and migrations only when the approved phase needs them.
 
 See [foundation conventions](docs/FOUNDATION.md), [identity conventions](docs/IDENTITY.md), [authorization conventions](docs/AUTHORIZATION.md), [dashboard conventions](docs/DASHBOARDS.md), [prompt-category conventions](docs/PROMPT_CATEGORIES.md), and [Prompt Library conventions](docs/PROMPT_LIBRARY.md) for current boundaries. Database jobs wait for transaction commits. Local files are private and write failures throw. New local setups use daily info logs with 14-day retention; an existing `.env` should use `LOG_STACK=daily`, `LOG_LEVEL=info` and `LOG_DAILY_DAYS=14` to adopt those defaults.

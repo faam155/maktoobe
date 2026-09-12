@@ -15,6 +15,7 @@ final class Access
     public const STANDARD_USER = 'Standard User';
 
     public const PERMISSIONS = [
+        'linkedin.dashboard.view', 'linkedin.posts.view', 'linkedin.posts.create', 'linkedin.posts.edit', 'linkedin.posts.delete', 'linkedin.metrics.manage', 'linkedin.import', 'linkedin.export', 'linkedin.targets.view', 'linkedin.targets.manage', 'linkedin.campaigns.manage', 'linkedin.audience.view', 'linkedin.ai.view', 'linkedin.ai.generate', 'linkedin.settings.manage', 'linkedin.sync',
         'access-admin', 'manage-users', 'create-users', 'edit-users', 'disable-users', 'delete-users',
         'manage-roles', 'manage-permissions', 'manage-prompts', 'publish-prompts', 'manage-categories',
         'manage-events', 'upload-event-files', 'manage-brand-guidelines', 'use-ai', 'manage-ai-settings',

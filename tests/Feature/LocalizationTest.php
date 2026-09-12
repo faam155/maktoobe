@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Support\Authorization\Access;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Lang;
@@ -13,6 +14,15 @@ use Tests\TestCase;
 class LocalizationTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_permission_catalog_labels_resolve_in_both_locales(): void
+    {
+        foreach (Access::PERMISSIONS as $permission) {
+            foreach (['en', 'ar'] as $locale) {
+                $this->assertTrue(Lang::hasForLocale('admin.permissions.'.$permission, $locale), $permission.' / '.$locale);
+            }
+        }
+    }
 
     public function test_english_and_arabic_catalogs_have_identical_recursive_keys(): void
     {

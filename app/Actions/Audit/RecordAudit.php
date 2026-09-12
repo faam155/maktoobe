@@ -10,7 +10,7 @@ class RecordAudit
 {
     public function handle(?int $actorId, string $action, string $type, ?int $resourceId, array $metadata = [], ?string $source = null, mixed $at = null): void
     {
-        if (! in_array($type, ['user', 'role', 'prompt', 'prompt_category', 'event', 'brand_guideline', 'system', 'ai_configuration'], true) || ! preg_match('/^[a-z][a-z0-9_.]{0,79}$/D', $action)) {
+        if (! in_array($type, ['social', 'user', 'role', 'prompt', 'prompt_category', 'event', 'brand_guideline', 'system', 'ai_configuration'], true) || ! preg_match('/^[a-z][a-z0-9_.]{0,79}$/D', $action)) {
             throw new \InvalidArgumentException('Invalid audit identity.');
         }
         $values = ['actor_id' => $actorId, 'action' => $action, 'resource_type' => $type, 'resource_id' => $resourceId, 'metadata' => app(SafeAuditMetadata::class)->clean($metadata), 'created_at' => $at ?? now()];

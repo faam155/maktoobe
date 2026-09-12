@@ -12,6 +12,7 @@ use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\User;
 use App\Queries\Events\AdminEventIndexQuery;
+use App\Queries\Social\EventSocialQuery;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -45,7 +46,7 @@ class EventController
     {
         Gate::authorize('view', $event);
 
-        return view('admin.events.show', ['event' => $event->load(['category.translations', 'organizer', 'allowedUsers:id,name,email', 'allowedRoles:id,name'])]);
+        return view('admin.events.show', ['socialPerformance' => app(EventSocialQuery::class)->get(auth()->user(), $event), 'event' => $event->load(['category.translations', 'organizer', 'allowedUsers:id,name,email', 'allowedRoles:id,name'])]);
     }
 
     public function edit(Event $event): View

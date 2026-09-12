@@ -1,4 +1,5 @@
 // Alpine is supplied once by Livewire. Do not import or start a second instance.
+import './social.js';
 const sections = new Set(['#overview', '#foundation', '#preferences']);
 
 document.querySelectorAll('[data-generation-status]').forEach((status) => {

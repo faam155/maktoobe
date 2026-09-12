@@ -5,6 +5,7 @@
 <a href="{{ route('events.index') }}" @class(['portal-nav-link','is-current'=>request()->routeIs('events.*') && !request()->routeIs('events.calendar')])>{{ __('dashboard.events') }}</a>
 <a href="{{ route('events.calendar') }}" @class(['portal-nav-link','is-current'=>request()->routeIs('events.calendar')])>{{ __('calendar.title') }}</a>
 <a class="portal-nav-link" href="{{ route('notifications.index') }}">{{ __('dashboard.notifications') }}</a>
+@can('linkedin.dashboard.view')<a class="portal-nav-link" href="{{ route('social.index') }}">{{ __('social.social_media') }} · LinkedIn</a>@endcan
 <a href="{{ route('account.security') }}" @class(['portal-nav-link','is-current'=>request()->routeIs('account.*') && !request()->routeIs('account.home')])>{{ __('dashboard.profile') }}</a>
 @can('access-admin')<a href="{{ route('admin.dashboard') }}" class="portal-nav-link">{{ __('dashboard.administration') }}</a>@endcan
 @if(auth()->user()->can('manage-events') && !auth()->user()->can('access-admin'))<a href="{{ route('admin.events.index') }}" class="portal-nav-link">{{ __('events.manage') }}</a>@endif
