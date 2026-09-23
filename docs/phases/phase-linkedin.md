@@ -56,3 +56,17 @@ The canonical technical/operational contract is [SOCIAL_MEDIA.md](../SOCIAL_MEDI
 - No cache was added without measured need. Query/output bounds are documented; very large installations may need future tuning. Additional platforms, scheduled sync, Content Calendar planning, public APIs, Flutter, automated event-report file insertion and deployment remain outside this completed implementation scope.
 
 No push or deployment is authorized by this checkpoint. Stop after the LinkedIn increment.
+
+## Reverification and local setup repair — 2026-09-23
+
+The user requested a fresh build and working-state check. Existing uncommitted `composer.json` / `composer.lock` changes adding Tinker were preserved.
+
+The current local connection was verified as database `maktoobe`, configured user `root`; the isolated project MySQL server reported version 8.4.3 on port 3307. All migrations were already applied. The application database contained the sixteen LinkedIn permissions but no social platform or content types. Running only `php artisan db:seed --class=SocialMediaCatalogSeeder --force` restored one LinkedIn platform and eight content types through the existing repeat-safe additive seeder. No application database reset, demo statistics or account creation was performed.
+
+- Full PHP regression: **227 passed / 1,560 assertions**, 329.03 seconds, exit 0.
+- Production build, Composer strict validation, installed platform requirements and the configured local PDF runtime smoke test passed.
+- Local `/up` and `/login` returned HTTP 200 on port 8000.
+- Isolated browser verification: **6 passed**, 4.0 minutes, covering all five viewport sizes in English/Arabic plus editing, filtering, CSV confirmation, PDF/XLSX downloads and event integration. The first concurrent attempt reached the Arabic settings-page navigation before its 60-second whole-test timeout; the successful rerun used 120 seconds per case and no parallel PHP suite. No application-code change was needed.
+- Evidence: `.runtime/linkedin-recheck-php.txt`, `.runtime/linkedin-recheck-browser.txt`, and `.runtime/linkedin-recheck-browser-final.txt`.
+
+Live LinkedIn API synchronization remains unconfigured, as in the approved provider-architecture scope. Real analytics accounts and measurements must be entered or imported; no production statistics are fabricated.
