@@ -1,7 +1,7 @@
 <div class="social-post-list">
 @forelse($posts as $post)
 <article class="social-post"><div>
-@if($post->thumbnail_url)<img src="{{ $post->thumbnail_url }}" alt="" loading="lazy" referrerpolicy="no-referrer" width="72" height="72">@endif
+@if($post->thumbnail_url)<img src="{{ $post->thumbnail_url }}" alt="{{ $post->title }}" loading="lazy" decoding="async" referrerpolicy="no-referrer" width="72" height="72">@endif
 <h3>@can('linkedin.posts.view')<a href="{{ route('social.posts.show',[$account,$post]+$f) }}">{{ $post->title }}</a>@else{{ $post->title }}@endcan</h3>
 <p dir="auto">{{ \Illuminate\Support\Str::limit($post->content,130) }}</p>
 <p class="social-muted"><bdi>{{ $post->published_at->setTimezone($account->timezone)->format('Y-m-d H:i') }}</bdi> · {{ $post->contentType?->label() }} · {{ __('social.'.$post->language) }}</p>

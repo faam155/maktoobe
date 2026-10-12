@@ -1,7 +1,7 @@
 <x-layouts.portal :title="$post->title"><div class="social-workspace">@include('social._nav')
 <a href="{{ route('social.dashboard',[$account]+$f) }}">{{ __('social.back') }}</a>
 <section class="social-section"><h2 dir="auto">{{ $post->title }}</h2><p class="social-text" dir="auto">{{ $post->content }}</p>
-@if($post->thumbnail_url)<img class="social-thumbnail" src="{{ $post->thumbnail_url }}" alt="" referrerpolicy="no-referrer">@endif
+@if($post->thumbnail_url)<img class="social-thumbnail" src="{{ $post->thumbnail_url }}" alt="{{ $post->title }}" loading="lazy" decoding="async" referrerpolicy="no-referrer">@endif
 @if($post->url)<a href="{{ $post->url }}" target="_blank" rel="noopener noreferrer">{{ __('social.url') }}</a>@endif
 <dl class="social-inline-metrics">@foreach(['impressions','reactions','comments','shares','clicks','engagements','engagement_rate'] as $key)<div><dt>{{ __('social.'.$key) }}</dt><dd>{{ $stats?->$key??'—' }}</dd></div>@endforeach</dl>
 <p><bdi>{{ $post->published_at->setTimezone($account->timezone)->format('Y-m-d H:i') }}</bdi> · {{ $post->contentType->label() }} · {{ __('social.'.$post->language) }} · {{ $post->campaign?->name }} · {{ $post->event?->title }}</p>

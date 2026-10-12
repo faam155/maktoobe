@@ -2,6 +2,24 @@
 import './social.js';
 const sections = new Set(['#overview', '#foundation', '#preferences']);
 
+const responsiveMenus = document.querySelectorAll('[data-responsive-menu]');
+responsiveMenus.forEach((menu) => {
+    menu.querySelectorAll('nav a').forEach((link) => link.addEventListener('click', () => menu.removeAttribute('open')));
+});
+document.addEventListener('click', (event) => {
+    responsiveMenus.forEach((menu) => {
+        if (menu.open && !menu.contains(event.target)) menu.removeAttribute('open');
+    });
+});
+document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    responsiveMenus.forEach((menu) => {
+        if (!menu.open) return;
+        menu.removeAttribute('open');
+        menu.querySelector('summary')?.focus();
+    });
+});
+
 document.querySelectorAll('[data-generation-status]').forEach((status) => {
     const refresh = status.parentElement.querySelector('.generation-refresh');
     const timer = setInterval(async () => {

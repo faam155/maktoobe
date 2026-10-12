@@ -10,7 +10,7 @@
 </head>
 <body class="portal-body">
 <a class="skip-link" href="#portal-main">{{ __('foundation.skip') }}</a>
-<header class="portal-mobile-header"><x-brand /><details class="portal-menu"><summary>{{ __('dashboard.menu') }}</summary><nav aria-label="{{ __('dashboard.navigation') }}">@include('portal.partials.navigation')</nav></details></header>
+<header class="portal-mobile-header"><x-brand /><details class="portal-menu" data-responsive-menu><summary>{{ __('dashboard.menu') }}</summary><nav aria-label="{{ __('dashboard.navigation') }}">@include('portal.partials.navigation')</nav></details></header>
 <div class="portal-shell">
     <aside class="portal-sidebar">
         <x-brand />

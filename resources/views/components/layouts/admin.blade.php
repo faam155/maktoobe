@@ -10,7 +10,7 @@
 </head>
 <body class="admin-body">
 <a class="skip-link" href="#admin-main">{{ __('foundation.skip') }}</a>
-<header class="admin-mobile-header"><x-brand /><details class="admin-menu"><summary>{{ __('admin.menu') }}</summary><nav aria-label="{{ __('admin.navigation') }}">@include('admin.partials.navigation')</nav></details></header>
+<header class="admin-mobile-header"><x-brand /><details class="admin-menu" data-responsive-menu><summary>{{ __('admin.menu') }}</summary><nav aria-label="{{ __('admin.navigation') }}">@include('admin.partials.navigation')</nav></details></header>
 <div class="admin-shell">
     <aside class="admin-sidebar">
         <x-brand />

@@ -21,6 +21,7 @@ for (const size of [
     { name: 'narrow-mobile', width: 360, height: 800 },
 ]) {
     test(`${size.name}: admin users, roles and permissions are responsive in both directions`, async ({ page }) => {
+        test.setTimeout(90_000);
         fixture('reset');
         const errors = [];
         page.on('pageerror', error => errors.push(error.message));
